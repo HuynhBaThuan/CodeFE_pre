@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import './customer.css'
 import '../../assets/fonts/fontawesome-free-6.2.0-web/css/all.min.css'
 import { useNavigate } from "react-router-dom";
 import { getUserInfo, getDefaultContact } from '../../services/userServices';
@@ -222,8 +221,8 @@ const Profile = () => {
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("address")}</div>
-                                <div class="col-4">
+                                <div class="col-3 txt-bold">{t("address1")}</div>
+                                <div class="col-8">
                                     <div class="input-group">
                                         <textarea
                                             name="name"

@@ -91,8 +91,8 @@
 
     "infoNav1" : "Quản lý tài khoản",
     "infoNav2" : "Quản lý đơn hàng",
-    "infoNav4" : "Cập nhật địa chỉ",
-    "infoNav5" : "Thông tin đơn hàng",
+    "infoNav3" : "Cập nhật địa chỉ",
+    "infoNav4" : "Thông tin đơn hàng",
 
     "infoTitle": "Thông tin người dùng",
     "userTitle1": "Tải ảnh đại diện",
@@ -102,6 +102,27 @@
     "update": "Cập nhật",
     "changeInfo": "Thay đổi thông tin",
     "name": "Tên",
-    "saveChange" : "Lưu thay đổi"
+    "address1" : "Địa chỉ",
+    "saveChange" : "Lưu thay đổi",
+    "change": "Sửa",
+    "add": "Thêm",
+
+    "orderHis" : "Lịch sử đơn hàng",
+    "status": "Trạng thái",
+    "all": "Tất cả",
+    "complete": "Hoàn tất",
+    "cancel": "Hủy",
+    "from": "Từ ngày",
+    "to": "Đến ngày",
+    "search":"Tìm kiếm",
+    "time" : "Thời gian",
+    "place" : "Địa điểm",
+    "staff" : "Người giao",
+    "total" : "Tổng tiền",
+    "detail": "Chi tiết",
+    "orderTime" : "Thời gian đặt",
+    "receiveTime" : "Thời gian nhận",
+    "rating": "Đánh giá",
+    "orderDetail": "Chi tiết đơn hàng"
 }
   

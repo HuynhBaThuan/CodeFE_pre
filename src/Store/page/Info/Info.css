@@ -61,7 +61,7 @@
     cursor: pointer;
 }
 
-.col-3 {
+.col-3_1 {
     flex: 1;
     font-size: 16px;
     font-weight: 400;
@@ -75,7 +75,7 @@
     font-weight: 400;
 }
 
-.input-group input {
+.input-group1 input {
     font-size: 14px;
     padding: 0 20px;
     border: 0;

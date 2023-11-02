@@ -4,9 +4,10 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Modal from 'react-bootstrap/Modal';
 import ava from '../../assets/img/images.jpg'
-
+import { useTranslation } from 'react-i18next';
 
 const OrderHistory = () => {
+    const {t} = useTranslation();
     const fromDateRef = useRef(null);
     const toDateRef = useRef(null);
 
@@ -86,7 +87,7 @@ const OrderHistory = () => {
         <div>
             <div class="block-section">
                 <div class="container">
-                    <div class="now-incoming incoming-full">
+                    {/* <div class="now-incoming incoming-full">
                         <div class="slick-slider slick-initialized">
                             <div class="slick-list">
                                 <div
@@ -118,8 +119,8 @@ const OrderHistory = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <h1 class="block-title mb-4 text-center">Lịch sử đơn hàng</h1>
+                    </div> */}
+                    <h1 class="block-title mb-4 text-center">{t("orderHis")}</h1>
                     <div class="history-switch">
                         <div class="item now active">FALTH</div>
                     </div>
@@ -127,23 +128,23 @@ const OrderHistory = () => {
                         <div class="filter-table">
                             <div class="filter-table-item">
                                 <div class="text-nowrap">
-                                    <span class="filter-table-label">Trạng thái</span><select name="" class="form-control filter-table-input">
-                                        <option value="-1" selected="">All</option>
-                                        <option value="4">Hoàn tất</option>
-                                        <option value="8">Hủy</option>
+                                    <span class="filter-table-label">{t("status")}</span><select name="" class="form-control filter-table-input">
+                                        <option value="-1" selected="">{t("all")}</option>
+                                        <option value="4">{t("complete")}</option>
+                                        <option value="8">{t("cancel")}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="filter-table-item">
                                 <div class="text-nowrap">
-                                    <span class="filter-table-label">Từ ngày</span>
+                                    <span class="filter-table-label">{t("from")}</span>
                                     <input ref={fromDateRef} class="input--style-2 js-datepicker" type="text" style={{ width: '255px' }} />
                                 </div>
                             </div>
 
                             <div class="filter-table-item">
                                 <div class="text-nowrap">
-                                    <span class="filter-table-label">Đến ngày</span>
+                                    <span class="filter-table-label">{t("to")}</span>
                                     <input
                                         ref={toDateRef}
                                         class="flatpickr-input input--style-2 js-datepicker"
@@ -153,36 +154,36 @@ const OrderHistory = () => {
                                 </div>
                             </div>
                             <div class="filter-table-item">
-                                <button type="button" class="btn btn-sm">Tìm kiếm</button>
+                                <button type="button" class="btn btn-sm">{t("search")}</button>
                             </div>
                         </div>
                         <div class="history-table">
                             <div class="history-table-row history-table-heading">
                                 <div class="history-table-cell history-table-col1">STT</div>
                                 <div class="history-table-cell history-table-col3">
-                                    Thời gian
+                                    {t("time")}
                                 </div>
                                 <div class="history-table-cell history-table-col4">
-                                    Địa điểm
+                                    {t("place")}
                                 </div>
                                 <div class="history-table-cell history-table-col5">
-                                    Người giao
+                                    {t("staff")}
                                 </div>
                                 <div class="history-table-cell history-table-col6">
-                                    Tổng tiền
+                                    {t("total")}
                                 </div>
                                 <div class="history-table-cell history-table-col7">
-                                    Trạng thái
+                                    {t("status")}
                                 </div>
                                 <div class="history-table-cell history-table-col8">
-                                    Chi tiết
+                                    {t("detail")}
                                 </div>
                             </div>
                             <div class="history-table-row">
                                 <div class="history-table-cell history-table-col1">1</div>
                                 <div class="history-table-cell history-table-col3">
-                                    <div>Thời gian đặt: 10/09/2023 13:56</div>
-                                    <div>Thời gian giao: 10/09/2023 14:10</div>
+                                    <div>{t("orderTime")}: 10/09/2023 13:56</div>
+                                    <div>{t("receiveTime")}: 10/09/2023 14:10</div>
                                 </div>
                                 <div class="history-table-cell history-table-col4">
                                     <a
@@ -201,7 +202,7 @@ const OrderHistory = () => {
                                     <a href='#'
                                         class="font-weight-bold"
                                         onClick={handleShowModal1}
-                                    >Đánh giá</a>
+                                    >{t("rating")}</a>
                                 </div>
                                 <div class="history-table-cell history-table-col6">
                                     <div style={{ fontWeight: 'bold' }}><span>171,550đ</span></div>
@@ -222,56 +223,7 @@ const OrderHistory = () => {
                                 </div>
                                 <div class="history-table-cell history-table-col8">
                                     <a href="#" className="d-block mb-1" onClick={handleShowModal}>
-                                        Chi tiết đơn hàng
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="history-table-row">
-                                <div class="history-table-cell history-table-col1">2</div>
-                                <div class="history-table-cell history-table-col3">
-                                    <div>Thời gian đặt: 27/08/2023 10:51</div>
-                                    <div>Thời gian giao: 27/08/2023 11:10</div>
-                                </div>
-                                <div class="history-table-cell history-table-col4">
-                                    <a
-                                        href="/da-nang/duyen-com-ga-xoi-mo"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    ><div class="text-body">
-                                            <strong class="d-block text-truncate"
-                                            >Duyên - Cơm Gà Xối Mỡ - Núi Thành</strong><span class="d-block text-truncate"
-                                            >544 Núi Thành, P. Hòa Cường Nam, Quận Hải Châu, Đà
-                                                Nẵng</span>
-                                        </div></a>
-                                </div>
-                                <div class="history-table-cell history-table-col5">
-                                    <strong class="d-block text-truncate">Trần Cao Tiến</strong>
-                                    <a href='#'
-                                        class="font-weight-bold"
-                                        onClick={handleShowModal1}
-                                    >Đánh giá</a>
-
-                                </div>
-                                <div class="history-table-cell history-table-col6">
-                                    <div style={{ fontWeight: 'bold' }}><span>117,550đ</span></div>
-                                    <div style={{ color: 'green', fontWeight: 'bold' }}>
-                                        Thanh toán trực tiếp
-                                    </div>
-                                </div>
-                                <div class="history-table-cell history-table-col7">
-                                    <div class="font-weight-bold history-table-status">
-                                        Complete
-                                    </div>
-                                    {/* <button
-                                        title="Click here to re order."
-                                        class="font-weight-bold history-table-status gray pointer"
-                                    >
-                                        Re-order
-                                    </button> */}
-                                </div>
-                                <div class="history-table-cell history-table-col8">
-                                    <a href="#" className="d-block mb-1" onClick={handleShowModal}>
-                                        Chi tiết đơn hàng
+                                        {t("orderDetail")}
                                     </a>
                                 </div>
                             </div>

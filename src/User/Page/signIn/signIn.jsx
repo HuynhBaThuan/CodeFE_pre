@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import  styles from './signIn.module.css'
 import '../../assets/fonts/fontawesome-free-6.2.0-web/css/all.min.css'
-import '../../assets/fonts/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
+// import '../../assets/fonts/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
 import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../../services/userServices";
 import { useAuth } from "../../services/authContext";
@@ -111,7 +111,8 @@ const Signin = () => {
                 <div class="form-login-input">
                     <div class="field-group">
                         <div class="input-group">
-                            <i class="far fa-envelope"></i><input
+                            <i class="far fa-envelope"></i>
+                            <input
                                 type="email"
                                 placeholder="Email"
                                 value={email}

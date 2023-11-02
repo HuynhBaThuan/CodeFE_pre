@@ -4,7 +4,9 @@ import ModalUpdateAddress from '../../Components/Modal/modalUpdateAddress';
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from '../../services/userServices';
 import { useLogout } from '../../services/authContext';
+import { useTranslation } from 'react-i18next';
 const UpdateAddress = () => {
+    const {t} = useTranslation()
     const logout = useLogout();
     function handleLogout() {
         logout();
@@ -99,7 +101,7 @@ const UpdateAddress = () => {
                             style={{ cursor: 'pointer' }}
                         ><div class="row">
                                 <div class="col-auto"><i class="fas fa-user"></i></div>
-                                <div class="col">Quản lý tài khoản</div>
+                                <div class="col">{t("infoNav1")}</div>
                                 <div class="col-auto">
                                     <i class="icon-arrow-thin right"></i>
                                 </div></div></a>
@@ -109,7 +111,7 @@ const UpdateAddress = () => {
                                     <div class="col-auto">
                                         <i class="fas fa-shopping-cart"></i>
                                     </div>
-                                    <div class="col">Quản lý đơn hàng</div>
+                                    <div class="col">{t("infoNav2")}</div>
                                     <div class="col-auto">
                                         <i class="icon-arrow-thin down"></i>
                                     </div></div></a>
@@ -123,7 +125,7 @@ const UpdateAddress = () => {
                                         <div class="col-auto">
                                             <i class="fas fa-map-marker-alt"></i>
                                         </div>
-                                        <div class="col">Cập nhật địa chỉ</div>
+                                        <div class="col">{t("infoNav3")}</div>
                                         <div class="col-auto">
                                             <i class="icon-arrow-thin right"></i>
                                         </div></div></a>
@@ -134,7 +136,7 @@ const UpdateAddress = () => {
                                     style={{ cursor: 'pointer' }}
                                 ><div class="row">
                                         <div class="col-auto"><i class="fas fa-file-alt"></i></div>
-                                        <div class="col">Thông tin đơn hàng</div>
+                                        <div class="col">{t("infoNav4")}</div>
                                         <div class="col-auto">
                                             <i class="icon-arrow-thin right"></i>
                                         </div></div></a>
@@ -149,7 +151,7 @@ const UpdateAddress = () => {
                                 onClick={handleLogout}
                             ><div class="row">
                                     <div class="col-auto"><i class="fas fa-solid fa-right-from-bracket"></i></div>
-                                    <div class="col">Đăng xuất</div>
+                                    <div class="col">{t("Logout")}</div>
                                     <div class="col-auto">
                                     </div></div></a>
                         </div>
@@ -157,14 +159,14 @@ const UpdateAddress = () => {
 
                 </div>
                 <div class="now-detail-profile">
-                    <div class="header-user-profile">Cập nhật địa chỉ</div>
+                    <div class="header-user-profile">{t("infoNav3")}</div>
                     <div class="content-user-profile">
                         <div class="table-account">
                             <div class="header">
                                 <div class="row">
-                                    <div class="col col-2">Họ tên</div>
-                                    <div class="col col-5">Địa chỉ</div>
-                                    <div class="col col-3">Số điện thoại</div>
+                                    <div class="col col-2">Name</div>
+                                    <div class="col col-5">{t("address1")}</div>
+                                    <div class="col col-3">{t("phoneNumber")}</div>
                                     <div class="col col-2"></div>
                                 </div>
                             </div>
@@ -177,9 +179,9 @@ const UpdateAddress = () => {
                                             <div class="col col-3">{contact.phoneNumber}</div>
                                             <div class="col col-2 txt-center">
                                                 <span style={{ backgroundColor: 'white' }} className="margin-05 link-button" variant="primary" onClick={() => handleShowModal(contact.address, contact.phoneNumber, 'update')}>
-                                                    Sửa
+                                                {t("change")}
                                                 </span>
-                                                <span class="margin-05 link-button" variant="danger" onClick={() => handleShowDeleteModal(contact._id)}>Xoá</span>
+                                                <span class="margin-05 link-button" variant="danger" onClick={() => handleShowDeleteModal(contact._id)}>{t("delete")}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -194,7 +196,7 @@ const UpdateAddress = () => {
                                                     '', 
                                                     'add'
                                                 )}>
-                                                Thêm
+                                                {t("add")}
                                             </button>
                                         </div>
                                     </div>
