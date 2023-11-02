@@ -31,20 +31,20 @@
 
 }
 
-.row {
+.row1 {
     display: flex;
     gap: 20px;
     border-bottom: 0.1px solid rgb(84, 84, 84);
 }
 
-.label-custom {
+.label-custom1 {
     border: 0.1px solid rgb(84, 84, 84);
     border-radius: 2px;
     margin: 0 5px;
     padding: 0 10px;
 }
 
-.form-group {
+.form-group1 {
     display: flex;
     outline: none;
     padding-bottom: 10px;
@@ -52,7 +52,7 @@
 
 .custom-file-image {}
 
-.btn {
+.btn1 {
     height: 30px;
     width: 100px;
     margin: 10px 0 10px 0;

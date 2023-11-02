@@ -5,7 +5,7 @@ import Admin from './Admin/App'
 function App() {
     return (
         <div>
-            <Admin />
+            <User />
         </div>
     )
 }
