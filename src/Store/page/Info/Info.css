@@ -1,0 +1,97 @@
+.now-detail-profile {
+    border-radius: 4px;
+    border: '1px solid black' !important;
+}
+
+
+.user-profile-update {
+    padding: 20px 50px;
+    position: relative;
+    margin: 0;
+    font-family: Noto Sans, Arial, sans-serif;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.title-user {
+    font-weight: 700;
+    font-size: 15px;
+
+    padding-bottom: 20px;
+    position: relative
+}
+
+.user-avatar-image {
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+    border-bottom: 0.1px solid rgb(84, 84, 84);
+}
+
+.label-custom {
+    border: 0.1px solid rgb(84, 84, 84);
+    border-radius: 2px;
+    margin: 0 5px;
+    padding: 0 10px;
+}
+
+.form-group {
+    display: flex;
+    outline: none;
+    padding-bottom: 10px;
+}
+
+.custom-file-image {}
+
+.btn {
+    height: 30px;
+    width: 100px;
+    margin: 10px 0 10px 0;
+    border-radius: 10px;
+    border: 0px;
+    cursor: pointer;
+}
+
+.col-3 {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.col-8,
+.col-9,
+.col-4 {
+    flex: 2;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.input-group input {
+    font-size: 14px;
+    padding: 0 20px;
+    border: 0;
+    border: 1px solid #ededed;
+    height: 30px;
+    margin: 0;
+    position: relative;
+
+}
+
+.change-pass {
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: 100px;
+    border: 0;
+    border-bottom: 1px solid #4073a7;
+    padding: 0
+}
