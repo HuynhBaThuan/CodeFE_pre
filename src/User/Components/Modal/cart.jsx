@@ -3,7 +3,9 @@ import nocart from '../../assets/img/no_cart.png'
 import CartItem from '../Item/cartItem';
 import AddDish from './addDish';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../services/authContext';
 const CartModal = ({ show, handleClose }) => {
+    const {isLoggedIn} = useAuth();
     const [total, setTotal] = useState(0); // Số tiền tổng ban đầu là 0
 
     // Hàm này được gọi từ mỗi CartItem để cập nhật tổng tiền
@@ -13,8 +15,15 @@ const CartModal = ({ show, handleClose }) => {
     };
     const navigate = useNavigate();
 
-    const handleOrder = () => {
-        navigate("/user/order")
+    const handleOrder = (activity) => {
+        if(activity === "order") {
+            handleClose()
+            navigate("/user/order")
+        } else {
+            handleClose()
+            navigate("/signin")
+        }
+        
     }
     return (
         <div>
@@ -125,13 +134,23 @@ const CartModal = ({ show, handleClose }) => {
                                             </div>
                                         </div>
                                         <div>
-                                            <a onClick={handleOrder}
-                                            ><button
+                                        {isLoggedIn ? (
+                                            <button
                                                 type="button"
                                                 class="ant-btn ant-btn-primary ant-btn-block"
+                                                onClick={() => handleOrder('order')}
                                             >
-                                                    <span>Đăng nhập để đặt đơn</span>
-                                                </button></a>
+                                                <span>Đặt đơn</span>
+                                            </button>
+                                            ) : (
+                                                <button
+                                                type="button"
+                                                class="ant-btn ant-btn-primary ant-btn-block"
+                                                onClick={() => handleOrder('signin')}
+                                            >
+                                                <span>Đăng nhập để đặt đơn</span>
+                                            </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
