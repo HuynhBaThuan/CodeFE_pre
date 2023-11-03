@@ -4,7 +4,9 @@ import CartItem from '../Item/cartItem';
 import AddDish from './addDish';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../services/authContext';
+import { useTranslation } from 'react-i18next';
 const CartModal = ({ show, handleClose }) => {
+    const {t} = useTranslation();
     const {isLoggedIn} = useAuth();
     const [total, setTotal] = useState(0); // Số tiền tổng ban đầu là 0
 
@@ -44,11 +46,11 @@ const CartModal = ({ show, handleClose }) => {
                                         <div className="Ilus___1VMHi">
                                             <img src={nocart} alt="" />
                                         </div>
-                                        <h5 className="Title___ELm2y">Start Ordering Food!</h5>
-                                        <div className="Caption___2tnhx">Add items to your cart and place order here.</div>
+                                        <h5 className="Title___ELm2y">{t("cartTitle")}</h5>
+                                        <div className="Caption___2tnhx">{t("cartMess")}</div>
                                         <div className="">
                                             <button type="button" className="ant-btn textButton___2wwqU Button___2IyZ2" onClick={handleClose}>
-                                                <span>Continue browsing</span>
+                                                <span>{t("cartNav")}</span>
                                             </button>
                                         </div>
                                     </div>
@@ -61,10 +63,10 @@ const CartModal = ({ show, handleClose }) => {
                                         <div class="Close___3j6yl" role="button" tabindex="0"
                                         ><div role="button" tabIndex="0" style={{ fontSize: '25px', fontWeight: '300', color: 'black', cursor: 'pointer' }} onClick={handleClose}>x</div></div>
                                         <div class="BlockTitle___2pGA_">
-                                            <div class="title___3Sq4y">Giỏ đồ ăn</div>
+                                            <div class="title___3Sq4y">{t("cartName")}</div>
                                             <div class="subtitle___1Stq2">
                                                 <div class="small___1YhlN CartHeader-Caption-Clock___cBpaH"><i class="fa-regular fa-clock"></i></div>
-                                                <span>Thời gian giao: 15 phút (Cách bạn 1,2 km)</span>
+                                                <span>{t("timeDelivery")} 15 {t("minutes")} ({t("distance")} 1,2 km)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -114,13 +116,13 @@ const CartModal = ({ show, handleClose }) => {
                                                     <div class="feeDetail___UmhH4">
                                                         <div class="flexSpaceBetween___J6Lln">
                                                             <div class="subTotal___1rSTB">
-                                                                <span>Tổng</span>
+                                                                <span>{t("total")}</span>
                                                             </div>
                                                             <h6>{total} ₫</h6>
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        Delivery Fee will be shown after you review order
+                                                    {t("cartMess1")}
                                                     </div>
                                                 </div>
                                             </div>
@@ -128,7 +130,7 @@ const CartModal = ({ show, handleClose }) => {
                                     </div>
                                     <div class="Footer___MhWOA">
                                         <div class="ant-row-flex CartFooter-PriceInfo___1UEeS">
-                                            <div class="ant-col-8">Tổng cộng</div>
+                                            <div class="ant-col-8">{t("total")}</div>
                                             <div class="ant-col-16 CartFooter-Price___1jcoa">
                                                 40.000 ₫
                                             </div>
@@ -140,7 +142,7 @@ const CartModal = ({ show, handleClose }) => {
                                                 class="ant-btn ant-btn-primary ant-btn-block"
                                                 onClick={() => handleOrder('order')}
                                             >
-                                                <span>Đặt đơn</span>
+                                                <span>{t("order")}</span>
                                             </button>
                                             ) : (
                                                 <button
@@ -148,7 +150,7 @@ const CartModal = ({ show, handleClose }) => {
                                                 class="ant-btn ant-btn-primary ant-btn-block"
                                                 onClick={() => handleOrder('signin')}
                                             >
-                                                <span>Đăng nhập để đặt đơn</span>
+                                                <span>{t("signinToOrder")}</span>
                                             </button>
                                             )}
                                         </div>

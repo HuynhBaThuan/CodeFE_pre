@@ -3,12 +3,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import StoreItem from '../../Components/Item/storeItem';
 import { useCity } from '../../services/CityContext';
 import { useTranslation } from 'react-i18next';
+import useLocationSelect from '../signUp/address';
 const Home = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
   const dropdownRef = useRef(null);
   const dropdownRef1 = useRef(null);
+  const {
+    cities,
+    districts,
+    handleCityChange2,
+} = useLocationSelect();
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -43,25 +49,74 @@ const Home = () => {
   const { selectedLocation, key, updateKey } = useCity();
   const [stores, setStores] = useState({ data: [] });
 
-  const handleRemoveKey = () => {
-    updateKey("")
+  const handleRemove = (name) => {
+    if(name === "key") {
+      updateKey("")
+    } else if(name === "cat") {
+      setSelectedCategories([])
+    } else if(name === "area") {
+      setSelectedAreas([])
+    }
   }
+  
+  const [categories, setCategories] = useState({ data: [] })
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedAreas, setSelectedAreas] = useState([]);
+  useEffect(() => {
+    const api = `https://falth.vercel.app/api/category`
+    fetch(api)
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data);
+        console.log(categories)
+      })
+      .catch((error) => {
+        console.error('Lỗi khi gọi API', error);
+      });
+  }, []);
 
   useEffect(() => {
-    console.log(selectedLocation, key)
-    const api = `https://falth.vercel.app/api/store?limit=12&isLocked=false&page=1&name=${key}&address=${selectedLocation}`
+    setSelectedAreas([]);
+    handleCityChange2(selectedLocation);
+  }, [selectedLocation]);
+
+
+  const handleCategoryChange = (categoryName) => {
+    if (selectedCategories.includes(categoryName)) {
+      // Nếu categoryId đã tồn tại trong danh sách đã chọn, hãy loại bỏ nó
+      setSelectedCategories(selectedCategories.filter(catName => catName !== categoryName));
+    } else {
+      // Nếu categoryId chưa tồn tại trong danh sách đã chọn, hãy thêm nó vào danh sách
+      setSelectedCategories([...selectedCategories, categoryName]);
+    }
+  };
+
+  const handleAreaChange = (areaName) => {
+    if (selectedAreas.includes(areaName)) {
+      // Nếu categoryId đã tồn tại trong danh sách đã chọn, hãy loại bỏ nó
+      setSelectedAreas(selectedAreas.filter(name => name !== areaName));
+    } else {
+      // Nếu categoryId chưa tồn tại trong danh sách đã chọn, hãy thêm nó vào danh sách
+      setSelectedAreas([...selectedAreas, areaName]);
+    }
+  };
+
+  useEffect(() => {
+    const selectedCat = selectedCategories[0] || '';
+    console.log(selectedLocation, key, selectedCat)
+    const api = `https://falth.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&name=${key}`
     console.log(api)
     fetch(api)
       .then((response) => response.json())
       .then((data) => {
         setStores(data);
-        console.log(data)
-        // console.log(stores.data[0].openAt) // Cập nhật state 'stores' với dữ liệu từ API
       })
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);
       });
-  }, [selectedLocation, key]);
+  }, [selectedLocation, key, selectedCategories]);
+
+
 
   return (
     <div>
@@ -85,62 +140,19 @@ const Home = () => {
                 {isOpen && (
                   <div class="container-box-filter">
                     <div class="content">
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Quận Cẩm Lệ"
-                          id="district 30"
-                        /><label for="district 30">Quận Cẩm Lệ</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Quận Hải Châu"
-                          id="district 31"
-                        /><label for="district 31">Quận Hải Châu</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Quận Liên Chiểu"
-                          id="district 32"
-                        /><label for="district 32">Quận Liên Chiểu</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Quận Ngũ Hành Sơn"
-                          id="district 33"
-                        /><label for="district 33">Quận Ngũ Hành Sơn</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Quận Sơn Trà"
-                          id="district 34"
-                        /><label for="district 34">Quận Sơn Trà</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Quận Thanh Khê"
-                          id="district 35"
-                        /><label for="district 35">Quận Thanh Khê</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Hòa Vang"
-                          id="district 158"
-                        /><label for="district 158">Hòa Vang</label>
-                      </div>
-                      <div class="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          data-text="Hoàng Sa"
-                          id="district 159"
-                        /><label for="district 159">Hoàng Sa</label>
-                      </div>
+                    
+                        
+                      {districts.map((district) => (                       
+                        <div className="custom-checkbox" key={district.Id}>
+                          <input
+                            type="checkbox"
+                            id={`district-${district.Id}`}
+                            checked={selectedAreas.includes(district.Name)}
+                            onChange={() => handleAreaChange(district.Name)}
+                          />
+                          <label htmlFor={`district-${district.Id}`}>{district.Name}</label>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -150,123 +162,18 @@ const Home = () => {
                 {isOpen1 && (
                   <div class="container-box-filter">
                     <div class="content">
-                      <div>
-                        <div class="custom-checkbox">
+                      {categories.map((category) => (
+
+                        <div className="custom-checkbox" key={category._id}>
                           <input
                             type="checkbox"
-                            data-text="Đồ ăn"
-                            id="category 1000000"
-                          /><label for="category 1000000">Đồ ăn</label>
+                            id={`category-${category._id}`}
+                            checked={selectedCategories.includes(category.catName)}
+                            onChange={() => handleCategoryChange(category.catName)}
+                          />
+                          <label htmlFor={`category-${category._id}`}>{category.catName}</label>
                         </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Đồ uống"
-                            id="category 1000001"
-                          /><label for="category 1000001">Đồ uống</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Đồ chay"
-                            id="category 1000002"
-                          /><label for="category 1000002">Đồ chay</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Bánh kem"
-                            id="category 1000003"
-                          /><label for="category 1000003">Bánh kem</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Tráng miệng"
-                            id="category 1000004"
-                          /><label for="category 1000004">Tráng miệng</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Homemade"
-                            id="category 1000005"
-                          /><label for="category 1000005">Homemade</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Vỉa hè"
-                            id="category 1000006"
-                          /><label for="category 1000006">Vỉa hè</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Pizza/Burger"
-                            id="category 1000007"
-                          /><label for="category 1000007">Pizza/Burger</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Món gà"
-                            id="category 1000008"
-                          /><label for="category 1000008">Món gà</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Món lẩu"
-                            id="category 1000009"
-                          /><label for="category 1000009">Món lẩu</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Sushi"
-                            id="category 1000010"
-                          /><label for="category 1000010">Sushi</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Mì phở"
-                            id="category 1000011"
-                          /><label for="category 1000011">Mì phở</label>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            data-text="Cơm hộp"
-                            id="category 1000012"
-                          /><label for="category 1000012">Cơm hộp</label>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -287,30 +194,34 @@ const Home = () => {
           <div class="tag-filter">
             {key !== "" && (
               <div className="widget-tag">
-              {t("homeKey")}: <span className="key-word">{key}</span>
-                <span className="btn-delete-tag" onClick={handleRemoveKey}>x</span>
+                {t("homeKey")}: <span className="key-word">{key}</span>
+                <span className="btn-delete-tag" onClick={() => handleRemove("key")}>x</span>
               </div>
             )}
-            {/* <div class="widget-tag">
-              {t("homeArea")}: <span class="key-word">(1)</span>
-              <span class="btn-delete-tag">x</span>
-            </div>
+            {selectedAreas.length > 0 && (
             <div class="widget-tag">
-               {t("homeCategory")}: <span class="key-word">(1)</span>
-              <span class="btn-delete-tag">x</span>
-            </div> */}
+               {t("homeArea")}: <span class="key-word">({selectedAreas.length})</span>
+              <span class="btn-delete-tag" onClick={()=>handleRemove("area")}>x</span>
+            </div>
+            )}
+            {selectedCategories.length > 0 && (
+            <div class="widget-tag">
+               {t("homeCategory")}: <span class="key-word">({selectedCategories.length})</span>
+              <span class="btn-delete-tag" onClick={()=>handleRemove("cat")}>x</span>
+            </div>
+            )}
           </div>
         </div>
         <div class="now-list-restaurant res-col-4">
           <div class="list-restaurant">
-            <div class="now-loading-restaurant">               
-                <div class="box-loading">
-                  <div class="box-thumbnail"></div>
-                  <div class="box-line-df"></div>
-                  <div class="box-line-lgx"></div>
-                  <div class="box-line-lg"></div>
-                </div>
+            <div class="now-loading-restaurant">
+              <div class="box-loading">
+                <div class="box-thumbnail"></div>
+                <div class="box-line-df"></div>
+                <div class="box-line-lgx"></div>
+                <div class="box-line-lg"></div>
               </div>
+            </div>
             {/* <StoreItem
               id="1"
               name="Cơm Gà Nam Chợ Mới - Hoàng Diệu"

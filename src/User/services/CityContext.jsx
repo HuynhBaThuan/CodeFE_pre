@@ -15,7 +15,7 @@ export function CityProvider({ children }) {
   };
 
   return (
-    <CityContext.Provider value={{ selectedLocation, updateLocation, key, updateKey }}>
+    <CityContext.Provider value={{ selectedLocation, updateLocation, key, updateKey}}>
       {children}
     </CityContext.Provider>
   );

@@ -87,4 +87,10 @@ const getStoreById = async (id) => {
   return response.data;
 }
 
-export { loginAPI, getUserInfo, addContact, deleteContact, getStoreById, getDefaultContact }
+const getAllCategory = async () => {
+  const api = `https://falth.vercel.app/api/category`
+  const response = await axios.get(api);
+  return response.data;
+}
+
+export { loginAPI, getUserInfo, addContact, deleteContact, getStoreById, getDefaultContact, getAllCategory }
