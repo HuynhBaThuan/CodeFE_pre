@@ -14,33 +14,51 @@ const Profile = () => {
         localStorage.removeItem('user')
         navigate("/")
     }
-    const [showChangePassword, setShowChangePassword] = useState(false);
+    // const [showChangePassword, setShowChangePassword] = useState(false);
 
-    const handleToggleChangePassword = () => {
-        setShowChangePassword(!showChangePassword);
-    };
+    // const handleToggleChangePassword = () => {
+    //     setShowChangePassword(!showChangePassword);
+    // };
     const navigate = useNavigate();
     const handleNav = ({ nav }) => {
         navigate(`/${nav}`);
     };
     const [userName, setUserName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [img, setImg] = useState("")
     const [address, setAddress] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
+    const [formDataInfo, setFormDataInfo] = useState({
+        firstName: '',
+        lastName: '',
+        address: '',
+        phoneNumber: '',
+    });
     useEffect(() => {
-        // const token = localStorage.getItem("token");
         const fetchData = async () => {
             try {
+                const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
+                const userData = JSON.parse(user);
+                const defaultContactId = userData.defaultContact;
+                const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
                 if (token) {
-                    const userData = await getUserInfo(token);
-                    const defaultContact = await getDefaultContact(token)
                     setUserName(userData.firstName + " " + userData.lastName)
+                    setFirstName(userData.firstName)
+                    setLastName(userData.lastName)
                     setEmail(userData.email)
                     setImg(userData.photo)
                     setAddress(defaultContact.address)
                     setPhoneNumber(defaultContact.phoneNumber)
+                    setFormDataInfo({
+                        ...formDataInfo,
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
+                        phoneNumber: defaultContact.phoneNumber,
+                        address: defaultContact.address,
+                    });
                 } else {
                     console.error("Token không tồn tại trong local storage");
                 }
@@ -65,7 +83,7 @@ const Profile = () => {
         });
     };
     const  [error, setError] = useState("")
-    const handleSubmit = async (e) => {
+    const handleChangePassword = async (e) => {
         e.preventDefault();
         if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.newPass.trim())) {
             setError(t("error5"))
@@ -80,7 +98,6 @@ const Profile = () => {
                     };
                     console.log(changePasswordData)
                     const decodedToken = JSON.parse(atob(token.split(".")[1]));
-                    // const response = await axios.post(`https://falth.vercel.app/api/user/${decodedToken.id}`, changePasswordData);
                     console.log(decodedToken.id)
                     const response = await axios.post(`https://falth.vercel.app/api/user/change-pass/${decodedToken.id}`, changePasswordData, {
                         headers: {
@@ -91,19 +108,65 @@ const Profile = () => {
                     localStorage.removeItem('token')
                     alert(t("alert"))
                     navigate("/signin")
-                    // console.log('Đổi mật khẩu thành công', response.data);
                 } else {
                     console.error("Token không tồn tại trong local storage");
                 }
             } catch (error) {
-                // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
-                // console.error('Lỗi đổi mật khẩu', error);
                 setError(t("error7"))
             }
         } else {
             setError(t("error6"))
         }
     };
+
+    
+
+    const handleChange1 = (e) => {
+        const { name, value } = e.target;
+        setFormDataInfo({
+            ...formDataInfo,
+            [name]: value,
+        });
+    };
+    const  [errorInfo, setErrorInfo] = useState("")
+    const handleChangeInfo = async (e) => {
+        e.preventDefault();
+        if(formDataInfo.firstName === '' || formDataInfo.lastName === ''|| formDataInfo.address === ''|| formDataInfo.phoneNumber === '') {
+            setErrorInfo(t("error11"))
+        }else if(!/^\d{10}$/.test(formDataInfo.phoneNumber)) {
+            setErrorInfo(t("error9"))
+        }else {
+            try {
+                const user = localStorage.getItem("user");
+                const token = localStorage.getItem("token");
+                const userData = JSON.parse(user);
+                // console.log(userData._id)
+                console.log(formDataInfo)
+                if (token) {
+                    const response = await axios.patch(`https://falth.vercel.app/api/user/${userData._id}`, formDataInfo, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    userData.firstName = formDataInfo.firstName;
+                    userData.lastName = formDataInfo.lastName;
+                    const defaultContactId = userData.defaultContact;
+                    const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
+                    defaultContact.address = formDataInfo.address;
+                    defaultContact.phoneNumber = formDataInfo.phoneNumber;
+                    localStorage.setItem("user", JSON.stringify(userData));
+                    alert(t("alert2"))
+                    window.location.reload()
+                    // setUserName(formDataInfo.firstName + " " + formDataInfo.lastName)
+                } else {
+                    console.error("Token không tồn tại trong local storage");
+                }
+            } catch (error) {
+                setErrorInfo(t("error7"))
+            }
+        } 
+    };
+    
     return (
         <div class="container">
             <div class="now-navigation-profile">
@@ -200,13 +263,30 @@ const Profile = () => {
                         <form>
                             <div class="title-user">{t("changeInfo")}</div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("name")}</div>
+                                <div class="col-3 txt-bold">{t("firstName")}</div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
-                                            name="name"
-                                            placeholder={userName}
+                                            name="firstName"
+                                            placeholder={firstName}
                                             type="text"
+                                            class="form-control"
+                                            value={formDataInfo.firstName}
+                                            onChange={handleChange1}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group align-items-center">
+                                <div class="col-3 txt-bold">{t("lastName")}</div>
+                                <div class="col-4">
+                                    <div class="input-group">
+                                        <input
+                                            name="lastName"
+                                            placeholder={lastName}
+                                            type="text"
+                                            value={formDataInfo.lastName}
+                                            onChange={handleChange1}
                                             class="form-control"
                                         />
                                     </div>
@@ -225,10 +305,12 @@ const Profile = () => {
                                 <div class="col-8">
                                     <div class="input-group">
                                         <textarea
-                                            name="name"
+                                            name="address"
                                             placeholder={address}
                                             type="text"
                                             class="form-control"
+                                            value={formDataInfo.address}
+                                            onChange={handleChange1}
                                             style={{ wordWrap: "break-word", resize: "vertical" }}
                                         />
                                     </div>
@@ -239,33 +321,30 @@ const Profile = () => {
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
-                                            name="name"
+                                            name="phoneNumber"
                                             placeholder={phoneNumber}
                                             type="text"
+                                            value={formDataInfo.phoneNumber}
+                                            onChange={handleChange1}
                                             class="form-control"
+                                            maxLength={10}
                                         />
                                     </div>
                                 </div>
                             </div>
-
-                            <div>
-                                <div className="row form-group align-items-center">
-                                    <div className="col-3 txt-bold">{t("pass")}</div>
-                                    <div className="col-8">
-                                        <div className="input-group">
-                                            <span className="show-pass">********</span>
-                                            <button
-                                                type="button"
-                                                className="change-pass"
-                                                id="change-pass"
-                                                onClick={handleToggleChangePassword}
-                                            >
-                                                {t("resetTitle")}
-                                            </button>
-                                        </div>
-                                    </div>
+                            {errorInfo && <div class="row form-group align-items-center"><div className="alert-danger">{errorInfo}</div></div>}
+                            <div class="row">
+                                <div class="col-3">
+                                    <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleChangeInfo}>
+                                    {t("saveChange")}
+                                    </button>
                                 </div>
-                                {showChangePassword && (
+                            </div>
+                        </form>
+                    </div>
+                    <div class="user-profile-update">
+                        <form>
+                        <div class="title-user">{t("resetTitle")}</div>
                                     <div className="form-group verify-pass">
                                         <div className="row align-items-center mar-bottom5">
                                             <div className="col-3 txt-bold">{t("oldPass")}</div>
@@ -313,19 +392,17 @@ const Profile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                            {error && <div class="row form-group align-items-center"><div className="alert-danger">{error}</div></div>}
-                            <div class="row">
-                                <div class="col-3">
-                                    <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleSubmit}>
-                                    {t("saveChange")}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                                {error && <div class="row form-group align-items-center"><div className="alert-danger">{error}</div></div>}
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleChangePassword}>
+                                            {t("resetTitle")}
+                                            </button>
+                                        </div>
+                                    </div>                          
 
+                        </form>
+                    </div>                 
                 </div>
             </div>
         </div>

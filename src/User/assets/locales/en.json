@@ -9,14 +9,19 @@
   "error8": "Invalid email",
   "error9": "Invalid phone number",
   "error10": "Email address already exists",
+  "error11": "Please enter full information!",
 
   "success": "Information received! Please confirm your email",
 
   "alert": "Password change successful, please log in again",
   "alert1": "Shop owner registration successful! Please register your store information.",
+  "alert2": "Changed information successfully",
 
   "newPass": "New password",
   "confirmPass": "Confirm password",
+  "oldPass": "Old password",
+  "back" : "Back",
+
 
   "title_SI": "Login",
   "loginMess_SI": "Do not have an account?",
@@ -135,5 +140,10 @@
   "distance": "Distance",
   "cartMess1" : "Delivery charges will be displayed after you review your order",
   "order" : "Place order",
-  "signinToOrder" : "Sign in to place an order"
+  "signinToOrder" : "Sign in to place an order",
+
+  "store" : "Restaurant",
+  "ratingInFALTH" : "rating on FALTH",
+  "menu" : "Menu",
+  "searchDish" : "Search dish in menu"
 }

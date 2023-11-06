@@ -17,9 +17,21 @@ import OrderPage from './Page/customer/orderPage'
 import StoreDetail from './Page/customer/storeDetail'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { AuthProvider } from './services/authContext'
+import { AuthProvider} from './services/authContext'
 import { CityProvider } from './services/CityContext'
 import { LanguageProvider } from './services/languageContext'
+import { Navigate } from 'react-router-dom'
+
+const ProtectedRoute = ({ element }) => {
+  const token = localStorage.getItem("token")
+  if (token) {
+    return element;
+  } else {
+    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    return <Navigate to="/signin" />;
+  }
+};
+
 const App = () => {
 
   return (
@@ -40,11 +52,12 @@ const App = () => {
                 <Route path="/forgotPass" element={<ForgotPass />} />
                 <Route path="/verify" element={<Verify />} />
                 <Route path="/resetPass" element={<ResetPass />} />
-                <Route path="/user/profile" element={<Profile />} />
-                <Route path="/user/orderHistory" element={<OrderHistory />} />
-                <Route path="/user/updateAddress" element={<UpdateAddress />} />
-                <Route path="/user/order" element={<OrderPage />} />
-                <Route path="/home/storeDetail" element={<StoreDetail />} />
+                <Route path="/home/storeDetail" element={<StoreDetail />}/>
+
+                <Route path="/user/profile" element={<ProtectedRoute element={<Profile />} />}/>
+                <Route path="/user/orderHistory" element={<ProtectedRoute element={<OrderHistory />} />} />
+                <Route path="/user/updateAddress" element={<ProtectedRoute element={<UpdateAddress />} />} />
+                <Route path="/user/order" element={<ProtectedRoute element={<OrderPage />} />} />
               </Routes>
               <Footer />
             </div>

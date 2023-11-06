@@ -50,6 +50,7 @@ const addContact = async (e, formData) => {
     // Xử lý phản hồi từ máy chủ, ví dụ: hiển thị thông báo thành công
     console.log('Liên hệ đã được thêm', response.data);
     // Xóa dữ liệu trong form sau khi thêm liên hệ thành công
+    return response.data
   } catch (error) {
     // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
     console.error('Lỗi khi thêm liên hệ', error);
@@ -93,4 +94,11 @@ const getAllCategory = async () => {
   return response.data;
 }
 
-export { loginAPI, getUserInfo, addContact, deleteContact, getStoreById, getDefaultContact, getAllCategory }
+const getAllCategoryByStoreId = async (id) => {
+  const api = `https://falth.vercel.app/api/category/store/${id}`
+  console.log(api)
+  const response = await axios.get(api);
+  console.log(response)
+  return response.data;
+}
+export { loginAPI, getUserInfo, addContact, deleteContact, getStoreById, getDefaultContact, getAllCategory, getAllCategoryByStoreId }

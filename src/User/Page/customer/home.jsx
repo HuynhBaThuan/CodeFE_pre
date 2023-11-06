@@ -68,7 +68,7 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
-        console.log(categories)
+        // console.log(categories)
       })
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);

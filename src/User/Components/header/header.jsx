@@ -104,12 +104,9 @@ const Header = () => {
                 const token = localStorage.getItem("token");
                 if (token) {
                     setIsLoggedIn(true)
-                    const userData = await getUserInfo(token);
-                    // const user = localStorage.getItem("user");
                     const savedUser = localStorage.getItem('user');
                     if (savedUser) {
                         const user = (JSON.parse(savedUser));
-                        // console.log(user)
                         console.log(user.firstName + user.lastName);
                         setUserName(user.firstName + user.lastName)
                         setImg(user.photo)

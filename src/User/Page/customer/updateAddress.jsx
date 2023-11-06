@@ -62,9 +62,13 @@ const UpdateAddress = () => {
     useEffect(() => {;
         const fetchData = async () => {
             try {
+                const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
+                const userData = JSON.parse(user);
+                const defaultContactId = userData.defaultContact;
+                const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
                 if (token) {
-                    const userData = await getUserInfo(token);
+                    // const userData = await getUserInfo(token);
                     setUserName(userData.firstName + " " + userData.lastName)
                     setImg(userData.photo)
                     setContacts(userData.contact)
