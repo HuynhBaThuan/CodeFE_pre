@@ -49,7 +49,7 @@ const MenuGroup = ({category, openModal}) => {
         <div>
             <div
                 class="menu-group"
-                id="section-group-menu-6936699"
+                id={`category-${category._id}`}
                 style={{
                     height: '56px',
                     width: '100%',

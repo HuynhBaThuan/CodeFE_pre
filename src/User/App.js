@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Signin from './Page/signIn/signIn'
 import SignUpCustomer from './Page/signUp/signUpCustomer'
 import SignUpShipper from './Page/signUp/signUpShipper'
@@ -21,7 +21,6 @@ import { AuthProvider} from './services/authContext'
 import { CityProvider } from './services/CityContext'
 import { LanguageProvider } from './services/languageContext'
 import { Navigate } from 'react-router-dom'
-
 const ProtectedRoute = ({ element }) => {
   const token = localStorage.getItem("token")
   if (token) {
@@ -33,6 +32,53 @@ const ProtectedRoute = ({ element }) => {
 };
 
 const App = () => {
+  const checkAndCreateCart = () => {
+    // Kiểm tra xem có biến 'cart' trong localStorage hay không
+    const existingCart = localStorage.getItem('cart');
+  
+    if (!existingCart) {
+      // Nếu không có, tạo một cart mặc định (có thể là một mảng trống)
+      const defaultCart = {
+        nameStore: 'Cửa hàng Food', // Tên cửa hàng
+        idStore: 'sdgdhhf1244',   // ID cửa hàng
+        products: [
+          {
+            id: '1',
+            image: 'https://images.foody.vn/res/g116/1155652/s120x120/aa296232-4b2a-4651-9153-de98b781-93324cb5-221117190509.jpeg',
+            name: 'Sản phẩm 1',
+            price: 100,
+            amount: 1
+          },
+          {
+            id: '2',
+            image: 'https://images.foody.vn/res/g116/1155652/s120x120/aa296232-4b2a-4651-9153-de98b781-93324cb5-221117190509.jpeg',
+            name: 'Sản phẩm 1',
+            price: 200,
+            amount: 2
+          },
+          {
+            id: '3',
+            image: 'https://images.foody.vn/res/g116/1155652/s120x120/aa296232-4b2a-4651-9153-de98b781-93324cb5-221117190509.jpeg',
+            name: 'Sản phẩm 1',
+            price: 300,
+            amount: 3
+          },
+          {
+            id: '4',
+            image: 'https://images.foody.vn/res/g116/1155652/s120x120/aa296232-4b2a-4651-9153-de98b781-93324cb5-221117190509.jpeg',
+            name: 'Sản phẩm 1',
+            price: 300,
+            amount: 2
+          }
+        ],   // Mảng sản phẩm
+      };
+      localStorage.setItem('cart', JSON.stringify(defaultCart));
+    }
+  }
+
+  useEffect(() => {
+    checkAndCreateCart();
+},);
 
   return (
     <LanguageProvider>

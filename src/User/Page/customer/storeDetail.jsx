@@ -1,61 +1,63 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect} from "react";
 import CartModal from "../../Components/Modal/cart";
 import { useLocation } from "react-router-dom";
 import { getAllCategoryByStoreId } from "../../services/userServices";
 import { useTranslation } from "react-i18next";
 import MenuGroup from "../../Components/Item/menuGroup";
+import { Link, Element } from "react-scroll";
 import axios from "axios";
 const StoreDetail = () => {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState([]);
     const location = useLocation()
     const store = location.state.store.store;
     const data = [
         {
-          id: 1,
-          catName: "Món nướng",
-          photo: "photo1.jpg",
+            id: '1',
+            catName: "Món nướng",
+            photo: "photo1.jpg",
         },
         {
-          id: 2,
-          catName: "Ăn vặt",
-          photo: "photo2.jpg",
+            id: '2',
+            catName: "Ăn vặt",
+            photo: "photo2.jpg",
         },
         {
-            id: 3,
+            id: '3',
             catName: "Món lẩu",
             photo: "photo3.jpg",
         },
-      ];
-  const openModal = () => {
-    setShowModal(true);
-  };
+    ];
+    const openModal = () => {
+        setShowModal(true);
+    };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+    const closeModal = () => {
+        setShowModal(false);
+    };
 
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-            setCategories(data)
-            // const data1 = await getAllCategoryByStoreId(store._id)
-            // const data1 = await axios.get("https://falth.vercel.app/api/category/store/651d7093e1494e0d580de293")
-            // console.log(data1)
-            
-        } catch (error) {
-            console.error("Lỗi khi lấy thông tin quán ăn:", error);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setCategories(data)
+                // const data1 = await getAllCategoryByStoreId(store._id)
+                // const data1 = await axios.get("https://falth.vercel.app/api/category/store/651d7093e1494e0d580de293")
+                // console.log(data1)
+
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin quán ăn:", error);
+            }
         }
-    }
-    fetchData();
-  }, []);
+        fetchData();
+    }, []);
 
-  const [activeCategory, setActiveCategory] = useState(null);
+    const [activeCategory, setActiveCategory] = useState(null);
 
-  const handleCategoryClick = (id) => {
-    setActiveCategory(id);
-  };
+    const handleCategoryClick = (categoryId) => {
+        setActiveCategory(categoryId);
+    };
+
     return (
         <div>
             <div class="wrapper">
@@ -76,7 +78,7 @@ const StoreDetail = () => {
                                 {store.name}
                             </h1>
                             <div class="address-restaurant">
-                               {store.address}
+                                {store.address}
                             </div>
                             <div class="rating">
                                 <div class="stars">
@@ -128,29 +130,22 @@ const StoreDetail = () => {
                                 <div class="menu-restaurant-category">
                                     <div class="list-category" id="scroll-spy">
                                         <div class="scrollbar-container ps">
-                                        {categories.map((category) => (
-                                            <div class="item">
-                                                <span
-                                                    id="" title={category.catName} 
-                                                    className={`item-link ${category.id === activeCategory ? 'active' : ''}`}
-                                                    onClick={() => handleCategoryClick(category.id)}
-                                                >{category.catName}</span>
-                                            </div>
-                                        ))}
-                                            {/* <div class="ps__rail-x" style={{ left: '0px', bottom: '0px' }}>
-                                                <div
-                                                    class="ps__thumb-x"
-                                                    tabindex="0"
-                                                    style={{ left: '0px', width: '0px' }}
-                                                ></div>
-                                            </div>
-                                            <div class="ps__rail-y" style={{ top: '0px', right: '0px' }}>
-                                                <div
-                                                    class="ps__thumb-y"
-                                                    tabindex="0"
-                                                    style={{ top: '0px', height: '0px' }}
-                                                ></div>
-                                            </div> */}
+                                            {categories.map((category) => (
+                                                <Link to={category.catName} spy={true} smooth={true} duration={500} offset={-150}>
+
+                                                    <div className="item" key={category.id}>
+                                                        <span
+                                                            // id={`category-link-${category.id}`}
+                                                            title={category.catName}
+                                                            className={`item-link ${category.id === activeCategory ? 'active' : ''
+                                                                }`}
+                                                            onClick={() => handleCategoryClick(category.id)}
+                                                        >
+                                                            {category.catName}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -197,19 +192,24 @@ const StoreDetail = () => {
                                                         position: 'relative',
                                                     }}
                                                 >
-                                               
+
                                                     {categories.map((category) => (
-                                                        <MenuGroup category={category} openModal={openModal}/>
+                                                        <Element name={category.catName} className="element">
+
+                                                            <MenuGroup
+                                                                category={category}
+                                                                openModal={openModal}
+                                                            />
+                                                        </Element>
                                                     ))}
-                                                    
 
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
-                                
+
                             </div>
                         </div>
 
@@ -219,8 +219,8 @@ const StoreDetail = () => {
 
             </div>
             {showModal && (
-        <CartModal show={showModal} handleClose={closeModal} />
-      )}
+                <CartModal show={showModal} handleClose={closeModal} />
+            )}
         </div>
     )
 }
