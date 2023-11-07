@@ -7,7 +7,7 @@ const DeleteConfirmationModal = ({ show, handleClose, id }) => {
     console.log(id)
 
     const handleDeleteItem = () => {
-        console.log(id)
+        // console.log(id)
         deleteContact(id)
         const user = localStorage.getItem("user");
         const userData = JSON.parse(user);

@@ -119,24 +119,32 @@ const Header = () => {
         fetchData();
     },);
 
+    const [cart, setCart] = useState({
+        idStore : "",
+        nameStore : "",
+        products : []
+    });
     const [productsCount, setProductsCount] = useState(0);
-    const [cart, setCart] = useState(null);
 
   useEffect(() => {
-    // Lắng nghe sự kiện 'cartUpdated' để cập nhật số lượng sản phẩm
     const updateCartCount = () => {
-      const cartdata = JSON.parse(localStorage.getItem('cart'));
+        const cartdata = JSON.parse(localStorage.getItem('cart'));
       if (cartdata && cartdata.products) {
-        // Nếu cart tồn tại và có thuộc tính 'products', thì mới cập nhật productsCount
         const count = cartdata.products.length;
         setProductsCount(count);
-        setCart(cartdata)
+        setCart({
+            ...cart,
+            idStore: cartdata.idStore,
+            nameStore: cartdata.nameStore,
+            products: cartdata.products
+          });
         console.log(cartdata)
+        console.log(productsCount)
       }
     }
 
-    window.addEventListener('cartUpdated', updateCartCount);
     updateCartCount(); // Cập nhật ban đầu
+    window.addEventListener('cartUpdated', updateCartCount);
 
     return () => {
       window.removeEventListener('cartUpdated', updateCartCount);
@@ -316,7 +324,7 @@ const Header = () => {
                                         <ul class="header__cart-list-item">
                                             {cart.products.map((product) => (
                                                 <li class="header__cart-item">
-                                                    <img src={product.image} alt="" class="header__cart-img" />
+                                                    <img src={product.image[0]} alt="" class="header__cart-img" />
                                                     <div class="header__cart-item-info">
                                                         <div class="header__cart-item-head">
                                                             <h5 class="header__cart-item-name">{product.name}</h5>
@@ -328,7 +336,8 @@ const Header = () => {
                                                         </div>
                                                         <div class="header__cart-item-body">
                                                             <span class="header__cart-item-description">
-                                                                {t("headCartRequire")}
+                                                                {/* {t("headCartRequire")} */}
+                                                                {product.specialRequest}
                                                             </span>
                                                             <span class="header__cart-item-del">{t("delete")}</span>
                                                         </div>
