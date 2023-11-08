@@ -5,9 +5,10 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Modal from 'react-bootstrap/Modal';
 import ava from '../../assets/img/images.jpg'
 import { useTranslation } from 'react-i18next';
-
+import { useNavigate } from 'react-router-dom';
 const OrderHistory = () => {
     const {t} = useTranslation();
+    const navigate = useNavigate();
     const fromDateRef = useRef(null);
     const toDateRef = useRef(null);
 
@@ -82,6 +83,9 @@ const OrderHistory = () => {
         handleClose(); // Close the modal after submission
     };
 
+    const handleBack = () => {
+        navigate("/user/profile")
+    }
 
     return (
         <div>
@@ -227,7 +231,58 @@ const OrderHistory = () => {
                                     </a>
                                 </div>
                             </div>
+                            <div class="history-table-row">
+                                <div class="history-table-cell history-table-col1">1</div>
+                                <div class="history-table-cell history-table-col3">
+                                    <div>{t("orderTime")}: 10/09/2023 13:56</div>
+                                    <div>{t("receiveTime")}: 10/09/2023 14:10</div>
+                                </div>
+                                <div class="history-table-cell history-table-col4">
+                                    <a
+                                        href="/da-nang/coco-che"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    ><div class="text-body">
+                                            <strong class="d-block text-truncate"
+                                            >Coco Chè - Hồ Xuân Hương</strong><span class="d-block text-truncate"
+                                            >82 Hồ Xuân Hương, P. Khuê Mỹ, Quận Ngũ Hành Sơn, Đà
+                                                Nẵng</span>
+                                        </div></a>
+                                </div>
+                                <div class="history-table-cell history-table-col5">
+                                    <strong class="d-block text-truncate">Tôn Long Tiến</strong>
+                                    <a href='#'
+                                        class="font-weight-bold"
+                                        onClick={handleShowModal1}
+                                    >{t("rating")}</a>
+                                </div>
+                                <div class="history-table-cell history-table-col6">
+                                    <div style={{ fontWeight: 'bold' }}><span>171,550đ</span></div>
+                                    <div style={{ color: 'green', fontWeight: 'bold' }}>
+                                        Thanh toán trực tiếp
+                                    </div>
+                                </div>
+                                <div class="history-table-cell history-table-col7">
+                                    <div class="font-weight-bold history-table-status">
+                                        Complete
+                                    </div>
+                                    {/* <button
+                                        title="Click here to re order."
+                                        class="font-weight-bold history-table-status gray pointer"
+                                    >
+                                        Re-order
+                                    </button> */}
+                                </div>
+                                <div class="history-table-cell history-table-col8">
+                                    <a href="#" className="d-block mb-1" onClick={handleShowModal}>
+                                        {t("orderDetail")}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                        <div class="filter-table-item" style={{float:"right"}}>
+                                <button type="button" class="btn btn-sm" onClick={handleBack}>{t("back")}</button>
+                            </div>
                     </div>
                 </div>
             </div>

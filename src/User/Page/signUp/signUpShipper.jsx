@@ -3,6 +3,7 @@ import useLocationSelect from "./address";
 import './signUp.css'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 const SignUpShipper = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -61,14 +62,23 @@ const SignUpShipper = () => {
             });
     };
 
+    // const handleChangeImg = (e) => {
+    //     const { name, files } = e.target;
+    //     if (files.length > 0) {
+    //       setFormData({
+    //         ...formData,
+    //         [name]: files[0],
+    //       });
+    //     }
+    //   };
     const handleChangeImg = (e) => {
-        const { name, files } = e.target;
-        if (files.length > 0) {
-          setFormData({
-            ...formData,
-            [name]: files[0],
-          });
-        }
+        const name = e.target.name;
+        const value = e.target.files[0]; // Get the selected file
+      
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
       };
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
@@ -101,13 +111,13 @@ const SignUpShipper = () => {
             setError(t("error9"))
         } else {
             try {
-                console.log(registrationData)
+                // console.log(registrationData)
 
-            //   const response = await axios.post('https://falth.vercel.app/api/shipper', registrationData);
-            //   console.log('Đăng ký thành công', response.data);
-            //   setError('')
-            //   setSuccess('Đã nhận được thông tin! Mời bạn xác nhận email')
-            //     navigate("/verify", { state: { action: "verifyUser", email: registrationData.email } });
+              const response = await axios.post('https://falth.vercel.app/api/shipper', registrationData);
+              console.log('Đăng ký thành công', response.data);
+              setError('')
+              setSuccess('Đã nhận được thông tin! Mời bạn xác nhận email')
+                navigate("/verify", { state: { action: "verifyUser", email: registrationData.email } });
             } catch (error) {
               setError('Địa chỉ email đã tồn tại');
             }
@@ -129,7 +139,7 @@ const SignUpShipper = () => {
                                     <button class="btn_su btn--radius btn--red" style={{marginLeft:'20px'}} onClick={() => handleNav({ nav: "signUpOwner" })}>{t("owner")}</button>
                                 </div>
                             </div>
-                            <form method="POST" onSubmit={handleSubmit}>
+                            <form method="POST" onSubmit={handleSubmit} encType="multipart/form-data">
                                 <div class="input-group_su">
                                     <input style={{border:'none'}}class="input--style-2" type="text" placeholder="Email" name="email" required value={formData.email} onChange={handleChange}/>
                                 </div>
@@ -232,7 +242,7 @@ const SignUpShipper = () => {
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="frontImageCCCD" accept="image/*" value={formData.frontImageCCCD} onChange={handleChangeImg}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="file" name="frontImageCCCD" accept="image/*" onChange={handleChangeImg}/>
                                         </div>
                                     </div>
                                 </div>
@@ -245,7 +255,7 @@ const SignUpShipper = () => {
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="behindImageCCCD" accept="image/*" value={formData.behindImageCCCD} onChange={handleChangeImg}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="file" name="behindImageCCCD" accept="image/*" onChange={handleChangeImg}/>
                                         </div>
                                     </div>
                                 </div>
@@ -257,22 +267,10 @@ const SignUpShipper = () => {
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="licenseImage" accept="image/*" value={formData.licenseImage} onChange={handleChangeImg}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="file" name="licenseImage" accept="image/*" onChange={handleChangeImg}/>
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div class="row_su row-space">
-                                    <div class="col-2_su">
-                                        <div class="input-groupv">
-                                            <input style={{border:'none'}}class="input--style-2" type="text" name="image" accept="image/*" placeholder="Mặt trước giấy đăng kí xe: " readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-2_su">
-                                        <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="vehicle_reg" accept="image/*" />
-                                        </div>
-                                    </div>
-                                </div> */}
                                 {error && <div className="alert-danger">{error}</div>}
                                 {success && <div className="alert-success">{success}</div>}
                                 <div class="p-t-30">

@@ -18,10 +18,12 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         if (/^\d{10}$/.test(formData.phoneNumber)) {
             if(action1  === 'add') {
-                addContact(e, formData)
+                const response = await addContact(e, formData)
+                console.log(response)
+                localStorage.setItem("user", JSON.stringify(response));
             } else {
                 console.log('Update')
             }

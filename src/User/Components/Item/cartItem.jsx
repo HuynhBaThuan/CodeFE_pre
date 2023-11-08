@@ -2,30 +2,30 @@ import React, { useState, useEffect } from "react";
 import '../../assets/css/cart.css'
 import DeleteConfirmationModal from "../Modal/deleteDanger";
 import AddDish from "../Modal/addDish";
-const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, updateTotalPrice, id}) => {
-
+const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, id, updateTotalPrice}) => {
+    // 
     const [quantity, setQuantity] = useState(inputQuantity);
   const [totalPrice, setTotalPrice] = useState(quantity * price);
   const [currentSpecialRequest, setCurrentSpecialRequest] = useState(specialRequest);
   const handleDecrease = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
-    updateTotalPrice(id,price); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
-
+      console.log(price)
+      updateTotalPrice(id, quantity - 1, price);
     }
   };
 
   const handleIncrease = () => {
     if (quantity < 10) {
       setQuantity(quantity + 1);
-    updateTotalPrice(id, price); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
-
+        console.log(price)
+        updateTotalPrice(id, quantity + 1, price);
     }
   };
 
   useEffect(() => {
     setTotalPrice(quantity * price);
-    updateTotalPrice(id, totalPrice); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
+    // updateTotalPrice(id, totalPrice); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
   }, [quantity, price]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);

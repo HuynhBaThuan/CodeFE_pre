@@ -12,7 +12,7 @@ const Signin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); // Initialize navigate
-    const { setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn} = useAuth();
     const [loadingAPI, setLoadingAPI] = useState(false);
     const { setUserName } = useAuth()
     const { setImg } = useAuth()
@@ -28,7 +28,7 @@ const Signin = () => {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.data.user));
                 setIsLoggedIn(true);
-                console.log(res.data.data.user.firstName + res.data.data.user.lastName)
+                // console.log(res.data.data.user.firstName + res.data.data.user.lastName)
                 setUserName(res.data.data.user.firstName + res.data.data.user.lastName)
                 setImg(res.data.data.user.photo)
                 navigate("/");

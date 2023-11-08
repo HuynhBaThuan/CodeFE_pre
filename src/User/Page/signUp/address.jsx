@@ -29,6 +29,15 @@ function useLocationSelect() {
     }
   };
 
+  const handleCityChange2 = (selectedCityName) => {
+    if (selectedCityName !== "") {
+      const selectedCity = cities.find((city) => city.Name.includes(selectedCityName));
+      setDistricts(selectedCity.Districts);
+    } else {
+      setDistricts([]);
+    }
+  };
+
   const handleDistrictChange = (e) => {
     const selectedDistrictId = e.target.value;
     // Tìm phường/xã dựa trên quận/huyện được chọn
@@ -46,6 +55,7 @@ function useLocationSelect() {
     wards,
     handleCityChange,
     handleDistrictChange,
+    handleCityChange2
   };
 }
 

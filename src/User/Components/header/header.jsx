@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/css/header.css'
 import logo from '../../assets/img/logo.png'
-import images from '../../assets/img/images.jpg'
 import emptycart from '../../assets/img/no_cart.png'
 import dishincart from '../../assets/img/food.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +10,6 @@ import '../../assets/fonts/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
 import { useNavigate } from "react-router-dom";
 import CartModal from '../Modal/cart';
 import { useAuth, useLogout } from '../../services/authContext';
-import { getUserInfo } from '../../services/userServices';
 import { useCity } from '../../services/CityContext';
 import { useLang } from '../../services/languageContext';
 import { useTranslation } from "react-i18next";
@@ -104,12 +102,9 @@ const Header = () => {
                 const token = localStorage.getItem("token");
                 if (token) {
                     setIsLoggedIn(true)
-                    const userData = await getUserInfo(token);
-                    // const user = localStorage.getItem("user");
                     const savedUser = localStorage.getItem('user');
                     if (savedUser) {
                         const user = (JSON.parse(savedUser));
-                        // console.log(user)
                         console.log(user.firstName + user.lastName);
                         setUserName(user.firstName + user.lastName)
                         setImg(user.photo)
@@ -122,7 +117,39 @@ const Header = () => {
             }
         }
         fetchData();
-    }, []);
+    },);
+
+    const [cart, setCart] = useState({
+        idStore : "",
+        nameStore : "",
+        products : []
+    });
+    const [productsCount, setProductsCount] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+        const cartdata = JSON.parse(localStorage.getItem('cart'));
+      if (cartdata && cartdata.products) {
+        const count = cartdata.products.length;
+        setProductsCount(count);
+        setCart({
+            ...cart,
+            idStore: cartdata.idStore,
+            nameStore: cartdata.nameStore,
+            products: cartdata.products
+          });
+        console.log(cartdata)
+        console.log(productsCount)
+      }
+    }
+
+    updateCartCount(); // Cập nhật ban đầu
+    window.addEventListener('cartUpdated', updateCartCount);
+
+    return () => {
+      window.removeEventListener('cartUpdated', updateCartCount);
+    }
+  }, []);
 
     return (
         <div>
@@ -286,33 +313,37 @@ const Header = () => {
                             <div class="header__cart">
                                 <div class="header__cart-wrap">
                                     <i class="header__cart-icon fas fa-shopping-cart" onClick={openModal}></i>
-                                    <span class="header__cart-notice" onClick={openModal}>3</span>
+                                    <span class="header__cart-notice" onClick={openModal}>{productsCount}</span>
                                     {/* <!-- No cart: header__cart-list--no-cart --> */}
                                     <div class="header__cart-list">
                                         <img src={emptycart} alt="" class="header__cart-no-cart-img" />
                                         <span class="header__cart-list-no-cart-msg">{t("headEmptyCart")}</span>
 
                                         <h4 class="header__cart-heading">{t("headCartTitle")}</h4>
+                                        <h4 class="header__cart-heading" style={{color:"black"}}>{cart.nameStore}</h4>
                                         <ul class="header__cart-list-item">
-                                            <li class="header__cart-item">
-                                                <img src={dishincart} alt="" class="header__cart-img" />
-                                                <div class="header__cart-item-info">
-                                                    <div class="header__cart-item-head">
-                                                        <h5 class="header__cart-item-name">Gà rán</h5>
-                                                        <div class="header__cart-item-price-wrap">
-                                                            <span class="header__cart-item-price">2.000.000đ</span>
-                                                            <span class="header__cart-item-mul">x</span>
-                                                            <span class="header__cart-item-qnt">1</span>
+                                            {cart.products.map((product) => (
+                                                <li class="header__cart-item">
+                                                    <img src={product.image[0]} alt="" class="header__cart-img" />
+                                                    <div class="header__cart-item-info">
+                                                        <div class="header__cart-item-head">
+                                                            <h5 class="header__cart-item-name">{product.name}</h5>
+                                                            <div class="header__cart-item-price-wrap">
+                                                                <span class="header__cart-item-price">{product.price}đ</span>
+                                                                <span class="header__cart-item-mul">x</span>
+                                                                <span class="header__cart-item-qnt">{product.amount}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="header__cart-item-body">
+                                                            <span class="header__cart-item-description">
+                                                                {/* {t("headCartRequire")} */}
+                                                                {product.specialRequest}
+                                                            </span>
+                                                            <span class="header__cart-item-del">{t("delete")}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="header__cart-item-body">
-                                                        <span class="header__cart-item-description">
-                                                            {t("headCartRequire")}
-                                                        </span>
-                                                        <span class="header__cart-item-del">{t("delete")}</span>
-                                                    </div>
-                                                </div>
-                                            </li>        
+                                                </li>        
+                                            ))}
                                             
                                         </ul>
 
