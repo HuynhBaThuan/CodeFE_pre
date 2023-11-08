@@ -61,7 +61,7 @@ const UserProfile = () => {
 
     const getdatainfostore = async (json) => {
         try {
-            const response = await axios.get(`https://falth.vercel.app/api/store/${_id}`, json
+            const response = await axios.get(`https://falth.vercel.app/api/store/owner/${_id}`, json
                 , {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -168,7 +168,7 @@ const UserProfile = () => {
     };
 
     return (
-        <Box width="90%" sx={{ m: '0 5%', }}>
+        <Box width="80%" sx={{ m: '0 5%', }}>
             <div className="now-detail-profile" style={{
                 borderRadius: "4px",
                 boxShadow: " 0 0 3px 0 rgba(50,50,50,.3)"

@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Box, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import SlideProduct from "../../components/SlideProduct";
-import ProductCate from "../../components/ProductCate";
 import axios from 'axios';
+import Loading from '../../components/Loading/Loading'
+import style from './category.css';
 
 const Category = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const [currentPage, setCurrentPage] = useState(1);
     const [catName, setCatName] = useState('');
-
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
     const api = `https://falth.vercel.app/api/category/store/${_id}`;
     const [data, setData] = useState([]);
-    const [productList, setProductList] = useState([]);
+    const itemsPerPage = 8;
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://falth.vercel.app/api/category/store/651d7093e1494e0d580de290", {
+                const response = await axios.get("https://falth.vercel.app/api/product/store/653233e16d8d513510d93744", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
                 const responseData = response.data.data;
                 setData(responseData);
+                setTotalPages(Math.ceil(responseData.length / itemsPerPage));
             } catch (error) {
                 console.log(error);
+            }
+            finally {
+                setIsLoading(false)
             }
         };
 
@@ -39,7 +45,6 @@ const Category = () => {
                     }
                 });
                 const responseData = response.data.data.data;
-                setProductList(responseData);
             } catch (error) {
                 console.log(error);
             }
@@ -52,40 +57,58 @@ const Category = () => {
         fetchData();
     }, [api, token, catName]);
 
-    const handleAccessCategory = (categoryData) => {
-        setCatName(categoryData);
-        console.log(categoryData);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     };
 
     return (
-        <Box m="20px">
-            <Box
-                display="grid"
-                gridTemplateColumns="repeat(12, 1fr)"
-                gridAutoRows="140px"
-                gap="20px"
-            >
-                <Box
-                    gridColumn="span 12"
-                    gridRow="span 2"
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <SlideProduct data={data} onAccessCategory={handleAccessCategory} />
-                </Box>
+        <div className="product">
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <>
+                    <h2>Category</h2>
+                    <div className="container">
+                        {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+                            <div key={index} className="box">
+                                <div className="img_box">
+                                    <img className="image" src={item.images} alt="image" />
+                                </div>
+                                <div className="detail">
+                                    <h3>{item.name}</h3>
+                                    <p>{item.description}</p>
+                                    <div className="rating">
+                                        {[...Array(item.ratingAverage)].map((rating, index) => (
+                                            <i key={index} className="fa-solid fa-star" style={{ fontSize: '14px' }}></i>
+                                        ))}
 
-                <Box
-                    gridColumn="span 12"
-                    gridRow="span 2"
-                    backgroundColor={colors.primary[400]}
-                    overflow="auto"
-                >
-                    <ProductCate data={productList} />
-                </Box>
-            </Box>
-        </Box>
+                                    </div>
+                                    <h4>{item.price}</h4>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <ul className="pagination">
+                        <li className={currentPage === 1 ? 'disabled' : ''}>
+                            <a className="" onClick={() => handlePageChange(currentPage - 1)}>
+                                <i className="fa-solid fa-circle-chevron-left" style={{ color: 'red', fontSize: '18px', verticalAlign: 'middle' }}></i>
+                            </a>
+                        </li>
+                        {Array.from({ length: totalPages }).map((_, index) => (
+                            <li key={index} className={currentPage === index + 1 ? 'active' : ''}>
+                                <a className="undefined" href="#" onClick={() => handlePageChange(index + 1)}>{index + 1}</a>
+                            </li>
+                        ))}
+                        <li className={currentPage === totalPages ? 'disabled' : ''}>
+                            <a className="" onClick={() => handlePageChange(currentPage + 1)}>
+                                <i className="fa-solid fa-circle-chevron-right" style={{ color: 'red', fontSize: '18px', verticalAlign: 'middle' }}></i>
+                            </a>
+                        </li>
+                    </ul>
+                </>
+            )
+            }
+        </div >
     );
 };
 

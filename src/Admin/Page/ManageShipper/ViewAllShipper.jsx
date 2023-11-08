@@ -1,22 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Box, Typography, useTheme } from "@mui/material";
+import React, { useEffect, useState, useRef } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { tokens } from "../../theme";
-import { Button } from "@mui/material";
 import axios from 'axios';
-import style from './Detailstore.module.css'
-import Bill from './Detailstore';
+import { tokens } from "../../theme";
+import { Box, Typography, responsiveFontSizes, useTheme } from "@mui/material";
+import DetailShipper from './DetailShipper';
+import style from "./DetailShipper.module.css";
+import Notify from '../../../Components/Notify/Notify';
 
-const Acceptstore = ({ Catname }) => {
-
-
+function ManageShipper() {
     const [data, setData] = useState([]);
     const [selectActive, setSelectActive] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [openDetail, setOpenDetail] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-
+    const [error, setError] = useState(false)
+    const [message, setMessage] = useState("")
     const formRef = useRef();
+
+    const Showdetailshipper = (rows) => {
+        setOpenDetail(true);
+        setSelectedRow(rows);
+    }
+
+    const Acceptshipper = (rows) => {
+        setOpenDetail(true);
+        setSelectedRow(rows);
+    }
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -34,7 +43,9 @@ const Acceptstore = ({ Catname }) => {
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/store/city/Đà Nẵng`;
+    const api = `https://falth.vercel.app/api/admin/shipper/`;
+
+
     const fetchData = async () => {
         try {
             const response = await axios.get(api, {
@@ -42,32 +53,30 @@ const Acceptstore = ({ Catname }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            const responseData = response.data.data.data;
-            setData(responseData);
-        } catch (error) {
-            console.log(error);
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
-    const Searchproduct = async (name) => {
-        console.log(name);
-        try {
-            const response = await axios.get(`https://falth.vercel.app/api/product/search?search=${name}`
-                , {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-            const responseData = response.data.data.data;
+            const responseData = response.data.data;
             console.log(responseData);
             setData(responseData);
             setIsLoading(false);
-
         } catch (error) {
             console.log(error);
+        }
+    };
+    const handleDeleteClick = (id) => {
+        const confirmed = window.confirm('Bạn có muốn cấp phép hoạt động cho shipper?');
+        console.log(id)
+
+        if (confirmed) {
+            try {
+                axios.patch(`https://falth.vercel.app/api/admin/shipper/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then((res) => {
+                    fetchData();
+                })
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
@@ -75,33 +84,63 @@ const Acceptstore = ({ Catname }) => {
         fetchData();
     }, []);
 
-    const handleDetailClick = (row) => {
-
-        setSelectedRow(row);
-        setOpenDetail(true);
-    };
-
+    const rowsWithUniqueIds = data.map((item, index) => {
+        const uniqueId = index;
+        return { ...item, id: uniqueId };
+    });
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
     const columns = [
         { field: "id", headerName: "ID" },
         {
             flex: 1,
-            field: "name",
+            field: 'photo',
+            headerAlign: "center",
+            align: "center",
+            headerName: 'Hình ảnh',
+            renderCell: (params) => (
+                <img
+                    src={params.value}
+                    alt="Hình ảnh"
+                    style={{ width: "50px", height: "50px", borderRadius: "50px" }}
+                />
+            ),
+        },
+        {
+            flex: 1,
+            field: "firstName",
+            headerName: "Họ",
+            type: "firstName",
+            headerAlign: "center",
+            align: "center",
+        },
+        {
+            flex: 1,
+            field: "lastName",
             headerName: "Tên",
-            type: "number",
-            headerAlign: "left",
-            align: "left",
+            type: "type",
+            headerAlign: "center",
+            align: "center",
         },
         {
-            flex: 1,
-            field: "address",
-            headerName: "Địa chỉ",
+            flex: 2,
+            field: "phoneNumber",
+            headerAlign: "center",
+            align: "center",
+            headerName: "Số điện thoại",
         },
         {
-            field: "Detsil",
-            flex: 1,
+            flex: 2,
+            field: "status",
+            headerAlign: "center",
+            align: "center",
+            headerName: "Trạng thái",
+        },
+        {
+            field: "Detail",
+            flex: 2,
             headerName: "Xem Chi Tiết",
             renderCell: (params) => {
                 return (
@@ -113,7 +152,7 @@ const Acceptstore = ({ Catname }) => {
                         justifyContent="center"
                         backgroundColor={colors.greenAccent[600]}
                         borderRadius="4px"
-                        onClick={() => handleDetailClick(params.row)}
+                        onClick={() => Showdetailshipper(params.row)}
                     >
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
                             Xem chi tiết
@@ -123,8 +162,8 @@ const Acceptstore = ({ Catname }) => {
             },
         },
         {
-            headerName: "Khóa của hàng",
-            flex: 1,
+            headerName: "Khóa tài khoản",
+            flex: 2,
             renderCell: (params) => {
                 return (
                     <Box
@@ -135,22 +174,16 @@ const Acceptstore = ({ Catname }) => {
                         justifyContent="center"
                         backgroundColor={colors.greenAccent[600]}
                         borderRadius="4px"
-                    // onClick={() => handleDeleteClick(params.row)}
+
                     >
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                            Khóa cửa hàng
+                            Khóa tài khoản
                         </Typography>
                     </Box>
                 );
             },
         },
     ];
-
-    const rowsWithUniqueIds = data.map((item, index) => {
-        const uniqueId = index;
-        return { ...item, id: uniqueId };
-    });
-
 
     return (
         <Box m="20px" position='relative'>
@@ -180,39 +213,39 @@ const Acceptstore = ({ Catname }) => {
                     },
                 }}
             >
-                {openDetail && (
-                    <div className="form-container" >
-                        <div className={style.add} ref={formRef} style={{ zIndex: 1, top: 0, right: 0, background: colors.primary[400], width: '40%', maxHeight: '100%' }}>
-                            <Bill rows={selectedRow} />
+                {openDetail && selectedRow && (
+                    <div className="form-container">
+                        <div ref={formRef} className={style.add} style={{ zIndex: 1, top: 0, right: 0, background: colors.primary[400], width: '40%', maxHeight: '100%' }}>
+                            <DetailShipper rows={selectedRow} />
                         </div>
                     </div>
                 )}
                 <div className={style.dsdh} >
                     <div className={style.dshd1} style={{ background: colors.primary[400], }} >
-                        <div className={style.titledsdh}>Danh sách của hàng</div>
+                        <div className={style.titledsdh}>Danh sách Shipper</div>
                         <div className={style.searchBar}>
                             <input
                                 type="text"
                                 className={style.searchInput}
-                                placeholder="Tìm kiếm cửa hàng..."
-                                onChange={(e) => Searchproduct(e.target.value)}
+                                placeholder="Tìm kiếm shipper..."
                             />
                         </div>
                     </div>
 
                 </div>
-                <DataGrid rows={rowsWithUniqueIds} columns={columns}
-                    loading={isLoading}
+                <DataGrid
+                    rows={rowsWithUniqueIds}
+                    columns={columns}
                     initialState={{
                         pagination: {
-                            pageSize: 10,
+                            pageSize: 6,
                         },
-                    }} />
-
-
-            </Box >
-        </Box >
+                    }}
+                    loading={isLoading}
+                />
+            </Box>
+        </Box>
     );
-};
+}
 
-export default Acceptstore;
+export default ManageShipper;

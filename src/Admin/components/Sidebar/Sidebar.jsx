@@ -11,13 +11,15 @@ import CommentIcon from '@mui/icons-material/Comment';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
+
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const navigate = useNavigate();
     const handleNavigation = ({ to, title }) => {
-        // navigate(to);
+        navigate(to);
         setSelected(title);
     };
     return (
@@ -35,11 +37,14 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     );
 };
 
-const Sidebara = ({ Catname }) => {
+const Sidebara = ({ Catname, Admin }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Danh sách Sản phẩm");
+    const { t } = useTranslation();
+    console.log("Admin")
+    console.log(Admin)
 
     return (
         <Box
@@ -59,9 +64,10 @@ const Sidebara = ({ Catname }) => {
                 "& .pro-menu-item.active": {
                     color: "#6870fa !important",
                 },
+
             }}
         >
-            <ProSidebar collapsed={isCollapsed} backgroundColor="none" style={{ height: "100vh" }}>
+            <ProSidebar collapsed={isCollapsed} backgroundColor="none" height='auto'>
                 <Menu iconShape="square">
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -93,7 +99,7 @@ const Sidebara = ({ Catname }) => {
                             <Box display="flex" justifyContent="center" alignItems="center">
                                 <img
                                     alt="profile-user"
-                                    src={'./avata.jpg'}
+                                    src={Admin.photo}
                                     style={{
                                         cursor: "pointer", borderRadius: "50%", width: "100px", height: "100px"
                                     }}
@@ -106,23 +112,23 @@ const Sidebara = ({ Catname }) => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Thanh Lịch
+                                    {Admin.firstName} {Admin.lastName}
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    VP Fancy Admin
+                                    {Admin.email}
                                 </Typography>
                             </Box>
                         </Box>
                     )}
 
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                        <Item
+                        {/* <Item
                             title="Dashboard"
-
+to="./"
                             icon={<HomeOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                        />
+                        /> */}
 
                         {!isCollapsed && (<Typography
                             variant="h6"
@@ -133,7 +139,7 @@ const Sidebara = ({ Catname }) => {
                         </Typography>)}
                         <Item
                             title="Danh sách cửa hàng"
-                            to="/product"
+                            to="/"
                             icon={<MenuOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -141,7 +147,7 @@ const Sidebara = ({ Catname }) => {
                         />
                         <Item
                             title="Cấp phép cửa hàng"
-                            to="/product"
+                            to="/Acceptstore"
                             icon={<LeaderboardIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -157,14 +163,14 @@ const Sidebara = ({ Catname }) => {
                         </Typography>)}
                         <Item
                             title="Danh sách Shipper"
-                            to="/listorder"
+                            to="/ViewAllShipper"
                             icon={<PersonOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Cấp phép Shipper"
-                            to="/team"
+                            to="/ManageShipper"
                             icon={<CommentIcon />}
                             selected={selected}
                             setSelected={setSelected}
