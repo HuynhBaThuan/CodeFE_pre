@@ -11,22 +11,22 @@ const ResetPass = () => {
     const [confirm, setConfirm] = useState(""); 
     const [error, setError] = useState("");
     const email = location.state.email;
+    const [loadingAPI, setLoadingAPI] = useState(false)
     const handleResetPass = async () => {
         if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(newPass.trim())) {
             setError(t("error5"))
         }else if(newPass.trim() !== confirm.trim()) {
             setError(t("error6"));
         } else {
+            setLoadingAPI(true)
             try {
-                // const response = await axios.post(`https://falth.vercel.app/api/auth/reset-password/${email}`, {password: newPass, passwordConfirm: confirm});
-      
-                // console.log('Đăng ký thành công', response.data);
                 console.log(newPass, confirm, email)
                 alert(t("alert"))
                 navigate("/signin")
-              } catch (error) {
+            } catch (error) {
                 setError(t("error7"));
-              }
+            }
+            setLoadingAPI(false)
         }
     }
     return (
@@ -46,7 +46,10 @@ const ResetPass = () => {
                         </div>
                     </div>
                     {error && <div className="alert-danger">{error}</div>}
-                    <button class="btn btn-block" onClick={handleResetPass}>{t("resetTitle")}</button>
+                    <button class="btn btn-block" onClick={handleResetPass} style={{ flexDirection: 'row' }}>
+                        {loadingAPI && <i class="fas fa-spinner fa-spin" style={{ color: 'white', position: 'inherit', marginRight: '10px' }}></i>}
+                        {t("resetTitle")}
+                    </button>
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { Troubleshoot } from '@mui/icons-material';
 const Verify = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -14,20 +15,44 @@ const Verify = () => {
     const action = location.state.action;
     const email = location.state.email;
     const isButtonDisabled = otp.length !== 6;
+    const [loadingAPI, setLoadingAPI] = useState(false);
     const handleVerify = async () => {
+        // const verify = {
+        //     signUpToken: otp
+        // };
+        // console.log(verify)
         if (action === "verifyUser") {
-            const verify = {
-                signUpToken: otp
-            };
-            console.log(verify)
+            setLoadingAPI(true);
             try {
                 // Gọi API đăng ký người dùng
-                const response = await axios.post(`https://falth.vercel.app/api/user/${email}`, verify);
+                const response = await axios.post(`https://falth.vercel.app/api/user/${email}`, {signUpToken: otp});
                 handleShow()
             } catch (error) {
                 seterror(t("error4"))
             }
+            setLoadingAPI(false);
+        } else if (action === 'verifyShipper') {
+            setLoadingAPI(true);
+            try {
+                // Gọi API đăng ký người dùng
+                const response = await axios.post(`https://falth.vercel.app/api/shipper/${email}`, {signUpToken: otp});
+                handleShow()
+            } catch (error) {
+                seterror(t("error4"))
+            }
+            setLoadingAPI(false);
+        } else if (action === 'verifyStore') {
+            setLoadingAPI(true);
+            try {
+                // Gọi API đăng ký người dùng
+                const response = await axios.post(`https://falth.vercel.app/api/owner/${email}`, {signUpToken: otp});
+                handleShow()
+            } catch (error) {
+                seterror(t("error4"))
+            }
+            setLoadingAPI(false);
         } else if (action === "verifyToken") {
+            setLoadingAPI(true);
             try {
                 const response = await axios.post(`https://falth.vercel.app/api/auth/verify-token/${email}`, {token: otp});    
                 console.log('Đăng ký thành công', response.data);
@@ -35,6 +60,7 @@ const Verify = () => {
             } catch (error) {
                 seterror(t("error4"))
             }
+            setLoadingAPI(false);
         }
         
     };
@@ -63,7 +89,10 @@ const Verify = () => {
                                 <input type="text" placeholder={t("verifyMess")} value={otp} onChange={(e) => setOTP(e.target.value)} maxLength={6} />
                             </div>
                         </div>
-                        <button class="btn btn-block" onClick={handleVerify} disabled={isButtonDisabled}>{t("next")}</button>
+                        <button class="btn btn-block" onClick={handleVerify} disabled={isButtonDisabled} style={{ flexDirection: 'row' }}>
+                            {loadingAPI && <i class="fas fa-spinner fa-spin" style={{ color: 'white', position: 'inherit', marginRight: '10px' }}></i>}
+                            {t("next")}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -78,7 +107,7 @@ const Verify = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Hủy
                     </Button>
-                    <Button variant="danger" onClick={handleNavSignin}>
+                    <Button variant="danger" onClick={handleNavSignin}>                       
                         Ok
                     </Button>
                 </Modal.Footer>

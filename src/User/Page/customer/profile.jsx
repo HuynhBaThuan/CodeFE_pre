@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { getUserInfo, getDefaultContact } from '../../services/userServices';
 import { useLogout } from '../../services/authContext';
 import { useTranslation } from 'react-i18next';
+import LoadingModal from '../../Components/Loading/Loading';
 import axios from 'axios';
 const Profile = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation(); 
     const logout = useLogout();
     function handleLogout() {
@@ -88,6 +90,7 @@ const Profile = () => {
         if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.newPass.trim())) {
             setError(t("error5"))
         }else if(formData.newPass === formData.confirmedPass) {
+            setIsLoading(true)
             try {
                 const token = localStorage.getItem("token");
                 if (token) {
@@ -106,6 +109,7 @@ const Profile = () => {
                     })
                     logout();
                     localStorage.removeItem('token')
+                    localStorage.removeItem('user')
                     alert(t("alert"))
                     navigate("/signin")
                 } else {
@@ -114,6 +118,7 @@ const Profile = () => {
             } catch (error) {
                 setError(t("error7"))
             }
+            setIsLoading(false)
         } else {
             setError(t("error6"))
         }
@@ -136,6 +141,7 @@ const Profile = () => {
         }else if(!/^\d{10}$/.test(formDataInfo.phoneNumber)) {
             setErrorInfo(t("error9"))
         }else {
+            setIsLoading(true)
             try {
                 const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
@@ -155,7 +161,7 @@ const Profile = () => {
                     defaultContact.address = formDataInfo.address;
                     defaultContact.phoneNumber = formDataInfo.phoneNumber;
                     localStorage.setItem("user", JSON.stringify(userData));
-                    alert(t("alert2"))
+                    alert(t("alert2"));
                     window.location.reload()
                     // setUserName(formDataInfo.firstName + " " + formDataInfo.lastName)
                 } else {
@@ -164,10 +170,13 @@ const Profile = () => {
             } catch (error) {
                 setErrorInfo(t("error7"))
             }
+            setIsLoading(false)
         } 
     };
     
     return (
+        <div>
+
         <div class="container">
             <div class="now-navigation-profile">
                 <div class="header-profile">
@@ -405,6 +414,8 @@ const Profile = () => {
                     </div>                 
                 </div>
             </div>
+        </div>
+        {isLoading && (<LoadingModal/>)}
         </div>
     )
 }

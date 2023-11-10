@@ -4,7 +4,9 @@ import StoreItem from '../../Components/Item/storeItem';
 import { useCity } from '../../services/CityContext';
 import { useTranslation } from 'react-i18next';
 import useLocationSelect from '../signUp/address';
+import LoadingModal from '../../Components/Loading/Loading';
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
@@ -68,11 +70,11 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
-        // console.log(categories)
       })
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);
       });
+      console.log(isLoading)
   }, []);
 
   useEffect(() => {
@@ -222,31 +224,6 @@ const Home = () => {
                 <div class="box-line-lg"></div>
               </div>
             </div>
-            {/* <StoreItem
-              id="1"
-              name="Cơm Gà Nam Chợ Mới - Hoàng Diệu"
-              address="589 Hoàng Diệu, P. Hòa Thuận Đông, Quận Hải Châu, Đà Nẵng"
-              linkImage="https://images.foody.vn/res/g28/277130/prof/s280x175/foody-upload-api-foody-mobile-5-201006112619.jpg"
-              link="/da-nang/com-ga-nam-cho-moi-hoang-dieu"
-              open="8.00"
-              close="23.00"
-              rate={4.8}
-              like="yes"
-              store = {null}
-
-            />
-            <StoreItem
-              id="2"
-              name="Duyên - Cơm Gà Xối Mỡ - Hoàng Diệu"
-              address="264 Hoàng Diệu, P. Nam Dương, Quận Hải Châu, Đà Nẵng"
-              linkImage="https://images.foody.vn/res/g100001/1000000248/prof/s280x175/foody-upload-api-foody-mobile-im-e485ae6c-230917121851.jpg"
-              link="/da-nang/duyen-com-ga-xoi-mo-hoang-dieu"
-              open="8.00"
-              close="23.00"
-              rate="4.8"
-              like="yes"
-              store = {null}
-            />  */}
             {stores.data.map((store) => (
 
               <StoreItem
@@ -275,10 +252,8 @@ const Home = () => {
           </li>
         </ul>
       </div>
+      {isLoading && <LoadingModal />}  
     </div>
-
-
-
   )
 }
 export default Home;

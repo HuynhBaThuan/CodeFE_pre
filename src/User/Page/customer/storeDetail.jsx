@@ -199,6 +199,7 @@ const StoreDetail = () => {
                                                             <MenuGroup
                                                                 category={category}
                                                                 openModal={openModal}
+                                                                storeName={store.name}
                                                             />
                                                         </Element>
                                                     ))}
@@ -219,7 +220,7 @@ const StoreDetail = () => {
 
             </div>
             {showModal && (
-                <CartModal show={showModal} handleClose={closeModal} />
+                <CartModal show={showModal} handleClose={closeModal} handleOpen={openModal} />
             )}
         </div>
     )

@@ -2,49 +2,40 @@ import React, { useState, useEffect } from "react";
 import '../../assets/css/cart.css'
 import DeleteConfirmationModal from "../Modal/deleteDanger";
 import AddDish from "../Modal/addDish";
-const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, id, updateTotalPrice}) => {
-    // 
-    const [quantity, setQuantity] = useState(inputQuantity);
-  const [totalPrice, setTotalPrice] = useState(quantity * price);
-  const [currentSpecialRequest, setCurrentSpecialRequest] = useState(specialRequest);
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-      console.log(price)
-      updateTotalPrice(id, quantity - 1, price);
-    }
-  };
+const CartItem = ({updateTotalPrice, updateRequest, onDelete, product }) => {
+    // const [productCopy, setProductCopy] = useState(product)
+    // const [quantity, setQuantity] = useState(product.amount);
+    const [totalPrice, setTotalPrice] = useState(product.amount * product.price);
+    // const [currentSpecialRequest, setCurrentSpecialRequest] = useState(product.specialRequest);
+    const handleDecrease = () => {
+        if (product.amount > 1) {
+            // setQuantity(quantity - 1);
+            updateTotalPrice(product._id, product.amount - 1);
+        }
+    };
 
-  const handleIncrease = () => {
-    if (quantity < 10) {
-      setQuantity(quantity + 1);
-        console.log(price)
-        updateTotalPrice(id, quantity + 1, price);
-    }
-  };
+    const handleIncrease = () => {
+        if (product.amount < 10) {
+            updateTotalPrice(product._id, product.amount + 1);
+        }
+    };
 
-  useEffect(() => {
-    setTotalPrice(quantity * price);
-    // updateTotalPrice(id, totalPrice); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
-  }, [quantity, price]);
+    useEffect(() => {
+        setTotalPrice(product.amount * product.price);
+        // updateTotalPrice(id, totalPrice); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
+    }, [product.amount, product.price]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [itemToDelete, setItemToDelete] = useState(null);
+    // const [itemToDelete, setItemToDelete] = useState(null);
+    const [action, setAction] = useState('');
 
-    const handleShowDeleteModal = (item) => {
-        setItemToDelete(item);
+    const handleShowDeleteModal = (action) => {
+        setAction(action)
         setShowDeleteModal(true);
     };
 
     const handleCloseDeleteModal = () => {
         setShowDeleteModal(false);
-        setItemToDelete(null);
-    };
-
-    const handleDeleteItem = () => {
-        // Thực hiện xóa mục (itemToDelete) ở đây
-        // Sau khi xóa xong, đóng modal
-        handleCloseDeleteModal();
     };
 
     const [showModal1, setShowModal1] = useState(false);
@@ -57,18 +48,11 @@ const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, i
     const closeModal1 = () => {
         setShowModal1(false);
     };
-    const handleAddDishConfirm = (data) => {
-        // Cập nhật giá trị quantity và totalPrice từ AddDish
-        setQuantity(data.quantity);
-        setTotalPrice(data.totalPrice);
-      
-        // Cập nhật giá trị specialRequest từ AddDish
-        setCurrentSpecialRequest(data.specialRequest);
-      
-        // Đóng AddDish modal (nếu cần)
-        // closeModal1();
-      };
-    
+    const handleAddDishConfirm = (specialRequest) => {
+        updateRequest(product._id, specialRequest)       
+        console.log(specialRequest)
+    };
+
     return (
         <div>
             <div class="CartItem___2Yzg2 CartItem___j95Ri">
@@ -78,7 +62,7 @@ const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, i
                             <div class="QtyLink___x_Jhz"
                             ><i class="fa-solid fa-minus" style={{ cursor: 'pointer' }} onClick={handleDecrease}></i>
                             </div>
-                            <div class="QtyControl-Qty___1d4X_">{quantity}</div>
+                            <div class="QtyControl-Qty___1d4X_">{product.amount}</div>
                             <div class="QtyLink___x_Jhz"
                             ><i class="fa-solid fa-plus" style={{ cursor: 'pointer' }} onClick={handleIncrease}></i></div>
                         </div>
@@ -90,7 +74,7 @@ const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, i
                         >1x</a>
                     </div>
                     <div
-                        class="CartItem-ColPhoto___1guvj tappable___LOYBZ"  onClick={openModal1}
+                        class="CartItem-ColPhoto___1guvj tappable___LOYBZ" onClick={openModal1}
                     >
                         <div
                             class="placeholder___1xbBh CartItem-Photo___nfN4N"
@@ -98,7 +82,7 @@ const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, i
                             <img
                                 alt="Food item"
                                 class="realImage___2TyNE show___3oA6B"
-                                src={linkImage}
+                                src={product.images[0]}
                             />
                         </div>
                     </div>
@@ -108,33 +92,30 @@ const CartItem = ({ inputQuantity, linkImage, dishName, specialRequest, price, i
                                 class="CartItem-ColName___19whb tappable___LOYBZ CartItem-ColName-STO" onClick={openModal1}
                             >
                                 <div class="CartItem-Name___1U_wi">
-                                    {dishName}
+                                    {product.name}
                                 </div>
                                 <div class="CartItem-Comment___XZpCq">
-                                    {currentSpecialRequest}
+                                    {product.specialRequest}
                                 </div>
                             </div>
                             <div class="CartItem-ColPrice___136ai">
                                 <div>
                                     <div>{totalPrice}</div>
-                                    <button onClick={handleShowDeleteModal}><i class="fa-solid fa-trash" style={{ color: 'red' }}></i></button>
+                                    <button onClick={() => handleShowDeleteModal('cart')}><i class="fa-solid fa-trash" style={{ color: 'red' }}></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} handleDelete={handleDeleteItem}/>
+            <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} handleDelete={onDelete} id={product._id} action={action} />
             {showModal1 && (
                 <AddDish
                     show={showModal1}
                     handleClose={closeModal1}
-                    inputQuantity={quantity}
-                    linkImage={linkImage}
-                    dishName={dishName}
-                    specialRequest={currentSpecialRequest}
-                    price={price}
                     onConfirm={handleAddDishConfirm}
+                    product={product}
+                    updateTotalPrice={updateTotalPrice}
                 />
             )}
         </div>

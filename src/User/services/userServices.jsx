@@ -32,16 +32,11 @@ const getDefaultContact = async (token) => {
 const addContact = async (e, formData) => {
   e.preventDefault();
   console.log(formData)
-  const newContact = {
-    phoneNumber: formData.phoneNumber,
-    address: formData.address,
-  };
-
   try {
     //   // Gọi API để thêm liên hệ
     const token = localStorage.getItem("token");
     const decodedToken = JSON.parse(atob(token.split(".")[1]));
-    const response = await axios.put(`https://falth.vercel.app/api/user/add-contact/${decodedToken.id}`, newContact, {
+    const response = await axios.put(`https://falth.vercel.app/api/user/add-contact/${decodedToken.id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -49,6 +44,34 @@ const addContact = async (e, formData) => {
     window.location.reload()
     // Xử lý phản hồi từ máy chủ, ví dụ: hiển thị thông báo thành công
     console.log('Liên hệ đã được thêm', response.data);
+    // Xóa dữ liệu trong form sau khi thêm liên hệ thành công
+    return response.data
+  } catch (error) {
+    // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
+    console.error('Lỗi khi thêm liên hệ', error);
+  }
+};
+
+const updateContact = async (e, formData, id) => {
+  e.preventDefault();
+  // console.log(formData)
+  // const newContact = {
+  //   phoneNumber: formData.phoneNumber,
+  //   address: formData.address,
+  // };
+
+  try {
+    //   // Gọi API để thêm liên hệ
+    const token = localStorage.getItem("token");
+    const decodedToken = JSON.parse(atob(token.split(".")[1]));
+    const response = await axios.put(`https://falth.vercel.app/api/user/${decodedToken.id}/contact/add-contact/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    window.location.reload()
+    // Xử lý phản hồi từ máy chủ, ví dụ: hiển thị thông báo thành công
+    console.log('Liên hệ đã được chỉnh sửa', response.data);
     // Xóa dữ liệu trong form sau khi thêm liên hệ thành công
     return response.data
   } catch (error) {
@@ -70,12 +93,8 @@ const deleteContact = async (id) => {
       }
     });
     window.location.reload()
-
-    // Xử lý phản hồi từ máy chủ, ví dụ: hiển thị thông báo thành công
     console.log('Liên hệ đã được xóa', response.data);
-    // Xóa dữ liệu trong form sau khi thêm liên hệ thành công
   } catch (error) {
-    // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
     console.error('Lỗi khi xóa liên hệ', error);
   }
 }
@@ -101,4 +120,4 @@ const getAllCategoryByStoreId = async (id) => {
   console.log(response)
   return response.data;
 }
-export { loginAPI, getUserInfo, addContact, deleteContact, getStoreById, getDefaultContact, getAllCategory, getAllCategoryByStoreId }
+export { loginAPI, getUserInfo, addContact, deleteContact, getStoreById, getDefaultContact, getAllCategory, getAllCategoryByStoreId, updateContact }

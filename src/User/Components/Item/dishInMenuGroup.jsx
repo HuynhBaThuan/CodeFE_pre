@@ -1,6 +1,12 @@
 import React from "react";
 
-const DishInMenuGroup = ({ dish, handleOpen }) => {
+const DishInMenuGroup = ({ dish, handleOpen, handleAddToCart }) => {
+
+    const handleAdd = () => {
+        console.log(dish)
+        handleAddToCart(dish);
+        handleOpen();
+    }
 
     return (
         <div>
@@ -50,7 +56,7 @@ const DishInMenuGroup = ({ dish, handleOpen }) => {
                             <div
                                 class="col-auto adding-food-cart txt-right"
                             >
-                                <div class="btn-adding" onClick={handleOpen}>+</div>
+                                <div class="btn-adding" onClick={handleAdd}>+</div>
                             </div>
                         </div>
                     </div>

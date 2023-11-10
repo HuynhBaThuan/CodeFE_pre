@@ -5,23 +5,13 @@ import AddDish from './addDish';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../services/authContext';
 import { useTranslation } from 'react-i18next';
-const CartModal = ({ show, handleClose }) => {
+import { useCity } from '../../services/CityContext';
+const CartModal = ({ show, handleClose, handleOpen }) => {
+    const {cart, setCart, productsCount, setProductsCount} = useCity();
     const {t} = useTranslation();
     const {isLoggedIn} = useAuth();
     const [total, setTotal] = useState(0); // Số tiền tổng ban đầu là 0
-
-    // Hàm này được gọi từ mỗi CartItem để cập nhật tổng tiền
-    // const updateTotalPrice = (id, activity, totalPrice) => {
-    //     console.log("update")
-    //     if(activity === "-")
-    //         setTotal((prevTotal) => prevTotal - totalPrice);
-    //     else if(activity === "+"){
-    //         setTotal((prevTotal) => prevTotal + totalPrice);
-    //     }
-    //     else {
-    //         setTotal((prevTotal) => prevTotal - totalPrice);
-    //     }
-    // };
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleOrder = (activity) => {
@@ -34,15 +24,12 @@ const CartModal = ({ show, handleClose }) => {
         }
         
     }
-    const [cart, setCart] = useState({
-        idStore : "",
-        nameStore : "",
-        products : []
-    });
 
   useEffect(() => {
     const updateCart = () => {
+        console.log("Bawts dau")
         const cartdata = JSON.parse(localStorage.getItem('cart'));
+        console.log(cartdata)
       if (cartdata && cartdata.products) {
         setCart({
             ...cart,
@@ -74,22 +61,23 @@ const CartModal = ({ show, handleClose }) => {
     
   }, []);
 
-  const updateTotalPrice = (id, quantity, price) => {
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}, [cart]);
+
+  const updateTotalPrice = (id, quantity) => {
     // Tìm sản phẩm có id tương ứng trong giỏ hàng
     const updatedProducts = cart.products.map(product => {
-      if (product.id === id) {
+      if (product._id === id) {
         product.amount = quantity;
       }
       return product;
     });
 
-    // Cập nhật giỏ hàng với sản phẩm đã được cập nhật
     setCart({
       ...cart,
       products: updatedProducts
     });
-
-    // Tính lại tổng tiền
     let tempTotal = 0;
     updatedProducts.forEach(product => {
       const productTotal = product.amount * product.price;
@@ -97,7 +85,75 @@ const CartModal = ({ show, handleClose }) => {
     });
 
     setTotal(tempTotal);
+    console.log(cart)
   };
+
+  const updateRequest = (id, request) => {
+    // Tìm sản phẩm có id tương ứng trong giỏ hàng
+    const updatedProducts = cart.products.map(product => {
+      if (product._id === id) {
+        product.specialRequest = request;
+      }
+      return product;
+    });
+
+    setCart({
+      ...cart,
+      products: updatedProducts
+    });
+    // let tempTotal = 0;
+    // updatedProducts.forEach(product => {
+    //   const productTotal = product.amount * product.price;
+    //   tempTotal += productTotal;
+    // });
+
+    // setTotal(tempTotal);
+    // console.log(cart)
+  };
+
+  const handleDeleteItem = (id) => {
+
+    const updatedProducts = cart.products.filter((product) => product._id !== id);
+    setCart({
+        ...cart,
+        products: updatedProducts
+      });
+      const updatedCart = {
+        ...cart,
+        products: updatedProducts
+    };
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    let tempTotal = 0;
+        updatedProducts.forEach(product => {
+      const productTotal = product.amount * product.price;
+      tempTotal += productTotal;
+    });
+
+    setTotal(tempTotal);
+    const count = updatedCart.products.length;
+    setProductsCount(count)
+    // console.log(cart)
+    // handleOpen()
+    setIsModalOpen(true)
+  };
+
+  useEffect(() => {
+    if (productsCount === 0) {
+        setCart({
+            idStore: '',
+            nameStore: '',
+            products: []
+          });
+    }
+}, [productsCount]);
+  
+useEffect(() => {
+    // Khi isModalOpen thay đổi thành true, mở lại modal
+    if (isModalOpen) {
+        handleOpen();
+        setIsModalOpen(false); // Đặt lại giá trị để tránh việc mở modal liên tục
+    }
+}, [isModalOpen, handleOpen]);
 
 
     return (
@@ -136,14 +192,11 @@ const CartModal = ({ show, handleClose }) => {
                                                         ><h5>{cart.nameStore}</h5></a>
                                                         <div class="CartItemList___1cspW">
                                                             {cart.products.map((product) => (
-                                                                <CartItem
-                                                                    inputQuantity={product.amount}
-                                                                    linkImage={product.image[0]}
-                                                                    dishName={product.name}
-                                                                    specialRequest={product.specialRequest}
-                                                                    price={product.price}
-                                                                    id={product.id}
+                                                                <CartItem                                                             
                                                                     updateTotalPrice={updateTotalPrice}
+                                                                    updateRequest={updateRequest}
+                                                                    onDelete={handleDeleteItem}
+                                                                    product={product}
                                                                 />
                                                             ))}          
                                                         </div>

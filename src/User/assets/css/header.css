@@ -3384,8 +3384,8 @@ input[type="submit"].btn-block {
   color: #cf2127;
 }
 .btn-blue-4 {
-  background-color: #4073a7;
-  border-color: #4073a7;
+  background-color:  var(--primary-color);
+  border-color: var(--primary-color);
   color: #fff;
 }
 .btn-done {
@@ -14578,7 +14578,7 @@ span.flatpickr-weekday {
 .user-profile-update .title-user {
   font-weight: 700;
   font-size: 15px;
-  color: #4073a7;
+  color: var(--primary-color);
   padding-bottom: 20px;
   position: relative;
 }
