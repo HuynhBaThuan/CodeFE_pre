@@ -101,7 +101,7 @@ const App = () => {
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/signUpCustomer" element={<SignUpCustomer />} />
                 <Route path="/signUpShipper" element={<SignUpShipper />} />
-                <Route path="/signUpOwner" element={<SignUpOwner />} />
+                <Route path="/signUpStore" element={<SignUpOwner />} />
                 <Route path="/signUpStore" element={<SignUpStore />} />
                 <Route path="/forgotPass" element={<ForgotPass />} />
                 <Route path="/verify" element={<Verify />} />

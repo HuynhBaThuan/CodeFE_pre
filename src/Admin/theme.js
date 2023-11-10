@@ -164,7 +164,7 @@ export const themeSettings = (mode) => {
         },
         typography: {
             fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-            fontSize: 12,
+            fontSize: 13,
             h1: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
                 fontSize: 40,
@@ -199,7 +199,7 @@ export const ColorModeContext = createContext({
 });
 
 export const useMode = () => {
-    const [mode, setMode] = useState("dark");
+    const [mode, setMode] = useState("light");
 
     const colorMode = useMemo(
         () => ({

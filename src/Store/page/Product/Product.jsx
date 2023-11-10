@@ -46,7 +46,7 @@ const Product = ({ Catname }) => {
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/product/store/${_id}?limit=100`;
+    const api = `https://falth.vercel.app/api/product/owner/${_id}`;
     const fetchData = async () => {
         try {
             const response = await axios.get(api, {
@@ -54,7 +54,8 @@ const Product = ({ Catname }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            const responseData = response.data.data.data;
+            const responseData = response.data.data;
+            console.log(responseData);
             setData(responseData);
         } catch (error) {
             console.log(error);
@@ -258,7 +259,7 @@ const Product = ({ Catname }) => {
                     </div>
 
                 </div>
-                <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading}
+                <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading} fontsize="16px"
                     initialState={{
                         pagination: {
                             pageSize: 10,

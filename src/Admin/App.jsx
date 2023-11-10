@@ -11,14 +11,35 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Topbar from './components/Topbar/Topbar';
-import ViewAllStore from './Page/ViewAllStore/ViewAllStore';
+import ManageStore from './Page/ManageStore/ManageStore';
 import Acceptstore from './Page/Acceptstore/Acceptstore';
+import Comments from './components/Comment/Comment';
+import ManageShipper from './Page/ManageShipper/ManageShipper';
+import ViewAllShipper from './Page/ManageShipper/ViewAllShipper';
+import { LanguageProvider } from './services/languageContext';
 
 const App = () => {
     const [theme, colorMode] = useMode();
     const [Catname, setCatname] = useState([]);
     const token = localStorage.getItem('autoken');
+    const [Admin, setAdmin] = useState([]);
     const [isSidebar, setIsSidebar] = useState(true);
+    const Login = async () => {
+        try {
+            const response = await axios.post('https://falth.vercel.app/api/auth/login/', {
+                email: 'user321@gmail.com',
+                password: 'leduchuy123',
+            });
+            const token = response.data.token;
+            const _id = response.data.data.user._id;
+            localStorage.setItem('autoken', token);
+            localStorage.setItem('_id', _id);
+            console.log('Đăng nhập thành công');
+            setAdmin(response.data.data.user);
+        } catch (error) {
+            console.log('Lỗi đăng nhập:', error);
+        }
+    };
     const fetchCatname = async () => {
         try {
             const response = await axios.get(`https://falth.vercel.app/api/category`
@@ -40,38 +61,55 @@ const App = () => {
     useEffect(() => {
         fetchCatname();
     }, []);
+    useEffect(() => {
+        Login();
+    }, []);
 
 
 
     const Layout = () => {
         return (
-            <ColorModeContext.Provider value={colorMode}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <div className="app" style={{ display: 'flex', height: '100%' }}>
-                        <Playground isSidebar={isSidebar}/>
-                        <main className="content" style={{ width: '100%', borderLeft: '1px soild white' }} >
-                            <Topbar />
-                            <Outlet />
-                        </main>
-
-                    </div>
-                </ThemeProvider>
-            </ColorModeContext.Provider >
+            <LanguageProvider>
+                <ColorModeContext.Provider value={colorMode}>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <div className="app" style={{ display: 'flex', height: 'auto', minHeight: '100vh' }}>
+                            <Playground isSidebar={isSidebar} Admin={Admin} />
+                            <main className="content" style={{ width: '100%', borderLeft: '1px solid white', }}>
+                                <Topbar />
+                                <Outlet />
+                            </main>
+                        </div>
+                    </ThemeProvider>
+                </ColorModeContext.Provider>
+            </LanguageProvider>
         )
     }
+
     const router = createBrowserRouter([
         {
             path: "/",
             element: <Layout />,
             children: [
                 {
-                    path: '/',
+                    path: '/Acceptstore',
                     element: <Acceptstore />
                 },
                 {
-                    path: '/Viewallstore',
-                    element: <ViewAllStore />
+                    path: '/ViewAllShipper',
+                    element: <ViewAllShipper />
+                },
+                {
+                    path: '/comments',
+                    element: <Comments />
+                },
+                {
+                    path: '/',
+                    element: <ManageStore />
+                },
+                {
+                    path: '/ManageShipper',
+                    element: <ManageShipper />
                 }
             ]
         },

@@ -6,7 +6,7 @@ function Login() {
     const fetchData = async () => {
         try {
             const response = await axios.post('https://falth.vercel.app/api/auth/login/', {
-                email: 'owner@gmail.com',
+                email: 'user321@gmail.com',
                 password: 'leduchuy123',
             });
             const token = response.data.token;

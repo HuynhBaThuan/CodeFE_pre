@@ -23,6 +23,12 @@
     background-color: red;
 }
 
+.img_bill {
+    height: 160px;
+    width: 60%;
+    margin-bottom: 10px;
+}
+
 
 
 .center1 {
@@ -174,13 +180,15 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.35);
+
     gap: 10px;
 
 }
 
 .Store {
-    align-items: center;
-    text-align: center;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .Name_store {
@@ -196,23 +204,39 @@
 
 .bill {
     font-size: 20px;
+    gap: 50;
     margin-top: 20px;
-    font-weight: 400;
 }
 
 .bill_stt {
+    display: flex;
     text-align: left;
-    gap: 10px;
-    font-weight: 10;
+    font-size: 15px;
+    gap: 15px;
+    align-items: center;
 }
 
 .bill_time {
-    display: flex;
-    gap: 100px;
-    font-weight: 10;
+    margin-bottom: 10px;
 }
 
 .Store {
     text-align: center;
     width: 90%;
+    gap: 15px;
+}
+
+.col {
+    flex: 2;
+}
+
+.feedback {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px !important;
+    margin-right: 40%;
+}
+
+.col1 {
+    flex: 1;
 }

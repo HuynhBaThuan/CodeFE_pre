@@ -12,8 +12,10 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
+    const { t } = useTranslation();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const navigate = useNavigate();
@@ -45,7 +47,7 @@ const Sidebara = ({ Catname }) => {
     const _id = localStorage.getItem('_id');
     const fetchData2 = async () => {
         try {
-            const res = await axios.get(`https://falth.vercel.app/api/store/${_id}`, {
+            const res = await axios.get(`https://falth.vercel.app/api/store/owner/${_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -80,7 +82,7 @@ const Sidebara = ({ Catname }) => {
                 "& .pro-menu-item.active": {
                     color: "#6870fa !important",
                 },
-            }}
+            }} height='auto'
         >
             <ProSidebar collapsed={isCollapsed} backgroundColor="none" height='auto'>
                 <Menu iconShape="square">
@@ -100,7 +102,7 @@ const Sidebara = ({ Catname }) => {
                                 ml="15px"
                             >
                                 <Typography variant="h3" color={colors.grey[100]}>
-                                    ADMINIS
+                                    STORE
                                 </Typography>
                                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                                     <MenuOutlinedIcon />
@@ -165,7 +167,7 @@ const Sidebara = ({ Catname }) => {
                                 return (
                                     <Item
                                         title={option.catName}
-                                        to="/product"
+                                        to="/category"
                                         selected={selected}
                                         setSelected={setSelected}
 

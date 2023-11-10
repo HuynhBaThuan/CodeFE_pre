@@ -1,26 +1,23 @@
-import React from 'react'
-import { Box, Icon, Typography, useTheme } from "@mui/material";
-import { Formik, Form } from "formik";
-import { Button, TextField, Select, MenuItem } from "@mui/material";
-import Header from '../../Store/components/Header/Header';
-import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import React from 'react';
+import style from "./Notify.css";
+
 
 function Notify({ error, message, setOpenNotify }) {
+
     return (
-        <div>
-            <div>
-                <Box>
-                    <div style={{ display: "flex" }}>                        <Button color="secondary" variant="contained" onClick={() => setOpenNotify(false)}>
-                        Thoát
-                    </Button>
-                        <Header title={error ? "Thông báo từ FALTH : Thông báo khác" : "Thông báo từ FALTH :Thông báo lỗi"} subtitle={error ? `Thông báo:${message}` : `Lỗi: ${message}`} />
-
-                    </div>
-                </Box>
-
-            </div >
-        </div >
+        <div className="modal-content">
+            <div class="modal-header"><div class="txt-bold font13">
+                <span class="txt-red">FHALT</span> Thông báo</div>
+            </div><div class="modal-body">
+                <p class="font15">
+                    <span>{message}</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-red align-right" onClick={() => setOpenNotify(false)}>Ok</button>
+            </div>
+        </div>
     )
 }
 
-export default Notify
+export default Notify;
