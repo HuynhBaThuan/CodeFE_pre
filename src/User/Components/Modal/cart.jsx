@@ -17,7 +17,7 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
     const handleOrder = (activity) => {
         if(activity === "order") {
             handleClose()
-            navigate("/user/order")
+            navigate("/user/order", {state: {total:total}})
         } else {
             handleClose()
             navigate("/signin")
@@ -27,9 +27,7 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
 
   useEffect(() => {
     const updateCart = () => {
-        console.log("Bawts dau")
         const cartdata = JSON.parse(localStorage.getItem('cart'));
-        console.log(cartdata)
       if (cartdata && cartdata.products) {
         setCart({
             ...cart,
@@ -101,14 +99,6 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
       ...cart,
       products: updatedProducts
     });
-    // let tempTotal = 0;
-    // updatedProducts.forEach(product => {
-    //   const productTotal = product.amount * product.price;
-    //   tempTotal += productTotal;
-    // });
-
-    // setTotal(tempTotal);
-    // console.log(cart)
   };
 
   const handleDeleteItem = (id) => {

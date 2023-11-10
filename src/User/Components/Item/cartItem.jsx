@@ -22,7 +22,6 @@ const CartItem = ({updateTotalPrice, updateRequest, onDelete, product }) => {
 
     useEffect(() => {
         setTotalPrice(product.amount * product.price);
-        // updateTotalPrice(id, totalPrice); // Gọi hàm updateTotalPrice để cập nhật tổng tiền
     }, [product.amount, product.price]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);

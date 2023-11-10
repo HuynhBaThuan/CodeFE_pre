@@ -95,7 +95,6 @@ const Header = () => {
 
 
     useEffect(() => {
-        console.log(isLoggedIn)
 
         const fetchData = async () => {
             try {
