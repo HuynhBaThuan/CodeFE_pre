@@ -2,8 +2,8 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import enTranslation from "../User/assets/locales/en.json"
-import viTranslation from "../User/assets/locales/vi.json";
+import enTranslation from "../User/assets/locales/eng.json"
+import viTranslation from "../User/assets/locales/vie.json";
 
 i18n
   .use(initReactI18next)

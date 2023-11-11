@@ -55,12 +55,6 @@ const Signin = () => {
             <div class="content">
                 <div class="title">{t("title_SI")}</div>
                 <div class="login-via">
-                    {/* <div class="item phone">
-                        <span class="fas fa-mobile-alt"></span>Số điện thoại
-                    </div> */}
-                    <div class="item fb">
-                        <span class="fab fa-facebook-f"></span>Facebook
-                    </div>
                     <form
                         id="google-login-form"
                         action="https://accounts.google.com/o/oauth2/v2/auth"

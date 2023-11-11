@@ -87,15 +87,6 @@ const MenuGroup = ({category, openModal, storeName}) => {
             const count = updatedCart.products.length;
             setProductsCount(count);
         }
-        // if(cart.idStore === dish.storeId) {
-        //     const updatedProducts = cart.products.concat(addedDish);
-        //     setCart({ ...cart, products: [...updatedProducts] });
-        
-        //     const updatedCart = { ...cart, products: [...updatedProducts] };
-        //     localStorage.setItem('cart', JSON.stringify(updatedCart));
-        //     const count = updatedCart.products.length;
-        //     setProductsCount(count)
-        // } 
         else {
             const newCart = {
                 idStore: dish.storeId,

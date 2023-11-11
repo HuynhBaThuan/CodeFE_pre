@@ -42,8 +42,8 @@ const StoreDetail = () => {
             try {
                 setCategories(data)
                 // const data1 = await getAllCategoryByStoreId(store._id)
-                // const data1 = await axios.get("https://falth.vercel.app/api/category/store/651d7093e1494e0d580de293")
-                // console.log(data1)
+                const data1 = await axios.get("https://falth.vercel.app/api/category/store/654c2d531bcf4800076d5db8")
+                console.log(data1)
 
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin quán ăn:", error);

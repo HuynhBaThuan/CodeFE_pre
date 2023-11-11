@@ -74,7 +74,6 @@ const Home = () => {
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);
       });
-      console.log(isLoading)
   }, []);
 
   useEffect(() => {
@@ -104,17 +103,20 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true)
     const selectedCat = selectedCategories[0] || '';
     console.log(selectedLocation, key, selectedCat)
-    const api = `https://falth.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&name=${key}`
+    const api = `https://falth.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&search=${key}`
     console.log(api)
     fetch(api)
       .then((response) => response.json())
       .then((data) => {
         setStores(data);
+        setIsLoading(false)
       })
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);
+        setIsLoading(false)
       });
   }, [selectedLocation, key, selectedCategories]);
 

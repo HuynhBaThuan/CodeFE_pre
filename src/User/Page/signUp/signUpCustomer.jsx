@@ -81,8 +81,8 @@ const SignUpCustomer = () => {
         } else if (!/^\d{10}$/.test(registrationData.phoneNumber)) {
             setError(t("error9"))
         } else {
-            setIsLoading(true)
             try {
+                setIsLoading(true)
               // Gọi API đăng ký người dùng
               const response = await axios.post('https://falth.vercel.app/api/user', registrationData);
     

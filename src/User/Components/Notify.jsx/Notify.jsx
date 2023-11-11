@@ -1,0 +1,31 @@
+import React from 'react';
+import './Notify.css';
+import { useTranslation } from 'react-i18next';
+
+function Notify({ error, message, setOpenNotify }) {
+    const {t} = useTranslation()
+    return (
+
+        <div class="modal is-active show fade modal-noti modal-alert">
+            <div class="modal-dialog modal-noti" role="document">
+                <div class="modal-content">
+                    <span class="close" data-dismiss="modal" onClick={() => setOpenNotify(false)}>x</span>
+                    <div class="modal-header">
+                        <div class="txt-bold font13">
+                            <span class="txt-red">FALTH</span> {t("notify")} 
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <p class="font15"><span>{message}</span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-red align-right" onClick={() => setOpenNotify(false)}>Ok</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade under-modal show"></div>
+        </div>
+    )
+}
+
+export default Notify;

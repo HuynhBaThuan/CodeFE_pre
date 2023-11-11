@@ -6,7 +6,7 @@ const StoreItem = ({like, store}) => {
     const { t } = useTranslation();
     const handleStore = () => {
         navigate("/home/storeDetail", {state: {store:{store}}});
-        // console.log(store)
+        console.log(store)
     };
     return (
         <div class="item-restaurant" onClick={handleStore}>

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../services/authContext';
 import { useTranslation } from 'react-i18next';
 import { useCity } from '../../services/CityContext';
+import LoadingModal from '../Loading/Loading';
+import axios from 'axios';
 const CartModal = ({ show, handleClose, handleOpen }) => {
     const {cart, setCart, productsCount, setProductsCount} = useCity();
     const {t} = useTranslation();
@@ -13,6 +15,7 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
     const [total, setTotal] = useState(0); // Số tiền tổng ban đầu là 0
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleOrder = (activity) => {
         if(activity === "order") {
@@ -145,10 +148,18 @@ useEffect(() => {
     }
 }, [isModalOpen, handleOpen]);
 
+const handleStore = async() => {
+    setIsLoading(true)
+    // const store = await axios.get(`https://falth.vercel.app/api/store/${cart.idStore}`) 
+    const storeData = await axios.get(`https://falth.vercel.app/api/store/654ca4a39e79270844b1979d`) 
+    const store = storeData.data.data
+    // console.log(store.data)
+    navigate("/home/storeDetail", {state: {store:{store}}});
+    setIsLoading(false)
+}
 
     return (
         <div>
-            {/* {showModal && ( */}
             <div className={`ant-drawer ant-drawer-right ant-drawer-open DrawerWrapper___3chn_ DrawerWrapper--custom`}>
                 <div className="ant-drawer-mask" onClick={handleClose}></div>
 
@@ -174,12 +185,13 @@ useEffect(() => {
                                             <div class="Body___20FKF CartBody___3v3rN">
                                                 <div class="CartMerchantList___3GwGF">
                                                     <div class="CartMerchant CartMerchantList-Item___3mF14">
-                                                        <a
-                                                            role="button"
+                                                        <button
+                                                            // role="button"
                                                             tabindex="0"
-                                                            href="/vn/vi/restaurant/c%C6%A1m-t%E1%BA%A5m-mi%E1%BB%81n-t%C3%A2y-2-hai-b%C3%A0-tr%C6%B0ng-delivery/5-CYUUNFJYBELDRX?"
+                                                            // href="/vn/vi/restaurant/c%C6%A1m-t%E1%BA%A5m-mi%E1%BB%81n-t%C3%A2y-2-hai-b%C3%A0-tr%C6%B0ng-delivery/5-CYUUNFJYBELDRX?"
                                                             style={{ color: 'inherit', textDecoration: 'none' }}
-                                                        ><h5>{cart.nameStore}</h5></a>
+                                                            onClick={handleStore}
+                                                        ><h5>{cart.nameStore}</h5></button>
                                                         <div class="CartItemList___1cspW">
                                                             {cart.products.map((product) => (
                                                                 <CartItem                                                             
@@ -257,7 +269,7 @@ useEffect(() => {
                     </div>
                 </div>
             </div>
-
+            {isLoading && (<LoadingModal/>)}
         </div>
     );
 };

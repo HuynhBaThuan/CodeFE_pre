@@ -56,7 +56,7 @@ const Verify = () => {
             try {
                 const response = await axios.post(`https://falth.vercel.app/api/auth/verify-token/${email}`, {token: otp});    
                 console.log('Đăng ký thành công', response.data);
-                navigate("/resetPass", {state: {email: email}})
+                navigate("/resetPass", {state: {email: email, token: otp}})
             } catch (error) {
                 seterror(t("error4"))
             }

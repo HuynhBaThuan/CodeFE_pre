@@ -1,7 +1,7 @@
 {
   "error1": "Please enter email",
   "error2": "Please enter a password",
-  "error3": "Invalid password",
+  "error3": "Invalid password or email",
   "error4": "The verification code is invalid or has expired",
   "error5": "Password must have at least 8 characters including letters and numbers",
   "error6": "Password and password confirmation do not match",
@@ -10,12 +10,14 @@
   "error9": "Invalid phone number",
   "error10": "Email address already exists",
   "error11": "Please enter full information!",
+  "error12": "Failed to change information",
 
   "success": "Information received! Please confirm your email",
 
   "alert": "Password change successful, please log in again",
   "alert1": "Shop owner registration successful! Please register your store information.",
   "alert2": "Changed information successfully",
+  "notify": "Notifications",
 
   "newPass": "New password",
   "confirmPass": "Confirm password",
@@ -146,4 +148,5 @@
   "ratingInFALTH" : "rating on FALTH",
   "menu" : "Menu",
   "searchDish" : "Search dish in menu"
+
 }

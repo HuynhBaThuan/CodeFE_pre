@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import '../../assets/fonts/fontawesome-free-6.2.0-web/css/all.min.css'
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-
+import axios from 'axios';
 const ResetPass = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -11,6 +11,7 @@ const ResetPass = () => {
     const [confirm, setConfirm] = useState(""); 
     const [error, setError] = useState("");
     const email = location.state.email;
+    const token = location.state.token;
     const [loadingAPI, setLoadingAPI] = useState(false)
     const handleResetPass = async () => {
         if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(newPass.trim())) {
@@ -20,11 +21,17 @@ const ResetPass = () => {
         } else {
             setLoadingAPI(true)
             try {
-                console.log(newPass, confirm, email)
-                alert(t("alert"))
+                const resetPasswordData = {
+                    token: token,
+                    password: newPass,
+                    passwordConfirm: confirm
+                };
+                console.log(resetPasswordData)
+                const response = await axios.post(`https://falth.vercel.app/api/auth/reset-password/${email}`, resetPasswordData)
                 navigate("/signin")
             } catch (error) {
                 setError(t("error7"));
+                console.log(error)
             }
             setLoadingAPI(false)
         }

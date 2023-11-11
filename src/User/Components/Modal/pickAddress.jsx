@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import ModalUpdateAddress from "./modalUpdateAddress";
-const PickAddress = ({ show, handleClose }) => {
+const PickAddress = ({ show, handleClose, user }) => {
     const [showModalUpdateAddress, setShowModalUpdateAddress] = useState(false);
 
     const handleShowModalUpdateAddress = () => {
         setShowModalUpdateAddress(true);
-        // handleClose();
     };
     const handleCloseModalUpdateAddress = () => {
         setShowModalUpdateAddress(false);
@@ -13,7 +12,7 @@ const PickAddress = ({ show, handleClose }) => {
 
     return (
         <div>
-            <div id="modal" style={{zIndex:'10'}}>
+            <div id="modal" style={{ zIndex: '10' }}>
                 <div>
                     <div
                         class="shopee-modal__transition-appear-done shopee-modal__transition-enter-done"
@@ -60,145 +59,101 @@ const PickAddress = ({ show, handleClose }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
-                                        <div class="VR5G-p AXtEWT">
-                                            <div class="_54u+Wc">
-                                                <div
-                                                    class="stardust-radio stardust-radio--checked"
-                                                    tabindex="0"
-                                                    role="radio"
-                                                    aria-checked="false"
-                                                    aria-disabled="true"
-                                                    aria-labelledby="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_invalid-flag"
-                                                >
+                                    {user.contact.map((cont) => (
+
+                                        <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
+                                            <div class="VR5G-p AXtEWT">
+                                                <div class="_54u+Wc">
                                                     <div
-                                                        class="stardust-radio-button stardust-radio-button--checked"
+                                                        class="stardust-radio stardust-radio--checked"
+                                                        tabindex="0"
+                                                        role="radio"
+                                                        aria-checked="false"
+                                                        aria-disabled="false"
+                                                        aria-labelledby="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_invalid-flag"
                                                     >
-                                                        <div class="stardust-radio-button__outer-circle">
-                                                            <div
-                                                                class="stardust-radio-button__inner-circle"
-                                                            ></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="stardust-radio__content">
-                                                        <div class="stardust-radio__label"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="PcodYT">
-                                                <div role="heading" class="_7efJXB hgGPm2">
-                                                    <div
-                                                        id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
-                                                        class="RMBiE- JZWy3M"
-                                                    >
-                                                        <span class="_1yD00D Xikkun"
-                                                        ><div class="iTAYV4">Cid Kagenou</div></span>
-                                                        <div class="_38L8qy"></div>
-                                                        <div role="row" class="mU9KsT _4edPAv ULZM9T">
-                                                            (+84) 707252330
-                                                        </div>
-                                                    </div>
-                                                    <div class="XEXjAd">
-                                                        <button onClick={handleShowModalUpdateAddress} class="Tuo6ZP">Cập nhật</button>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content"
-                                                    role="heading"
-                                                    class="_7efJXB hgGPm2"
-                                                >
-                                                    <div class="RMBiE- JZWy3M">
-                                                        <div class="dA02H7">
-                                                            <div role="row" class="ULZM9T">
-                                                                241, Đường Mai Đăng Chơn
-                                                            </div>
-                                                            <div role="row" class="ULZM9T">
-                                                                Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng
+                                                        <div
+                                                            class="stardust-radio-button "
+                                                        >
+                                                            <div class="stardust-radio-button__outer-circle">
+                                                                <div
+                                                                    class="stardust-radio-button__inner-circle"
+                                                                ></div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="ZsWMz8 XEXjAd"></div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge"
-                                                    role="row"
-                                                    class="hRRgNe ULZM9T"
-                                                >
-                                                    <span role="mark" class="UAGfcj hCWcbk NqLtr2"
-                                                    >Mặc định</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
-                                        <div class="VR5G-p AXtEWT">
-                                            <div class="_54u+Wc">
-                                                <div
-                                                    class="stardust-radio stardust-radio--checked"
-                                                    tabindex="0"
-                                                    role="radio"
-                                                    aria-checked="true"
-                                                    aria-disabled="false"
-                                                    aria-labelledby="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_invalid-flag"
-                                                >
-                                                    <div
-                                                        // stardust-radio-button--checked
-                                                        class="stardust-radio-button"
-                                                    >
-                                                        <div class="stardust-radio-button__outer-circle">
-                                                            <div
-                                                                class="stardust-radio-button__inner-circle"
-                                                            ></div>
+                                                        <div class="stardust-radio__content">
+                                                            <div class="stardust-radio__label"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="stardust-radio__content">
-                                                        <div class="stardust-radio__label"></div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="PcodYT">
-                                                <div role="heading" class="_7efJXB hgGPm2">
-                                                    <div
-                                                        id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
-                                                        class="RMBiE- JZWy3M"
-                                                    >
-                                                        <span class="_1yD00D Xikkun"
-                                                        ><div class="iTAYV4">Cid Kagenou</div></span>
-                                                        <div class="_38L8qy"></div>
-                                                        <div role="row" class="mU9KsT _4edPAv ULZM9T">
-                                                            (+84) 707252330
-                                                        </div>
-                                                    </div>
-                                                    <div class="XEXjAd">
-                                                        <button onClick={handleShowModalUpdateAddress} class="Tuo6ZP">Cập nhật</button>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content"
-                                                    role="heading"
-                                                    class="_7efJXB hgGPm2"
-                                                >
-                                                    <div class="RMBiE- JZWy3M">
-                                                        <div class="dA02H7">
-                                                            <div role="row" class="ULZM9T">
-                                                                241, Đường Mai Đăng Chơn
-                                                            </div>
-                                                            <div role="row" class="ULZM9T">
-                                                                Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng
+                                                <div class="PcodYT">
+                                                    <div role="heading" class="_7efJXB hgGPm2">
+                                                        <div
+                                                            id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
+                                                            class="RMBiE- JZWy3M"
+                                                        >
+                                                            <span class="_1yD00D Xikkun"
+                                                            ><div class="iTAYV4">{user.firstName + " " + user.lastName}</div></span>
+                                                            <div class="_38L8qy"></div>
+                                                            <div role="row" class="mU9KsT _4edPAv ULZM9T">
+                                                                {cont.phoneNumber}
                                                             </div>
                                                         </div>
+                                                        <div class="XEXjAd">
+                                                            <button onClick={handleShowModalUpdateAddress} class="Tuo6ZP">Cập nhật</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="ZsWMz8 XEXjAd"></div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge"
-                                                    role="row"
-                                                    class="hRRgNe ULZM9T"
-                                                >
+                                                    <div
+                                                        id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content"
+                                                        role="heading"
+                                                        class="_7efJXB hgGPm2"
+                                                    >
+                                                        <div class="RMBiE- JZWy3M">
+                                                            <div class="dA02H7">
+                                                                <div role="row" class="ULZM9T">
+                                                                    {cont.address}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ZsWMz8 XEXjAd"></div>
+                                                    </div>
+                                                    {user.defaultContact === cont._id && (
+                                                        <div
+                                                            id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge"
+                                                            role="row"
+                                                            className="hRRgNe ULZM9T"
+                                                        >
+                                                            <span role="mark" className="UAGfcj hCWcbk NqLtr2">Mặc định</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}                                    
+                                    {/* {user.contact.map((cont) => (
+        <div key={cont._id} className="address-item">
+          <input
+            type="radio"
+            id={`address-radio-${cont._id}`}
+            name="address-radio-group"
+            value={cont._id}
+            checked={user.defaultContact === cont._id}
+            onChange={() => handleRadioChange(cont._id)}
+          />
+          <label htmlFor={`address-radio-${cont._id}`}>
+            <div>
+              <div>{cont.address}</div>
+              <div>{`${user.firstName} ${user.lastName}`}</div>
+              <div>{cont.phoneNumber}</div>
+              <button onClick={() => handleShowModalUpdateAddress()}>Cập nhật</button>
+              {selectedAddress === cont._id && (
+                <div className="default-badge">Mặc định</div>
+              )}
+            </div>
+          </label>
+        </div>
+      ))} */}
+
                                     <button class="LkGLx9 _4aRllO IkCOND" onClick={handleShowModalUpdateAddress}>
                                         <svg viewBox="0 0 10 10" class="QUCjwo">
                                             <path

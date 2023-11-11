@@ -5,6 +5,8 @@ import { getUserInfo, getDefaultContact } from '../../services/userServices';
 import { useLogout } from '../../services/authContext';
 import { useTranslation } from 'react-i18next';
 import LoadingModal from '../../Components/Loading/Loading';
+import Notify from '../../Components/Notify.jsx/Notify';
+import { useAuth } from '../../services/authContext';
 import axios from 'axios';
 const Profile = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -25,11 +27,13 @@ const Profile = () => {
     const handleNav = ({ nav }) => {
         navigate(`/${nav}`);
     };
-    const [userName, setUserName] = useState("");
+    // const [userName, setUserName] = useState("");
+    // const [img, setImg] = useState("")
+    const { userName, setUserName, img, setImg } = useAuth()
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [img, setImg] = useState("")
     const [address, setAddress] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [formDataInfo, setFormDataInfo] = useState({
@@ -85,6 +89,8 @@ const Profile = () => {
         });
     };
     const  [error, setError] = useState("")
+    const [openNotify, setOpenNotify] = useState(false)
+    const [message, setMessage] = useState("")
     const handleChangePassword = async (e) => {
         e.preventDefault();
         if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.newPass.trim())) {
@@ -109,16 +115,19 @@ const Profile = () => {
                     })
                     logout();
                     localStorage.removeItem('token')
-                    localStorage.removeItem('user')
-                    alert(t("alert"))
+                    localStorage.removeItem('user')                   
+                    setMessage(t("alert"))
                     navigate("/signin")
+                    setOpenNotify(true);
                 } else {
                     console.error("Token không tồn tại trong local storage");
                 }
             } catch (error) {
-                setError(t("error7"))
+                setMessage(t("error7"))
+            } finally {
+                setIsLoading(false);
+                setOpenNotify(true);
             }
-            setIsLoading(false)
         } else {
             setError(t("error6"))
         }
@@ -134,6 +143,7 @@ const Profile = () => {
         });
     };
     const  [errorInfo, setErrorInfo] = useState("")
+    
     const handleChangeInfo = async (e) => {
         e.preventDefault();
         if(formDataInfo.firstName === '' || formDataInfo.lastName === ''|| formDataInfo.address === ''|| formDataInfo.phoneNumber === '') {
@@ -146,7 +156,6 @@ const Profile = () => {
                 const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
                 const userData = JSON.parse(user);
-                // console.log(userData._id)
                 console.log(formDataInfo)
                 if (token) {
                     const response = await axios.patch(`https://falth.vercel.app/api/user/${userData._id}`, formDataInfo, {
@@ -160,17 +169,19 @@ const Profile = () => {
                     const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
                     defaultContact.address = formDataInfo.address;
                     defaultContact.phoneNumber = formDataInfo.phoneNumber;
+                    setUserName(formDataInfo.firstName + " " + formDataInfo.lastName)
                     localStorage.setItem("user", JSON.stringify(userData));
-                    alert(t("alert2"));
-                    window.location.reload()
-                    // setUserName(formDataInfo.firstName + " " + formDataInfo.lastName)
+                    setMessage(t("alert2"))
+                    // alert(t("alert2"));
                 } else {
                     console.error("Token không tồn tại trong local storage");
                 }
             } catch (error) {
-                setErrorInfo(t("error7"))
+                setMessage(t("alert2"))
+            } finally {
+                setIsLoading(false);
+                setOpenNotify(true);
             }
-            setIsLoading(false)
         } 
     };
     
@@ -178,6 +189,7 @@ const Profile = () => {
         <div>
 
         <div class="container">
+        {openNotify && (<Notify message={message} setOpenNotify={setOpenNotify}/>)}
             <div class="now-navigation-profile">
                 <div class="header-profile">
                     <div class="row align-items-center">
