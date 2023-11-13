@@ -3,20 +3,26 @@ import logo from '../../assets/img/logo.png'
 import '../../assets/css/b.css'
 import PickAddress from "../../Components/Modal/pickAddress";
 import ModalUpdateAddress from "../../Components/Modal/modalUpdateAddress";
+import UpdateAddressOrder from "../../Components/Modal/updateAddressOrder";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCity } from "../../services/CityContext";
 import OrderDishItem from "../../Components/Item/orderedDishItem";
+import LoadingModal from "../../Components/Loading/Loading";
+import axios from "axios";
 const OrderPage = () => {
   const [showModalAddress, setShowModalAddress] = useState(false);
   const { cart, setCart, productsCount } = useCity();
   const location = useLocation()
   const total = location.state.total
+  const feeDefault = location.state.feeDefault
+  const calArray = location.state.calArray
   const [totalPrice, setTotalPrice] = useState(total)
-  const [shipFee, setShipFee] = useState(15000)
+  const [shipFee, setShipFee] = useState(feeDefault)
   const [totalPayment, setTotalPayment] = useState(totalPrice + shipFee)
-  const [address, setAddress] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("")
+  const [selectedContact, setSelectedContact] = useState({})
+  const [array, setArray] = useState(calArray)
   const [userName, setUserName] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState()
   const openModalAddress = () => {
     setShowModalAddress(true);
@@ -39,30 +45,41 @@ const OrderPage = () => {
     });
 
     setTotalPrice(tempTotal);
-}, [cart]);
+  }, [cart]);
 
-useEffect(() => {
-  setTotalPayment(totalPrice + shipFee);
-}, [totalPrice, shipFee]);
+  useEffect(() => {
+    setTotalPayment(totalPrice + shipFee);
+  }, [totalPrice, shipFee]);
 
-useEffect(() => {
-  const fetchData = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-          const user = localStorage.getItem("user");
-          // const token = localStorage.getItem("token");
-          const userData = JSON.parse(user);
-          const defaultContactId = userData.defaultContact;
-          const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
-          setUser(userData);
-          setAddress(defaultContact.address)
-          setPhoneNumber(defaultContact.phoneNumber)
-          setUserName(userData.firstName + " " + userData.lastName)
+        setIsLoading(true)
+        const user = localStorage.getItem("user");
+        const userData = JSON.parse(user);
+        const defaultContactId = userData.defaultContact;
+        const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
+        setUser(userData);
+        setSelectedContact(defaultContact)
+        setUserName(userData.firstName + " " + userData.lastName)
       } catch (error) {
-          console.error("Lỗi khi lấy thông tin người dùng:", error);
+        console.error("Lỗi khi lấy thông tin phí vận chuyển:", error);
       }
-  }
-  fetchData();
-}, []);
+      setIsLoading(false)
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+      try {
+        const feeShipElement = array.find(element => element.contact._id === selectedContact._id);
+        const fee =  feeShipElement.shipCost
+        setShipFee(fee)
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin phí vận chuyển:", error);
+      }
+  }, [selectedContact, shipFee]);
+
   return (
     <div>
       <div class="eqkueT">
@@ -100,9 +117,9 @@ useEffect(() => {
               <div class="Jw2Sc-">
                 <div>
                   <div class="NYnMjH">
-                    <div class="FVWWQy">{userName}  {phoneNumber}</div>
+                    <div class="FVWWQy">{userName} | {selectedContact.phoneNumber}</div>
                     <div class="QsWYfx">
-                      {address}
+                      {selectedContact.address}
                     </div>
                     <div class="uk7Wpm">Mặc định</div>
                   </div>
@@ -116,7 +133,7 @@ useEffect(() => {
             <div class="_3cPNXP">
               <div class="V-sVj2">
                 <div class="jNp+ZB ktatB-"><h2 class="_6HCfS6">Sản phẩm</h2></div>
-                <div class="jNp+ZB _04sLFc">Yêu cầu đặc biệt</div>
+                <div class="jNp+ZB _04sLFc" style={{ textAlign: 'left', paddingLeft: '20px' }}>Yêu cầu đặc biệt</div>
                 <div class="jNp+ZB">Đơn giá</div>
                 <div class="jNp+ZB">Số lượng</div>
                 <div class="jNp+ZB LBqTli">Thành tiền</div>
@@ -132,10 +149,10 @@ useEffect(() => {
                     </div>
                     {cart.products.map((product) => (
 
-                      <OrderDishItem product={product}/>
+                      <OrderDishItem product={product} />
                     ))}
                   </div>
-                </div>               
+                </div>
                 <div class="Nivkv-">
                   <div class="ULZMSb">
                     <div class="z10ZuQ">Tổng số tiền ({productsCount} sản phẩm):</div>
@@ -188,7 +205,7 @@ useEffect(() => {
             <div class="KQyCj0" aria-live="polite">
               <h2 class="a11y-visually-hidden">Tổng thanh toán:</h2>
               <h3 class="Tc17Ac XIEGGF BcITa9">Tổng tiền hàng</h3>
-              <div class="Tc17Ac mCEcIy BcITa9">{total}₫</div>
+              <div class="Tc17Ac mCEcIy BcITa9">{totalPrice}₫</div>
               <h3 class="Tc17Ac XIEGGF RY9Grr">Phí vận chuyển</h3>
               <div class="Tc17Ac mCEcIy RY9Grr">{shipFee}₫</div>
               <h3 class="Tc17Ac XIEGGF n3vdfL">Tổng thanh toán:</h3>
@@ -215,8 +232,9 @@ useEffect(() => {
         </div>
       </div>
       {showModalAddress && (
-        <PickAddress show={showModalAddress} handleClose={closeModalAddress} user={user}/>
+        <PickAddress show={showModalAddress} handleClose={closeModalAddress} user={user} selectedContact={selectedContact} setSelectedContact={setSelectedContact}/>
       )}
+      {isLoading && (<LoadingModal/>)}
 
     </div>
   )

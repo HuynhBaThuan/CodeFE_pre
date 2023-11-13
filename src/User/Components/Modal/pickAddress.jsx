@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ModalUpdateAddress from "./modalUpdateAddress";
-const PickAddress = ({ show, handleClose, user }) => {
+import UpdateAddressOrder from "./updateAddressOrder";
+const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedContact }) => {
     const [showModalUpdateAddress, setShowModalUpdateAddress] = useState(false);
 
     const handleShowModalUpdateAddress = () => {
@@ -10,9 +11,35 @@ const PickAddress = ({ show, handleClose, user }) => {
         setShowModalUpdateAddress(false);
     };
 
+    const [selectedAddress, setSelectedAddress] = useState(selectedContact._id);
+
+    const handleRadioChange = (contId) => {
+        setSelectedAddress(contId);
+    };
+
+    const handleConfirm = () => {
+        const selectedContact = user.contact.find((cont) => cont._id === selectedAddress);
+
+        if (selectedContact) {
+            setSelectedContact(selectedContact)
+        } else {
+            console.error('Selected contact not found.');
+        }
+        handleClose();
+    };
+
+    const [showModalAddress, setShowModalAddress] = useState(false);
+    const openModalAddress = () => {
+      setShowModalAddress(true);
+    };
+  
+    const closeModalAddress = () => {
+      setShowModalAddress(false);
+    };
+
     return (
         <div>
-            <div id="modal" style={{ zIndex: '10' }}>
+            <div id="modal" style={{ zIndex: '1' }}>
                 <div>
                     <div
                         class="shopee-modal__transition-appear-done shopee-modal__transition-enter-done"
@@ -64,29 +91,19 @@ const PickAddress = ({ show, handleClose, user }) => {
                                         <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
                                             <div class="VR5G-p AXtEWT">
                                                 <div class="_54u+Wc">
-                                                    <div
-                                                        class="stardust-radio stardust-radio--checked"
-                                                        tabindex="0"
-                                                        role="radio"
-                                                        aria-checked="false"
-                                                        aria-disabled="false"
-                                                        aria-labelledby="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_invalid-flag"
-                                                    >
-                                                        <div
-                                                            class="stardust-radio-button "
-                                                        >
-                                                            <div class="stardust-radio-button__outer-circle">
-                                                                <div
-                                                                    class="stardust-radio-button__inner-circle"
-                                                                ></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="stardust-radio__content">
-                                                            <div class="stardust-radio__label"></div>
-                                                        </div>
-                                                    </div>
+                                                    <input
+                                                        class="stardust-radio stardust-radio--checked stardust-radio-button"
+                                                        type="radio"
+                                                        id={`address-radio-${cont._id}`}
+                                                        name="address-radio-group"
+                                                        value={cont._id}
+                                                        checked={selectedAddress === cont._id}
+                                                        onChange={() => handleRadioChange(cont._id)}
+                                                    />
                                                 </div>
-                                                <div class="PcodYT">
+                                                <label class="PcodYT" htmlFor={`address-radio-${cont._id}`}>
+                                                    {/* <div class="PcodYT"> */}
+
                                                     <div role="heading" class="_7efJXB hgGPm2">
                                                         <div
                                                             id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
@@ -126,35 +143,13 @@ const PickAddress = ({ show, handleClose, user }) => {
                                                             <span role="mark" className="UAGfcj hCWcbk NqLtr2">Mặc định</span>
                                                         </div>
                                                     )}
-                                                </div>
+                                                    {/* </div> */}
+                                                </label>
                                             </div>
                                         </div>
-                                    ))}                                    
-                                    {/* {user.contact.map((cont) => (
-        <div key={cont._id} className="address-item">
-          <input
-            type="radio"
-            id={`address-radio-${cont._id}`}
-            name="address-radio-group"
-            value={cont._id}
-            checked={user.defaultContact === cont._id}
-            onChange={() => handleRadioChange(cont._id)}
-          />
-          <label htmlFor={`address-radio-${cont._id}`}>
-            <div>
-              <div>{cont.address}</div>
-              <div>{`${user.firstName} ${user.lastName}`}</div>
-              <div>{cont.phoneNumber}</div>
-              <button onClick={() => handleShowModalUpdateAddress()}>Cập nhật</button>
-              {selectedAddress === cont._id && (
-                <div className="default-badge">Mặc định</div>
-              )}
-            </div>
-          </label>
-        </div>
-      ))} */}
+                                    ))}
 
-                                    <button class="LkGLx9 _4aRllO IkCOND" onClick={handleShowModalUpdateAddress}>
+                                    <button class="LkGLx9 _4aRllO IkCOND" onClick={openModalAddress}>
                                         <svg viewBox="0 0 10 10" class="QUCjwo">
                                             <path
                                                 stroke="none"
@@ -163,7 +158,8 @@ const PickAddress = ({ show, handleClose, user }) => {
                                     </button>
                                 </div>
                                 <div class="u7Oswx">
-                                    <button onClick={handleClose} class="LtBE+Z LkGLx9 _4aRllO IkCOND">Huỷ</button><button class="FKiInz _4aRllO h4w1PK">Xác nhận</button>
+                                    <button onClick={handleClose} class="LtBE+Z LkGLx9 _4aRllO IkCOND">Huỷ</button>
+                                    <button onClick={handleConfirm} class="FKiInz _4aRllO h4w1PK">Xác nhận</button>
                                 </div>
                             </div>
                         </div>
@@ -172,6 +168,9 @@ const PickAddress = ({ show, handleClose, user }) => {
                 </aside>
             </div>
             <ModalUpdateAddress show={showModalUpdateAddress} handleClose={handleCloseModalUpdateAddress} />
+            {showModalAddress && (
+        <UpdateAddressOrder show={showModalAddress} handleClose={closeModalAddress}/>
+      )}
         </div>
     )
 }

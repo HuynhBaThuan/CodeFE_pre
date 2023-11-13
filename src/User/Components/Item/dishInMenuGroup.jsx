@@ -3,7 +3,7 @@ import React from "react";
 const DishInMenuGroup = ({ dish, handleOpen, handleAddToCart }) => {
 
     const handleAdd = () => {
-        console.log(dish)
+        // console.log(dish)
         handleAddToCart(dish);
         handleOpen();
     }

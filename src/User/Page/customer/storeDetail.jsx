@@ -1,34 +1,36 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import CartModal from "../../Components/Modal/cart";
 import { useLocation } from "react-router-dom";
 import { getAllCategoryByStoreId } from "../../services/userServices";
 import { useTranslation } from "react-i18next";
 import MenuGroup from "../../Components/Item/menuGroup";
 import { Link, Element } from "react-scroll";
+import LoadingModal from "../../Components/Loading/Loading";
 import axios from "axios";
 const StoreDetail = () => {
     const { t } = useTranslation()
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState([]);
     const location = useLocation()
+    const [isLoading, setIsLoading] = useState(false)
     const store = location.state.store.store;
-    const data = [
-        {
-            id: '1',
-            catName: "Món nướng",
-            photo: "photo1.jpg",
-        },
-        {
-            id: '2',
-            catName: "Ăn vặt",
-            photo: "photo2.jpg",
-        },
-        {
-            id: '3',
-            catName: "Món lẩu",
-            photo: "photo3.jpg",
-        },
-    ];
+    // const data = [
+    //     {
+    //         id: '1',
+    //         catName: "Món nướng",
+    //         photo: "photo1.jpg",
+    //     },
+    //     {
+    //         id: '2',
+    //         catName: "Ăn vặt",
+    //         photo: "photo2.jpg",
+    //     },
+    //     {
+    //         id: '3',
+    //         catName: "Món lẩu",
+    //         photo: "photo3.jpg",
+    //     },
+    // ];
     const openModal = () => {
         setShowModal(true);
     };
@@ -40,14 +42,15 @@ const StoreDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setCategories(data)
-                // const data1 = await getAllCategoryByStoreId(store._id)
-                const data1 = await axios.get("https://falth.vercel.app/api/category/store/654c2d531bcf4800076d5db8")
-                console.log(data1)
+                setIsLoading(true)
+                // setCategories(data)
+                const data = await getAllCategoryByStoreId(store._id)
+                setCategories(data.data)
 
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin quán ăn:", error);
             }
+            setIsLoading(false)
         }
         fetchData();
     }, []);
@@ -199,7 +202,7 @@ const StoreDetail = () => {
                                                             <MenuGroup
                                                                 category={category}
                                                                 openModal={openModal}
-                                                                storeName={store.name}
+                                                                store={store}
                                                             />
                                                         </Element>
                                                     ))}
@@ -222,6 +225,7 @@ const StoreDetail = () => {
             {showModal && (
                 <CartModal show={showModal} handleClose={closeModal} handleOpen={openModal} />
             )}
+            {isLoading && (<LoadingModal />)}
         </div>
     )
 }

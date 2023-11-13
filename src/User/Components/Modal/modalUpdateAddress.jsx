@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import { addContact, updateContact } from '../../services/userServices';
 import LoadingModal from '../../Components/Loading/Loading';
 
-const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1, contactId }) => {
+const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1, contactId}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
@@ -28,8 +28,8 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
                 localStorage.setItem("user", JSON.stringify(response));
             } else {
                 const response = await updateContact(e, formData, contactId)
-                console.log(response)
-                localStorage.setItem("user", JSON.stringify(response));
+                console.log(response.data)
+                localStorage.setItem("user", JSON.stringify(response.data));
             }
             setIsLoading(false)
         } else {
@@ -61,8 +61,8 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
     return (
         <div>
 
-            <Modal className="modal fade modal-change-address" show={show} onHide={handleReset} size="lg">
-                <Modal.Body>
+            <Modal className="modal fade modal-change-address" show={show} onHide={handleReset} size="lg" > 
+                <Modal.Body style={{zIndex:'1000'}}>
                     <Modal.Title>Cập nhật địa chỉ</Modal.Title>
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
@@ -71,17 +71,6 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
                                 {error && <div className="alert-danger">{error}</div>}
                                 <div class="modal-body">
                                     <div class="row">
-                                        {/* <div class="col col-6 form-group input-field">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="fullname"
-                                            placeholder="Họ và tên"
-                                            name="name"
-                                        /><label for="name"
-                                        >Họ tên<span class="txt-red font-weight-bold"
-                                        >*</span></label>
-                                    </div> */}
                                         <div class="col col-12 form-group input-field">
                                             <input
                                                 type="text"

@@ -21,15 +21,16 @@ const UpdateAddress = () => {
     const [address, setAddress] = useState('');
     const [action, setAction] = useState('');
     const [actionDel, setActionDel] = useState('');
+    const [idContact, setIdContact] = useState('');
 
-    const handleShowModal = (address1, phoneNumber1, action1) => {
+    const handleShowModal = (address1, phoneNumber1, action1, id) => {
         setAddress(address1)
         setPhoneNumber(phoneNumber1)
         setAction(action1)
+        setIdContact(id)
         console.log(phoneNumber, address)
         setShowModal(true);
     };
-
     const handleCloseModal = () => {
         setShowModal(false);
         setAddress('')
@@ -67,8 +68,6 @@ const UpdateAddress = () => {
                 const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
                 const userData = JSON.parse(user);
-                const defaultContactId = userData.defaultContact;
-                const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
                 if (token) {
                     // const userData = await getUserInfo(token);
                     setUserName(userData.firstName + " " + userData.lastName)
@@ -213,7 +212,7 @@ const UpdateAddress = () => {
                 </div>
             </div>
 
-            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action}/>
+            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action} contactId={idContact} contatcs={contacts} setContacts={setContacts}/>
             <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} id={itemToDelete} action={actionDel}/>
                            
         </div>
