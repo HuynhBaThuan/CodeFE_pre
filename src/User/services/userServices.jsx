@@ -41,7 +41,6 @@ const addContact = async (e, formData) => {
         Authorization: `Bearer ${token}`
       }
     });
-    // window.location.reload();
     console.log('Liên hệ đã được thêm', response.data);
     return response.data
   } catch (error) {
@@ -59,7 +58,6 @@ const updateContact = async (e, formData, id) => {
         Authorization: `Bearer ${token}`
       }
     });
-    window.location.reload();
     console.log('Liên hệ đã được chỉnh sửa', response.data);
     return response.data
   } catch (error) {
@@ -77,7 +75,6 @@ const deleteContact = async (id) => {
         Authorization: `Bearer ${token}`
       }
     });
-    window.location.reload();
     console.log('Liên hệ đã được xóa', response.data);
   } catch (error) {
     console.error('Lỗi khi xóa liên hệ', error);
@@ -86,7 +83,6 @@ const deleteContact = async (id) => {
 
 //Info Store
 const getStoreById = async (id) => {
-  // const api = `https://falth.vercel.app/api/store/653233e16d8d513510d93744`
   const api = `https://falth.vercel.app/api/store/${id}`
   const response = await axios.get(api);
   return response.data;
@@ -117,6 +113,42 @@ const getProductByStoreId = async (storeId, catName) => {
   return response.data;
 }
 
+//cart
+
+//order
+
+const placeOrder = async (totalPrice, shipCost) => {
+  const token = localStorage.getItem("token");
+  const decodedToken = JSON.parse(atob(token.split(".")[1]));
+  const cart = JSON.parse(localStorage.getItem("cart"));
+
+  // Tạo đối tượng dữ liệu để truyền vào API
+  const products = cart.products.map((product) => ({
+    quantity: product.amount,
+    price: product.price,
+    product: product._id,
+    notes: product.specialRequest
+  }));
+  console.log(products)
+  const orderData = {
+    cart: products, // Lấy thông tin giỏ hàng từ đối tượng cart
+    totalPrice: totalPrice,
+    shipCost: shipCost,
+  };
+  console.log(orderData)
+  try {
+    const response = await axios.post(`https://falth.vercel.app/api/order/user/${decodedToken.id}/store/${cart.idStore}`, orderData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log("Order placed successfully:");
+    return response.data
+  } catch (error) {
+    console.error("Error placing order:", error);
+  }
+}
+
 export {
   loginAPI,
   getUserInfo,
@@ -127,5 +159,6 @@ export {
   getAllCategory,
   getAllCategoryByStoreId,
   updateContact,
-  getProductByStoreId
+  getProductByStoreId,
+  placeOrder
 }

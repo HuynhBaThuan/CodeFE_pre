@@ -5,8 +5,7 @@ import { getAllCategoryByStoreId } from "../../services/userServices";
 import { useTranslation } from "react-i18next";
 import MenuGroup from "../../Components/Item/menuGroup";
 import { Link, Element } from "react-scroll";
-import LoadingModal from "../../Components/Loading/Loading";
-import axios from "axios";
+import Skeleton from "../../Components/Skeleton/skeleton";
 const StoreDetail = () => {
     const { t } = useTranslation()
     const [showModal, setShowModal] = useState(false);
@@ -14,23 +13,6 @@ const StoreDetail = () => {
     const location = useLocation()
     const [isLoading, setIsLoading] = useState(false)
     const store = location.state.store.store;
-    // const data = [
-    //     {
-    //         id: '1',
-    //         catName: "Món nướng",
-    //         photo: "photo1.jpg",
-    //     },
-    //     {
-    //         id: '2',
-    //         catName: "Ăn vặt",
-    //         photo: "photo2.jpg",
-    //     },
-    //     {
-    //         id: '3',
-    //         catName: "Món lẩu",
-    //         photo: "photo3.jpg",
-    //     },
-    // ];
     const openModal = () => {
         setShowModal(true);
     };
@@ -43,7 +25,6 @@ const StoreDetail = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true)
-                // setCategories(data)
                 const data = await getAllCategoryByStoreId(store._id)
                 setCategories(data.data)
 
@@ -133,6 +114,11 @@ const StoreDetail = () => {
                                 <div class="menu-restaurant-category">
                                     <div class="list-category" id="scroll-spy">
                                         <div class="scrollbar-container ps">
+                                            {isLoading && Array(3).fill(0).map((item, index) => (
+                                                <div className="item" key={index} style={{ height: '30px', width: '100px' }}>
+                                                    <Skeleton />
+                                                </div>
+                                            ))}
                                             {categories.map((category) => (
                                                 <Link to={category.catName} spy={true} smooth={true} duration={500} offset={-150}>
 
@@ -222,11 +208,12 @@ const StoreDetail = () => {
                 </div>
 
             </div>
-            {showModal && (
-                <CartModal show={showModal} handleClose={closeModal} handleOpen={openModal} />
-            )}
-            {isLoading && (<LoadingModal />)}
-        </div>
+            {
+                showModal && (
+                    <CartModal show={showModal} handleClose={closeModal} handleOpen={openModal} />
+                )
+            }
+        </div >
     )
 }
 

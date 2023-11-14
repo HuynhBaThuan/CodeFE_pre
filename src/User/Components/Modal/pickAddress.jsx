@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ModalUpdateAddress from "./modalUpdateAddress";
-import UpdateAddressOrder from "./updateAddressOrder";
 const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedContact }) => {
     const [showModalUpdateAddress, setShowModalUpdateAddress] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+    const [action, setAction] = useState('');
+    const [idContact, setIdContact] = useState('');
+    const [contacts, setContacts] = useState([]);
 
-    const handleShowModalUpdateAddress = () => {
-        setShowModalUpdateAddress(true);
+    const handleShowModal = (address1, phoneNumber1, action1, id) => {
+        setAddress(address1)
+        setPhoneNumber(phoneNumber1)
+        setAction(action1)
+        setIdContact(id)
+        // console.log(phoneNumber, address)
+        setShowModal(true);
     };
-    const handleCloseModalUpdateAddress = () => {
-        setShowModalUpdateAddress(false);
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setAddress('')
+        setPhoneNumber('')
     };
 
     const [selectedAddress, setSelectedAddress] = useState(selectedContact._id);
@@ -28,31 +40,36 @@ const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedCont
         handleClose();
     };
 
-    const [showModalAddress, setShowModalAddress] = useState(false);
-    const openModalAddress = () => {
-      setShowModalAddress(true);
-    };
-  
-    const closeModalAddress = () => {
-      setShowModalAddress(false);
-    };
+    useEffect(() => {;
+        const fetchData = async () => {
+            try {
+                const user = localStorage.getItem("user");
+                const token = localStorage.getItem("token");
+                const userData = JSON.parse(user);
+                if (token) {
+                    setContacts(userData.contact)
+                } else {
+                    console.error("Token không tồn tại trong local storage");
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin người dùng:", error);
+            }
+        }
+        fetchData();
+    }, []);
 
     return (
         <div>
-            <div id="modal" style={{ zIndex: '1' }}>
-                <div>
-                    <div
-                        class="shopee-modal__transition-appear-done shopee-modal__transition-enter-done"
-                    ></div>
-                </div>
+            <div id="modal" style={{ zIndex: '1' }}>                
                 <aside
+                    zIndex='1'
                     tabindex="0"
                     role="dialog"
                     aria-modal="true"
                     aria-label="modal"
                     class="WG6KlM"
                 >
-                    <div class="jRFwds">
+                    <div class="jRFwds" style={{ zIndex: '1' }}>
                         <div class="PRuV34">
                             <div class="UK8GQJ">
                                 <div class="N+ztzK"><div>Địa Chỉ Của Tôi</div></div>
@@ -86,7 +103,7 @@ const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedCont
                                             </div>
                                         </div>
                                     </div>
-                                    {user.contact.map((cont) => (
+                                    {contacts.map((cont) => (
 
                                         <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
                                             <div class="VR5G-p AXtEWT">
@@ -117,7 +134,7 @@ const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedCont
                                                             </div>
                                                         </div>
                                                         <div class="XEXjAd">
-                                                            <button onClick={handleShowModalUpdateAddress} class="Tuo6ZP">Cập nhật</button>
+                                                            <button onClick={() => handleShowModal(cont.address, cont.phoneNumber, 'update', cont._id)} class="Tuo6ZP">Cập nhật</button>
                                                         </div>
                                                     </div>
                                                     <div
@@ -149,7 +166,12 @@ const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedCont
                                         </div>
                                     ))}
 
-                                    <button class="LkGLx9 _4aRllO IkCOND" onClick={openModalAddress}>
+                                    <button class="LkGLx9 _4aRllO IkCOND" onClick={() =>
+                                                handleShowModal(                                                   
+                                                    '',
+                                                    '', 
+                                                    'add',
+                                                )}>
                                         <svg viewBox="0 0 10 10" class="QUCjwo">
                                             <path
                                                 stroke="none"
@@ -167,10 +189,7 @@ const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedCont
                     <div class="_4BlFzb"></div>
                 </aside>
             </div>
-            <ModalUpdateAddress show={showModalUpdateAddress} handleClose={handleCloseModalUpdateAddress} />
-            {showModalAddress && (
-        <UpdateAddressOrder show={showModalAddress} handleClose={closeModalAddress}/>
-      )}
+            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action} contactId={idContact} setContacts={setContacts}/>
         </div>
     )
 }

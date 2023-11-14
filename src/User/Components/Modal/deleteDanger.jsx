@@ -4,8 +4,11 @@ import Button from 'react-bootstrap/Button';
 import { deleteContact } from '../../services/userServices';
 import LoadingModal from '../Loading/Loading';
 import { useState } from 'react';
-const DeleteConfirmationModal = ({ show, handleClose, handleDelete, id, action }) => {
+import Notify from '../Notify.jsx/Notify';
+const DeleteConfirmationModal = ({ show, handleClose, handleDelete, id, action, setContacts }) => {
     const [isLoading, setIsLoading] = useState(false)
+    const [openNotify, setOpenNotify] = useState(false)
+    const [message, setMessage] = useState("")
 
     const handleDeleteItem = async() => {
         console.log(action)
@@ -20,7 +23,10 @@ const DeleteConfirmationModal = ({ show, handleClose, handleDelete, id, action }
             localStorage.setItem("user", JSON.stringify(userData));
             handleClose();
             const  response = await deleteContact(id)
+            setContacts(userData.contact)
             setIsLoading(false)
+            setMessage("Xóa địa chỉ thành công!")
+            setOpenNotify(true)
         } else if (action === 'cart') {
             setIsLoading(true)
             handleDelete(id);
@@ -48,6 +54,7 @@ const DeleteConfirmationModal = ({ show, handleClose, handleDelete, id, action }
                 </Modal.Footer>
             </Modal>
             {isLoading && (<LoadingModal />)}
+            {openNotify && (<Notify message={message} setOpenNotify={setOpenNotify}/>)}
         </div>
     );
 };

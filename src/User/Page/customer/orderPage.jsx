@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useCity } from "../../services/CityContext";
 import OrderDishItem from "../../Components/Item/orderedDishItem";
 import LoadingModal from "../../Components/Loading/Loading";
+import { placeOrder } from "../../services/userServices";
 import axios from "axios";
 const OrderPage = () => {
   const [showModalAddress, setShowModalAddress] = useState(false);
@@ -17,7 +18,9 @@ const OrderPage = () => {
   const feeDefault = location.state.feeDefault
   const calArray = location.state.calArray
   const [totalPrice, setTotalPrice] = useState(total)
-  const [shipFee, setShipFee] = useState(feeDefault)
+  const [shipFee, setShipFee] = useState(feeDefault.shipCost)
+  const [distance, setDistance] = useState(feeDefault.distance)
+  const [deliveryTime, setDeliveryTime] = useState(feeDefault.deliveryTime)
   const [totalPayment, setTotalPayment] = useState(totalPrice + shipFee)
   const [selectedContact, setSelectedContact] = useState({})
   const [array, setArray] = useState(calArray)
@@ -34,8 +37,17 @@ const OrderPage = () => {
 
   const navigate = useNavigate();
 
-  const handleOrder = () => {
-    navigate("/home/storeDetail");
+  const handleOrder = async () => {
+    try {
+      setIsLoading(true)
+      const response = await placeOrder(totalPrice, shipFee);
+      const orderUrl = response.url; // Đặt tên phù hợp với trường cần lấy từ response
+      window.open(orderUrl, '_blank'); // '_blank' để mở ở một tab mới
+  } catch (error) {
+      console.error("Error placing order:", error);
+  }
+  setIsLoading(false)
+
   };
   useEffect(() => {
     let tempTotal = 0;
@@ -73,12 +85,13 @@ const OrderPage = () => {
   useEffect(() => {
       try {
         const feeShipElement = array.find(element => element.contact._id === selectedContact._id);
-        const fee =  feeShipElement.shipCost
-        setShipFee(fee)
+        setShipFee(feeShipElement.shipCost)
+        setDistance(feeShipElement.distance)
+        setDeliveryTime(feeShipElement.deliveryTime)
       } catch (error) {
         console.error("Lỗi khi lấy thông tin phí vận chuyển:", error);
       }
-  }, [selectedContact, shipFee]);
+  }, [selectedContact]);
 
   return (
     <div>
@@ -126,7 +139,6 @@ const OrderPage = () => {
                 </div>
                 <button onClick={openModalAddress} class="_3WkjWD div-style">Thay đổi</button>
               </div>
-              <div></div>
             </div>
           </div>
           <div class="sqxwIi">
@@ -144,8 +156,7 @@ const OrderPage = () => {
                 <div>
                   <div class="Z7qspM">
                     <div class="vYrpLx">
-                      <h3 class="YSl9dN">{cart.nameStore}</h3>
-
+                      <h3 class="YSl9dN">{cart.nameStore}  <i class="fa-regular fa-clock"></i>   {deliveryTime} phút</h3>
                     </div>
                     {cart.products.map((product) => (
 
@@ -206,7 +217,7 @@ const OrderPage = () => {
               <h2 class="a11y-visually-hidden">Tổng thanh toán:</h2>
               <h3 class="Tc17Ac XIEGGF BcITa9">Tổng tiền hàng</h3>
               <div class="Tc17Ac mCEcIy BcITa9">{totalPrice}₫</div>
-              <h3 class="Tc17Ac XIEGGF RY9Grr">Phí vận chuyển</h3>
+              <h3 class="Tc17Ac XIEGGF RY9Grr">Phí vận chuyển ({distance}km)</h3>
               <div class="Tc17Ac mCEcIy RY9Grr">{shipFee}₫</div>
               <h3 class="Tc17Ac XIEGGF n3vdfL">Tổng thanh toán:</h3>
               <div class="Tc17Ac kC0GSn mCEcIy n3vdfL">{totalPayment}₫</div>
@@ -223,6 +234,7 @@ const OrderPage = () => {
                 </div>
                 <button
                   class="stardust-button stardust-button--primary stardust-button--large apLZEG N7Du4X"
+                  onClick={handleOrder}
                 >
                   Đặt hàng
                 </button>

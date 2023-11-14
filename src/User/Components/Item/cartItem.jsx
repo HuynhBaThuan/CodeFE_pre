@@ -99,7 +99,7 @@ const CartItem = ({updateTotalPrice, updateRequest, onDelete, product }) => {
                             </div>
                             <div class="CartItem-ColPrice___136ai">
                                 <div>
-                                    <div>{totalPrice}</div>
+                                    <div>{totalPrice}₫</div>
                                     <button onClick={() => handleShowDeleteModal('cart')}><i class="fa-solid fa-trash" style={{ color: 'red' }}></i></button>
                                 </div>
                             </div>

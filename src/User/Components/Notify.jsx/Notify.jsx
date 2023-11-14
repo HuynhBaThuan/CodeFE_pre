@@ -2,8 +2,16 @@ import React from 'react';
 import './Notify.css';
 import { useTranslation } from 'react-i18next';
 
-function Notify({ error, message, setOpenNotify }) {
+function Notify({ error, message, setOpenNotify, handleClose }) {
     const {t} = useTranslation()
+    const close = () => {
+        if(handleClose) {
+            handleClose();
+            setOpenNotify(false)
+        } else {
+            setOpenNotify(false)
+        }
+    }
     return (
 
         <div class="modal is-active show fade modal-noti modal-alert">
@@ -19,7 +27,7 @@ function Notify({ error, message, setOpenNotify }) {
                         <p class="font15"><span>{message}</span></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-red align-right" onClick={() => setOpenNotify(false)}>Ok</button>
+                        <button type="button" class="btn btn-red align-right" onClick={close}>Ok</button>
                     </div>
                 </div>
             </div>

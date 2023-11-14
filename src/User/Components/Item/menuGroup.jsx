@@ -3,8 +3,10 @@ import DishInMenuGroup from "./dishInMenuGroup";
 import { useCity } from "../../services/CityContext";
 import { useState } from "react";
 import { getProductByStoreId } from "../../services/userServices";
+import Skeleton from "../Skeleton/skeleton";
 const MenuGroup = ({ category, openModal, store }) => {
     const { cart, setCart, setProductsCount } = useCity();
+    const [isLoading, setIsLoading] = useState(false)
     const handleOpen = () => {
         openModal()
     }
@@ -12,11 +14,13 @@ const MenuGroup = ({ category, openModal, store }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true)
                 const products = await getProductByStoreId(store._id, category.catName)
                 setDishes(products.data.data)
             } catch (error) {
                 console.log("Lỗi khi lấy thông tin món ăn", error)
             }
+            setIsLoading(false)
         }
         fetchData();
     }, [])
@@ -87,6 +91,33 @@ const MenuGroup = ({ category, openModal, store }) => {
             >
                 <div class="title-menu">{category.catName}</div>
             </div>
+            {isLoading && Array(4).fill(0).map((item, index) => (
+                <div
+                key={index}
+                class="item-restaurant-row"
+                style={{
+                    height: '84px',
+                    width: '100%',
+                }}
+            >
+                <div class="row">
+                    <div class="col-auto item-restaurant-img" style={{ width: '80px', height: '60px' }}>
+                        <Skeleton />
+                    </div>
+                    <div class="col item-restaurant-info">
+                        <h2 class="item-restaurant-name" style={{ width: '200px', height: '25px' }}>
+                            <Skeleton />
+                        </h2>
+                        <div class="item-restaurant-desc" style={{ width: '80px', height: '25px', marginTop: '10px' }}><Skeleton /></div>
+                    </div>
+                    <div class="col-auto item-restaurant-more">
+                        <div class="row" style={{ width: '150px', height: '30px' }}>
+                            <Skeleton />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            )) }
             {dishes.map((dish) => (
                 <DishInMenuGroup dish={dish} handleOpen={handleOpen} handleAddToCart={handleAddToCart} />
             ))}

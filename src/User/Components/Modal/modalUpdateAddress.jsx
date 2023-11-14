@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { addContact, updateContact } from '../../services/userServices';
 import LoadingModal from '../../Components/Loading/Loading';
+import Notify from '../Notify.jsx/Notify';
 
-const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1, contactId}) => {
+const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1, contactId, setContacts}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState("");
+    const [openNotify, setOpenNotify] = useState(false)
+    const [message, setMessage] = useState("")
     const [formData, setFormData] = useState({
         phoneNumber: phoneNumber1,
         address: address1,
@@ -23,13 +26,18 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
         if (/^\d{10}$/.test(formData.phoneNumber)) {
             setIsLoading(true)
             if (action1 === 'add') {
-                const response = await addContact(e, formData)
-                console.log(response)
+                const response = await addContact(e, formData);
                 localStorage.setItem("user", JSON.stringify(response));
+                setContacts(response.contact);
+                setMessage("Thêm địa chỉ thành công!");
+                setOpenNotify(true)
             } else {
                 const response = await updateContact(e, formData, contactId)
                 console.log(response.data)
                 localStorage.setItem("user", JSON.stringify(response.data));
+                setContacts(response.data.contact);
+                setMessage("Cập nhật địa chỉ thành công!");
+                setOpenNotify(true)
             }
             setIsLoading(false)
         } else {
@@ -57,7 +65,6 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
             address: address1,
         });
     }, [phoneNumber1, address1]);
-
     return (
         <div>
 
@@ -119,6 +126,7 @@ const ModalUpdateAddress = ({ show, handleClose, phoneNumber1, address1, action1
                 </Modal.Body>
             </Modal>
             {isLoading && (<LoadingModal />)}
+            {openNotify && (<Notify message={message} setOpenNotify={setOpenNotify} handleClose={handleClose}/>)}
         </div>
     )
 }

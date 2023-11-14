@@ -17,6 +17,7 @@ const OrderDishItem = ({ product }) => {
                             alt="product item"
                             src={product.images[0]}
                             height="40"
+                            width="40"
                         />
                         <span class="oEI3Ln"
                         ><span class="gHbVhc"
@@ -25,9 +26,9 @@ const OrderDishItem = ({ product }) => {
                     <div class="h3ONzh Le31ox">
                         <span class="dVLwMH">{product.specialRequest}</span>
                     </div>
-                    <div class="h3ONzh">{product.price}</div>
+                    <div class="h3ONzh">{product.price}₫</div>
                     <div class="h3ONzh">{product.amount}</div>
-                    <div class="h3ONzh fHRPUO">{totalPrice}</div>
+                    <div class="h3ONzh fHRPUO">{totalPrice}₫</div>
                 </div>
             </div>
         </div>

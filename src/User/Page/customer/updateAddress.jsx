@@ -22,6 +22,7 @@ const UpdateAddress = () => {
     const [action, setAction] = useState('');
     const [actionDel, setActionDel] = useState('');
     const [idContact, setIdContact] = useState('');
+    const [contacts, setContacts] = useState([]);
 
     const handleShowModal = (address1, phoneNumber1, action1, id) => {
         setAddress(address1)
@@ -59,7 +60,7 @@ const UpdateAddress = () => {
         navigate(`/${nav}`);
     };
 
-    const [contacts, setContacts] = useState([]);
+    
     const [userName, setUserName] = useState("");
     const [img, setImg] = useState("")
     useEffect(() => {;
@@ -199,7 +200,7 @@ const UpdateAddress = () => {
                                                 handleShowModal(                                                   
                                                     '',
                                                     '', 
-                                                    'add'
+                                                    'add',
                                                 )}>
                                                 {t("add")}
                                             </button>
@@ -212,8 +213,8 @@ const UpdateAddress = () => {
                 </div>
             </div>
 
-            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action} contactId={idContact} contatcs={contacts} setContacts={setContacts}/>
-            <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} id={itemToDelete} action={actionDel}/>
+            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action} contactId={idContact} setContacts={setContacts}/>
+            <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} id={itemToDelete} action={actionDel} setContacts={setContacts}/>
                            
         </div>
     )

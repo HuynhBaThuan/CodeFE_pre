@@ -32,10 +32,9 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
             })
             const calArray = response.data.data
             const feeShipElement = calArray.find(element => element.contact._id === userData.defaultContact);
-            const fee =  feeShipElement.shipCost
-            console.log(fee)
+            console.log(feeShipElement)
+            navigate("/user/order", { state: { total: total, feeDefault: feeShipElement, calArray: calArray } })
             setIsLoading(false)
-            navigate("/user/order", { state: { total: total, feeDefault:fee, calArray:calArray } })
         } else {
             handleClose()
             navigate("/signin")
@@ -78,7 +77,6 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
     }, [cart]);
 
     const updateTotalPrice = (id, quantity) => {
-        // Tìm sản phẩm có id tương ứng trong giỏ hàng
         const updatedProducts = cart.products.map(product => {
             if (product._id === id) {
                 product.amount = quantity;
@@ -100,7 +98,6 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
     };
 
     const updateRequest = (id, request) => {
-        // Tìm sản phẩm có id tương ứng trong giỏ hàng
         const updatedProducts = cart.products.map(product => {
             if (product._id === id) {
                 product.specialRequest = request;
@@ -157,12 +154,16 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
     }, [isModalOpen, handleOpen]);
 
     const handleStore = async () => {
-        setIsLoading(true)
-        const storeData = await getStoreById(cart.idStore)
-        const store = storeData.data
-        navigate("/home/storeDetail", { state: { store: { store } } });
-        handleClose()
-        setIsLoading(false)
+
+        try {
+            const storeData = await getStoreById(cart.idStore);
+            const store = storeData.data;
+            navigate("/home/storeDetail", { state: { store: { store } } });
+            handleClose();
+        } catch (error) {
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
