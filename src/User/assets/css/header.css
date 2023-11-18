@@ -8590,7 +8590,7 @@ button.close {
   display: inline-block;
   padding: 3px;
 }
-.icon-arrow-thin.right {
+.icon-arrow-thin.right_us {
   transform: rotate(-45deg);
 }
 .icon-arrow-thin.left {
@@ -16158,7 +16158,7 @@ button.history-table-status.gray {
   color: #666;
   cursor: not-allowed;
 }
-.right {
+.right_us {
   float: right;
 }
 .full {

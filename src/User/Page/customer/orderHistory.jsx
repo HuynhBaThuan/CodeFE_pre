@@ -148,9 +148,7 @@ const OrderHistory = () => {
                                 <div class="history-table-row" style={{ height: '50px', width: '1160px', marginBottom:'5px'}} key={index}>
                                 <Skeleton />
                             </div>
-                            ))}
-                            
-
+                            ))}                           
                             {items.map((item, index) => (
                                 <OrderHisItem item={item} index={index + 1} handleShowDetail={handleShowModal} handleShowRating={handleShowModal1} />
                             ))}
