@@ -38,6 +38,7 @@
     "i18next": "^23.6.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-bootstrap": "^2.9.1",

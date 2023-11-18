@@ -214,7 +214,7 @@ const Profile = () => {
                             <div class="col-auto"><i class="fas fa-user"></i></div>
                             <div class="col">{t("infoNav1")}</div>
                             <div class="col-auto">
-                                <i class="icon-arrow-thin right"></i>
+                                <i class="icon-arrow-thin right_us"></i>
                             </div></div>
                     </a>
                     <div class="item-navigation">
@@ -223,7 +223,7 @@ const Profile = () => {
                                 <div class="col-auto"><i class="fas fa-shopping-cart"></i></div>
                                 <div class="col">{t("infoNav2")}</div>
                                 <div class="col-auto">
-                                    <i class="icon-arrow-thin right"></i>
+                                    <i class="icon-arrow-thin right_us"></i>
                                 </div></div></a>
                     </div>
                     <div class="item-navigation">

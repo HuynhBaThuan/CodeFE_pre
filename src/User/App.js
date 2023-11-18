@@ -51,39 +51,67 @@ const App = () => {
     checkAndCreateCart();
 },);
 
+  // return (
+  //   <LanguageProvider>
+  //     <AuthProvider>
+  //       <CityProvider>
+  //           <div className='wrapper'>
+  //             <Header />
+  //             <Routes>
+  //               <Route path="/" element={<Home />} />
+  //               <Route path="/signin" element={<Signin />} />
+  //               <Route path="/signUpCustomer" element={<SignUpCustomer />} />
+  //               <Route path="/signUpShipper" element={<SignUpShipper />} />
+  //               <Route path="/signUpStore" element={<SignUpOwner />} />
+  //               <Route path="/signUpStore" element={<SignUpStore />} />
+  //               <Route path="/forgotPass" element={<ForgotPass />} />
+  //               <Route path="/verify" element={<Verify />} />
+  //               <Route path="/resetPass" element={<ResetPass />} />
+  //               <Route path="/home/storeDetail" element={<StoreDetail />}/>
+  //               <Route path="/home/storeComment" element={<ViewComment />}/>
+
+  //               <Route path="/user/profile" element={<ProtectedRoute element={<Profile />} />}/>
+  //               <Route path="/user/orderHistory" element={<ProtectedRoute element={<OrderHistory />} />} />
+  //               <Route path="/user/updateAddress" element={<ProtectedRoute element={<UpdateAddress />} />} />
+  //               <Route path="/user/order" element={<ProtectedRoute element={<OrderPage />} />} />
+  //             </Routes>
+  //             {/* <Footer /> */}
+  //           </div>
+  //       </CityProvider>
+  //     </AuthProvider>
+  //   </LanguageProvider>
+  // )
   return (
     <LanguageProvider>
       <AuthProvider>
         <CityProvider>
-          {/* <Router> */}
-            <div className='wrapper'>
-              <Header />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                {/* <Route path="/test" element={<SomeOneComponent />} /> */}
-                <Route path="/signin" element={<Signin />} />
-                <Route path="/signUpCustomer" element={<SignUpCustomer />} />
-                <Route path="/signUpShipper" element={<SignUpShipper />} />
-                <Route path="/signUpStore" element={<SignUpOwner />} />
-                <Route path="/signUpStore" element={<SignUpStore />} />
-                <Route path="/forgotPass" element={<ForgotPass />} />
-                <Route path="/verify" element={<Verify />} />
-                <Route path="/resetPass" element={<ResetPass />} />
-                <Route path="/home/storeDetail" element={<StoreDetail />}/>
-                <Route path="/home/storeComment" element={<ViewComment />}/>
+        {/* <Router> */}
+          <div className='wrapper'>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/signUpCustomer" element={<SignUpCustomer />} />
+              <Route path="/signUpShipper" element={<SignUpShipper />} />
+              <Route path="/signUpStore" element={<SignUpStore />} />
+              <Route path="/signUpOwner" element={<SignUpOwner />} />
+              <Route path="/forgotPass" element={<ForgotPass />} />
+              <Route path="/verify" element={<Verify />} />
+              <Route path="/resetPass" element={<ResetPass />} />
+              <Route path="/home/storeDetail" element={<StoreDetail />}/>
+              <Route path="/home/storeComment" element={<ViewComment />}/>
 
-                <Route path="/user/profile" element={<ProtectedRoute element={<Profile />} />}/>
-                <Route path="/user/orderHistory" element={<ProtectedRoute element={<OrderHistory />} />} />
-                <Route path="/user/updateAddress" element={<ProtectedRoute element={<UpdateAddress />} />} />
-                <Route path="/user/order" element={<ProtectedRoute element={<OrderPage />} />} />
-              </Routes>
-              {/* <Footer /> */}
-            </div>
+              <Route path="/user/profile" element={<ProtectedRoute element={<Profile />} />}/>
+              <Route path="/user/orderHistory" element={<ProtectedRoute element={<OrderHistory />} />} />
+              <Route path="/user/updateAddress" element={<ProtectedRoute element={<UpdateAddress />} />} />
+              <Route path="/user/order" element={<ProtectedRoute element={<OrderPage />} />} />
+            </Routes>
+          </div>
           {/* </Router> */}
         </CityProvider>
       </AuthProvider>
     </LanguageProvider>
-  )
+  );
 
 }
 

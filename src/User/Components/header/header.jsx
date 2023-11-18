@@ -265,7 +265,7 @@ const Header = () => {
                                             aria-expanded={isDropdownInfoOpen}
                                             onClick={toggleDropdownInfo}
                                         >
-                                            <div class="img">
+                                            <div class="img" style={{width:'auto'}}>
                                                 <img src={img} alt={userName} />
                                             </div>
                                             <span class="name">{userName}</span>

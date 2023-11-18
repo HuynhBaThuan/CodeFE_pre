@@ -1,16 +1,18 @@
 import React from "react";
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 const OrderHisItem = ({ item, index, handleShowDetail, handleShowRating }) => {
     const { t } = useTranslation()
-    const formattedDate = item.dateOrdered.format('DD/MM/YYYY HH:mm');
+    const formatteOrderTime = moment.utc(item.dateOrdered).format('DD/MM/YYYY HH:mm');
+    // const localFormattedDate = moment(item.dateOrdered).local().format('DD/MM/YYYY HH:mm');
     return (
         <div>
             <div class="history-table-row">
                 <div class="history-table-cell history-table-col1">{index}</div>
                 <div class="history-table-cell history-table-col3">
-                    <div>{t("orderTime")}: {formattedDate}</div>
-                    <div>{t("receiveTime")}: 10/09/2023 14:10</div>
+                    <div>{t("orderTime")}: {formatteOrderTime}</div>
+                    {/* <div>{t("receiveTime")}: {item.dateOrdered}</div> */}
+                    {/* <div>{t("receiveTime")}: {localFormattedDate}</div> */}
                 </div>
                 <div class="history-table-cell history-table-col4">
                     <a
@@ -19,9 +21,8 @@ const OrderHisItem = ({ item, index, handleShowDetail, handleShowRating }) => {
                         rel="noopener noreferrer"
                     ><div class="text-body">
                             <strong class="d-block text-truncate"
-                            >Coco Chè - Hồ Xuân Hương</strong><span class="d-block text-truncate"
-                            >82 Hồ Xuân Hương, P. Khuê Mỹ, Quận Ngũ Hành Sơn, Đà
-                                Nẵng</span>
+                            >{item.store.name}</strong><span class="d-block text-truncate"
+                            >{item.store.address}</span>
                         </div></a>
                 </div>
                 <div class="history-table-cell history-table-col5">

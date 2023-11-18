@@ -109,7 +109,7 @@ const UpdateAddress = () => {
                                 <div class="col-auto"><i class="fas fa-user"></i></div>
                                 <div class="col">{t("infoNav1")}</div>
                                 <div class="col-auto">
-                                    <i class="icon-arrow-thin right"></i>
+                                    <i class="icon-arrow-thin right_us"></i>
                                 </div></div></a>
                         <div class="item-navigation">
                             <a title="orderInfo" style={{ cursor: 'pointer' }} class="active" onClick={() => handleNav({ nav: "user/updateAddress" })}
@@ -133,7 +133,7 @@ const UpdateAddress = () => {
                                         </div>
                                         <div class="col">{t("infoNav3")}</div>
                                         <div class="col-auto">
-                                            <i class="icon-arrow-thin right"></i>
+                                            <i class="icon-arrow-thin right_us"></i>
                                         </div></div></a>
                                 <a
                                     class="item-navigation"
@@ -144,7 +144,7 @@ const UpdateAddress = () => {
                                         <div class="col-auto"><i class="fas fa-file-alt"></i></div>
                                         <div class="col">{t("infoNav4")}</div>
                                         <div class="col-auto">
-                                            <i class="icon-arrow-thin right"></i>
+                                            <i class="icon-arrow-thin right_us"></i>
                                         </div></div></a>
 
                             </div>

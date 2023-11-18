@@ -1,4 +1,4 @@
-.now-detail-profile {
+/* .now-detail-profile {
     border-radius: 4px;
     width: 100%;
 }
@@ -51,7 +51,6 @@
     flex-direction: column;
     gap: 10px;
     justify-content: center;
-    /* border-bottom: 0.1px solid rgb(202, 200, 200); */
 }
 
 .label-custom1 {
@@ -112,4 +111,4 @@
     border: 0;
     border-bottom: 1px solid #4073a7;
     padding: 0
-}
+} */
