@@ -6,7 +6,10 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <Router>
-      < Store />
+      <Routes>
+        <Route path='/*' element={<User />} />
+        <Route path='/store/*' element={<Store />} />
+      </Routes>
     </Router>
   )
 }

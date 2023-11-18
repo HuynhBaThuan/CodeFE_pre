@@ -10,6 +10,7 @@ import Update from './Update';
 import Delete from './Delete';
 import Notify from '../../../Components/Notify/Notify';
 import style from './Product.module.css'
+import Header2 from "../../components/Header/Header";
 
 
 
@@ -18,7 +19,7 @@ const Product = ({ Catname }) => {
 
     const [data, setData] = useState([]);
     const [selectActive, setSelectActive] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [openAdd, setOpenAdd] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
@@ -179,29 +180,42 @@ const Product = ({ Catname }) => {
 
     return (
         <Box m="20px" position='relative'>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header2 title="Danh sách đơn hàng" />
+
+                <Box>
+                    <div className={style.searchBar}>
+                        <input
+                            type="text"
+                            className={style.searchInput}
+                            placeholder="Tìm kiếm đơn hàng..."
+                            onChange={(e) => Searchproduct(e.target.value)}
+                        />
+                    </div>
+
+
+                </Box>
+                <Box>
+                </Box>
+                <Box>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={() => { setOpenAdd(true) }}
+                    >
+                        <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                    </Button>
+                </Box>
+            </Box>
             <Box
-                m="40px 0 0 0"
+                m="10px 0 0 0"
                 height="75vh"
                 sx={{
-                    "& .MuiDataGrid-root": {
-                        border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
+                    "& .MuiDataGrid-columnHeaderTitle": {
                         borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                        color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.blueAccent[700],
-                        borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                        borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
+                        fontSize: "14px"
+                        ,
+                        fontWeight: "500",
                     },
                 }}
             >
@@ -241,32 +255,11 @@ const Product = ({ Catname }) => {
                         </div>
                     )
                 }
-                <div className={style.dsdh}>
-                    <div className={style.dshd1} style={{ background: colors.primary[400] }}>
-                        <div className={style.titledsdh}>Danh sách sản phẩm</div>
-                        <div className={style.searchBar}>
-                            <input
-                                type="text"
-                                className={style.searchInput}
-                                placeholder="Tìm kiếm đơn hàng..."
-                                onChange={(e) => Searchproduct(e.target.value)}
-                            />
-                        </div>
-                        <div className={style.addButton}>
-                            <Button
-                                color="secondary"
-                                variant="contained"
-                                onClick={() => { setOpenAdd(true) }}
-                            >
-                                <i className="fa-solid fa-plus"></i> Thêm sản phẩm
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+
                 <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading}
                     initialState={{
                         pagination: {
-                            pageSize: 10,
+                            pageSize: 7,
                         },
                     }} />
             </Box >

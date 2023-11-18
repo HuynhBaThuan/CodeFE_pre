@@ -12,7 +12,7 @@ import Info from './page/Info/Info';
 import axios from 'axios';
 import Feedback from './page/Feedback/Feedback';
 import Statistics from './page/Statistics/Statistics';
-import './App.css'
+import './Store.css'
 
 const Store = () => {
   const [theme, colorMode] = useMode();
@@ -51,7 +51,8 @@ const Store = () => {
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
-              <Route path="/" element={<Feedback Catname={Catname} />} />
+              <Route path="/" element={<Statistics Catname={Catname} />} />
+              <Route path="/store/feedback" element={<Feedback Catname={Catname} />} />
               <Route path="/store/product" element={<Product Catname={Catname} />} />
               <Route path='/store/listorder' element={<Listorder />} />
               <Route path='/store/info' element={<Info />} />
