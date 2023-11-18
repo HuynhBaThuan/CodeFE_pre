@@ -55,7 +55,7 @@ const App = () => {
     <LanguageProvider>
       <AuthProvider>
         <CityProvider>
-          <Router>
+          {/* <Router> */}
             <div className='wrapper'>
               <Header />
               <Routes>
@@ -79,7 +79,7 @@ const App = () => {
               </Routes>
               {/* <Footer /> */}
             </div>
-          </Router>
+          {/* </Router> */}
         </CityProvider>
       </AuthProvider>
     </LanguageProvider>
