@@ -7,8 +7,8 @@ function App() {
     return (
         <div>
             <Store />
-            {/* <Admin /> */}
-            {/* <User /> */}
+            {/* <Admin />
+            <User /> */}
         </div>
     )
 }
