@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import ava from '../../assets/img/images.jpg'
-
+import { useTranslation } from "react-i18next";
 const RatingStore = ({ show, handleClose}) => {
+    const {t} = useTranslation();
+
     const [formData, setFormData] = useState({
         rating: '',
         reviewText: '',
@@ -127,9 +129,8 @@ const RatingStore = ({ show, handleClose}) => {
                                                             <div></div>
                                                         </div>
                                                         <div class="submit-section">
-                                                            <button type="button" class="btn btn-submit" variant="primary" onClick={handleSubmit}>
-                                                                Tiếp tục
-                                                            </button>
+                                                            <button type="button" class="btn btn-cancel">{t('back')}</button>
+                                                            <button type="button" disabled="" class="btn btn-submit">Gửi đánh giá</button>
                                                         </div>
                                                     </div>
                                                 </div>

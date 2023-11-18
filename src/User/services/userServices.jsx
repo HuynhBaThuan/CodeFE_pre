@@ -150,7 +150,7 @@ const placeOrder = async (totalPrice, shipCost, coordinates) => {
   }
 }
 
-const getAllOder = async () => {
+const getAllOderByUserId = async () => {
   const token = localStorage.getItem("token");
   const decodedToken = JSON.parse(atob(token.split(".")[1]));
   try {
@@ -160,7 +160,6 @@ const getAllOder = async () => {
       }
     });
     console.log("Order placed successfully:");
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error("Error get order:", error);
@@ -177,7 +176,6 @@ const viewOrder = async (id) => {
       }
     });
     console.log("Order placed successfully:");
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error("Error get order:", error);
@@ -196,6 +194,6 @@ export {
   updateContact,
   getProductByStoreId,
   placeOrder,
-  getAllOder, 
+  getAllOderByUserId, 
   viewOrder
 }
