@@ -1,7 +1,6 @@
 import React from "react";
 import '../../assets/css/pcmall.css'
-import '../../assets/css/978.css'
-import '../../assets/css/132.css'
+
 
 const Comment = () => {
     return (
