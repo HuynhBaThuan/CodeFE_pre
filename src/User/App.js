@@ -71,7 +71,6 @@ const App = () => {
                 <Route path="/resetPass" element={<ResetPass />} />
                 <Route path="/home/storeDetail" element={<StoreDetail />}/>
                 <Route path="/home/storeComment" element={<ViewComment />}/>
-
                 <Route path="/user/profile" element={<ProtectedRoute element={<Profile />} />}/>
                 <Route path="/user/orderHistory" element={<ProtectedRoute element={<OrderHistory />} />} />
                 <Route path="/user/updateAddress" element={<ProtectedRoute element={<UpdateAddress />} />} />
