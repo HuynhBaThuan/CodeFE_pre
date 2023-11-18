@@ -1,32 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ModalUpdateAddress from "./modalUpdateAddress";
-const PickAddress = ({ show, handleClose }) => {
+const PickAddress = ({ show, handleClose, user, selectedContact, setSelectedContact }) => {
     const [showModalUpdateAddress, setShowModalUpdateAddress] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+    const [action, setAction] = useState('');
+    const [idContact, setIdContact] = useState('');
+    const [contacts, setContacts] = useState([]);
 
-    const handleShowModalUpdateAddress = () => {
-        setShowModalUpdateAddress(true);
-        // handleClose();
+    const handleShowModal = (address1, phoneNumber1, action1, id) => {
+        setAddress(address1)
+        setPhoneNumber(phoneNumber1)
+        setAction(action1)
+        setIdContact(id)
+        // console.log(phoneNumber, address)
+        setShowModal(true);
     };
-    const handleCloseModalUpdateAddress = () => {
-        setShowModalUpdateAddress(false);
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setAddress('')
+        setPhoneNumber('')
     };
+
+    const [selectedAddress, setSelectedAddress] = useState(selectedContact._id);
+
+    const handleRadioChange = (contId) => {
+        setSelectedAddress(contId);
+    };
+
+    const handleConfirm = () => {
+        const selectedContact = user.contact.find((cont) => cont._id === selectedAddress);
+
+        if (selectedContact) {
+            setSelectedContact(selectedContact)
+        } else {
+            console.error('Selected contact not found.');
+        }
+        handleClose();
+    };
+
+    useEffect(() => {;
+        const fetchData = async () => {
+            try {
+                const user = localStorage.getItem("user");
+                const token = localStorage.getItem("token");
+                const userData = JSON.parse(user);
+                if (token) {
+                    setContacts(userData.contact)
+                } else {
+                    console.error("Token không tồn tại trong local storage");
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin người dùng:", error);
+            }
+        }
+        fetchData();
+    }, []);
 
     return (
         <div>
-            <div id="modal" style={{zIndex:'10'}}>
-                <div>
-                    <div
-                        class="shopee-modal__transition-appear-done shopee-modal__transition-enter-done"
-                    ></div>
-                </div>
+            <div id="modal" style={{ zIndex: '1' }}>                
                 <aside
+                    zIndex='1'
                     tabindex="0"
                     role="dialog"
                     aria-modal="true"
                     aria-label="modal"
                     class="WG6KlM"
                 >
-                    <div class="jRFwds">
+                    <div class="jRFwds" style={{ zIndex: '1' }}>
                         <div class="PRuV34">
                             <div class="UK8GQJ">
                                 <div class="N+ztzK"><div>Địa Chỉ Của Tôi</div></div>
@@ -60,146 +103,75 @@ const PickAddress = ({ show, handleClose }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
-                                        <div class="VR5G-p AXtEWT">
-                                            <div class="_54u+Wc">
-                                                <div
-                                                    class="stardust-radio stardust-radio--checked"
-                                                    tabindex="0"
-                                                    role="radio"
-                                                    aria-checked="false"
-                                                    aria-disabled="true"
-                                                    aria-labelledby="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_invalid-flag"
-                                                >
-                                                    <div
-                                                        class="stardust-radio-button stardust-radio-button--checked"
-                                                    >
-                                                        <div class="stardust-radio-button__outer-circle">
-                                                            <div
-                                                                class="stardust-radio-button__inner-circle"
-                                                            ></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="stardust-radio__content">
-                                                        <div class="stardust-radio__label"></div>
-                                                    </div>
+                                    {contacts.map((cont) => (
+
+                                        <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
+                                            <div class="VR5G-p AXtEWT">
+                                                <div class="_54u+Wc">
+                                                    <input
+                                                        class="stardust-radio stardust-radio--checked stardust-radio-button"
+                                                        type="radio"
+                                                        id={`address-radio-${cont._id}`}
+                                                        name="address-radio-group"
+                                                        value={cont._id}
+                                                        checked={selectedAddress === cont._id}
+                                                        onChange={() => handleRadioChange(cont._id)}
+                                                    />
                                                 </div>
-                                            </div>
-                                            <div class="PcodYT">
-                                                <div role="heading" class="_7efJXB hgGPm2">
-                                                    <div
-                                                        id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
-                                                        class="RMBiE- JZWy3M"
-                                                    >
-                                                        <span class="_1yD00D Xikkun"
-                                                        ><div class="iTAYV4">Cid Kagenou</div></span>
-                                                        <div class="_38L8qy"></div>
-                                                        <div role="row" class="mU9KsT _4edPAv ULZM9T">
-                                                            (+84) 707252330
-                                                        </div>
-                                                    </div>
-                                                    <div class="XEXjAd">
-                                                        <button onClick={handleShowModalUpdateAddress} class="Tuo6ZP">Cập nhật</button>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content"
-                                                    role="heading"
-                                                    class="_7efJXB hgGPm2"
-                                                >
-                                                    <div class="RMBiE- JZWy3M">
-                                                        <div class="dA02H7">
-                                                            <div role="row" class="ULZM9T">
-                                                                241, Đường Mai Đăng Chơn
-                                                            </div>
-                                                            <div role="row" class="ULZM9T">
-                                                                Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng
+                                                <label class="PcodYT" htmlFor={`address-radio-${cont._id}`}>
+                                                    {/* <div class="PcodYT"> */}
+
+                                                    <div role="heading" class="_7efJXB hgGPm2">
+                                                        <div
+                                                            id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
+                                                            class="RMBiE- JZWy3M"
+                                                        >
+                                                            <span class="_1yD00D Xikkun"
+                                                            ><div class="iTAYV4">{user.firstName + " " + user.lastName}</div></span>
+                                                            <div class="_38L8qy"></div>
+                                                            <div role="row" class="mU9KsT _4edPAv ULZM9T">
+                                                                {cont.phoneNumber}
                                                             </div>
                                                         </div>
+                                                        <div class="XEXjAd">
+                                                            <button onClick={() => handleShowModal(cont.address, cont.phoneNumber, 'update', cont._id)} class="Tuo6ZP">Cập nhật</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="ZsWMz8 XEXjAd"></div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge"
-                                                    role="row"
-                                                    class="hRRgNe ULZM9T"
-                                                >
-                                                    <span role="mark" class="UAGfcj hCWcbk NqLtr2"
-                                                    >Mặc định</span>
-                                                </div>
+                                                    <div
+                                                        id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content"
+                                                        role="heading"
+                                                        class="_7efJXB hgGPm2"
+                                                    >
+                                                        <div class="RMBiE- JZWy3M">
+                                                            <div class="dA02H7">
+                                                                <div role="row" class="ULZM9T">
+                                                                    {cont.address}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ZsWMz8 XEXjAd"></div>
+                                                    </div>
+                                                    {user.defaultContact === cont._id && (
+                                                        <div
+                                                            id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge"
+                                                            role="row"
+                                                            className="hRRgNe ULZM9T"
+                                                        >
+                                                            <span role="mark" className="UAGfcj hCWcbk NqLtr2">Mặc định</span>
+                                                        </div>
+                                                    )}
+                                                    {/* </div> */}
+                                                </label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div role="radiogroup" aria-label="Địa Chỉ Của Tôi">
-                                        <div class="VR5G-p AXtEWT">
-                                            <div class="_54u+Wc">
-                                                <div
-                                                    class="stardust-radio stardust-radio--checked"
-                                                    tabindex="0"
-                                                    role="radio"
-                                                    aria-checked="true"
-                                                    aria-disabled="false"
-                                                    aria-labelledby="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_invalid-flag"
-                                                >
-                                                    <div
-                                                        // stardust-radio-button--checked
-                                                        class="stardust-radio-button"
-                                                    >
-                                                        <div class="stardust-radio-button__outer-circle">
-                                                            <div
-                                                                class="stardust-radio-button__inner-circle"
-                                                            ></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="stardust-radio__content">
-                                                        <div class="stardust-radio__label"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="PcodYT">
-                                                <div role="heading" class="_7efJXB hgGPm2">
-                                                    <div
-                                                        id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_header"
-                                                        class="RMBiE- JZWy3M"
-                                                    >
-                                                        <span class="_1yD00D Xikkun"
-                                                        ><div class="iTAYV4">Cid Kagenou</div></span>
-                                                        <div class="_38L8qy"></div>
-                                                        <div role="row" class="mU9KsT _4edPAv ULZM9T">
-                                                            (+84) 707252330
-                                                        </div>
-                                                    </div>
-                                                    <div class="XEXjAd">
-                                                        <button onClick={handleShowModalUpdateAddress} class="Tuo6ZP">Cập nhật</button>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_content"
-                                                    role="heading"
-                                                    class="_7efJXB hgGPm2"
-                                                >
-                                                    <div class="RMBiE- JZWy3M">
-                                                        <div class="dA02H7">
-                                                            <div role="row" class="ULZM9T">
-                                                                241, Đường Mai Đăng Chơn
-                                                            </div>
-                                                            <div role="row" class="ULZM9T">
-                                                                Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ZsWMz8 XEXjAd"></div>
-                                                </div>
-                                                <div
-                                                    id="address-card_32c92423-9fcd-4034-ba8f-cd538c93f96e_badge"
-                                                    role="row"
-                                                    class="hRRgNe ULZM9T"
-                                                >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="LkGLx9 _4aRllO IkCOND" onClick={handleShowModalUpdateAddress}>
+                                    ))}
+
+                                    <button class="LkGLx9 _4aRllO IkCOND" onClick={() =>
+                                                handleShowModal(                                                   
+                                                    '',
+                                                    '', 
+                                                    'add',
+                                                )}>
                                         <svg viewBox="0 0 10 10" class="QUCjwo">
                                             <path
                                                 stroke="none"
@@ -208,7 +180,8 @@ const PickAddress = ({ show, handleClose }) => {
                                     </button>
                                 </div>
                                 <div class="u7Oswx">
-                                    <button onClick={handleClose} class="LtBE+Z LkGLx9 _4aRllO IkCOND">Huỷ</button><button class="FKiInz _4aRllO h4w1PK">Xác nhận</button>
+                                    <button onClick={handleClose} class="LtBE+Z LkGLx9 _4aRllO IkCOND">Huỷ</button>
+                                    <button onClick={handleConfirm} class="FKiInz _4aRllO h4w1PK">Xác nhận</button>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +189,7 @@ const PickAddress = ({ show, handleClose }) => {
                     <div class="_4BlFzb"></div>
                 </aside>
             </div>
-            <ModalUpdateAddress show={showModalUpdateAddress} handleClose={handleCloseModalUpdateAddress} />
+            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action} contactId={idContact} setContacts={setContacts}/>
         </div>
     )
 }

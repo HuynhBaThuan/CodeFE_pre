@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { getUserInfo, getDefaultContact } from '../../services/userServices';
 import { useLogout } from '../../services/authContext';
 import { useTranslation } from 'react-i18next';
+import LoadingModal from '../../Components/Loading/Loading';
+import Notify from '../../Components/Notify.jsx/Notify';
+import { useAuth } from '../../services/authContext';
 import axios from 'axios';
 const Profile = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation(); 
     const logout = useLogout();
     function handleLogout() {
@@ -23,11 +27,13 @@ const Profile = () => {
     const handleNav = ({ nav }) => {
         navigate(`/${nav}`);
     };
-    const [userName, setUserName] = useState("");
+    // const [userName, setUserName] = useState("");
+    // const [img, setImg] = useState("")
+    const { userName, setUserName, img, setImg } = useAuth()
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [img, setImg] = useState("")
     const [address, setAddress] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [formDataInfo, setFormDataInfo] = useState({
@@ -83,11 +89,14 @@ const Profile = () => {
         });
     };
     const  [error, setError] = useState("")
+    const [openNotify, setOpenNotify] = useState(false)
+    const [message, setMessage] = useState("")
     const handleChangePassword = async (e) => {
         e.preventDefault();
         if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.newPass.trim())) {
             setError(t("error5"))
         }else if(formData.newPass === formData.confirmedPass) {
+            setIsLoading(true)
             try {
                 const token = localStorage.getItem("token");
                 if (token) {
@@ -106,13 +115,18 @@ const Profile = () => {
                     })
                     logout();
                     localStorage.removeItem('token')
-                    alert(t("alert"))
+                    localStorage.removeItem('user')                   
+                    setMessage(t("alert"))
                     navigate("/signin")
+                    setOpenNotify(true);
                 } else {
                     console.error("Token không tồn tại trong local storage");
                 }
             } catch (error) {
-                setError(t("error7"))
+                setMessage(t("error7"))
+            } finally {
+                setIsLoading(false);
+                setOpenNotify(true);
             }
         } else {
             setError(t("error6"))
@@ -129,6 +143,7 @@ const Profile = () => {
         });
     };
     const  [errorInfo, setErrorInfo] = useState("")
+    
     const handleChangeInfo = async (e) => {
         e.preventDefault();
         if(formDataInfo.firstName === '' || formDataInfo.lastName === ''|| formDataInfo.address === ''|| formDataInfo.phoneNumber === '') {
@@ -136,11 +151,11 @@ const Profile = () => {
         }else if(!/^\d{10}$/.test(formDataInfo.phoneNumber)) {
             setErrorInfo(t("error9"))
         }else {
+            setIsLoading(true)
             try {
                 const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
                 const userData = JSON.parse(user);
-                // console.log(userData._id)
                 console.log(formDataInfo)
                 if (token) {
                     const response = await axios.patch(`https://falth.vercel.app/api/user/${userData._id}`, formDataInfo, {
@@ -154,21 +169,28 @@ const Profile = () => {
                     const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
                     defaultContact.address = formDataInfo.address;
                     defaultContact.phoneNumber = formDataInfo.phoneNumber;
+                    setUserName(formDataInfo.firstName + " " + formDataInfo.lastName)
                     localStorage.setItem("user", JSON.stringify(userData));
-                    alert(t("alert2"))
-                    window.location.reload()
-                    // setUserName(formDataInfo.firstName + " " + formDataInfo.lastName)
+                    setMessage(t("alert2"))
+                    // alert(t("alert2"));
                 } else {
                     console.error("Token không tồn tại trong local storage");
                 }
             } catch (error) {
-                setErrorInfo(t("error7"))
+                setMessage(t("alert2"))
+            } finally {
+                setIsLoading(false);
+                setOpenNotify(true);
             }
         } 
     };
+
     
     return (
+        <div>
+
         <div class="container">
+        {openNotify && (<Notify message={message} setOpenNotify={setOpenNotify}/>)}
             <div class="now-navigation-profile">
                 <div class="header-profile">
                     <div class="row align-items-center">
@@ -263,7 +285,10 @@ const Profile = () => {
                         <form>
                             <div class="title-user">{t("changeInfo")}</div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("firstName")}</div>
+                                <div class="col-3 txt-bold">
+                                    {t("firstName")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
@@ -273,12 +298,13 @@ const Profile = () => {
                                             class="form-control"
                                             value={formDataInfo.firstName}
                                             onChange={handleChange1}
+                                            required
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("lastName")}</div>
+                                <div class="col-3 txt-bold">{t("lastName")}<span class="txt-red font-weight-bold">*</span></div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
@@ -288,6 +314,7 @@ const Profile = () => {
                                             value={formDataInfo.lastName}
                                             onChange={handleChange1}
                                             class="form-control"
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -301,7 +328,10 @@ const Profile = () => {
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("address1")}</div>
+                                <div class="col-3 txt-bold">
+                                    {t("address1")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
                                 <div class="col-8">
                                     <div class="input-group">
                                         <textarea
@@ -312,12 +342,16 @@ const Profile = () => {
                                             value={formDataInfo.address}
                                             onChange={handleChange1}
                                             style={{ wordWrap: "break-word", resize: "vertical" }}
+                                            required
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("phoneNumber")}</div>
+                                <div class="col-3 txt-bold">
+                                    {t("phoneNumber")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
@@ -328,6 +362,7 @@ const Profile = () => {
                                             onChange={handleChange1}
                                             class="form-control"
                                             maxLength={10}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -347,7 +382,10 @@ const Profile = () => {
                         <div class="title-user">{t("resetTitle")}</div>
                                     <div className="form-group verify-pass">
                                         <div className="row align-items-center mar-bottom5">
-                                            <div className="col-3 txt-bold">{t("oldPass")}</div>
+                                            <div className="col-3 txt-bold">
+                                                {t("oldPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
                                             <div className="col-4">
                                                 <div className="input-group validate-pass">
                                                     <input
@@ -357,12 +395,16 @@ const Profile = () => {
                                                         className="form-control"
                                                         value={formData.oldPass}
                                                         onChange={handleChange}
+                                                        required
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row align-items-center mar-bottom5">
-                                            <div className="col-3 txt-bold">{t("newPass")}</div>
+                                            <div className="col-3 txt-bold">
+                                                {t("newPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
                                             <div className="col-4">
                                                 <div className="input-group validate-pass">
                                                     <input
@@ -371,13 +413,17 @@ const Profile = () => {
                                                         type="password"
                                                         className="form-control"
                                                         value={formData.newPass}
-                                                        onChange={handleChange}
+                                                        onChange={handleChange}    
+                                                        required                                                   
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row align-items-center">
-                                            <div className="col-3 txt-bold">{t("confirmPass")}</div>
+                                            <div className="col-3 txt-bold">
+                                                {t("confirmPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
                                             <div className="col-4">
                                                 <div className="input-group validate-pass">
                                                     <input
@@ -387,6 +433,7 @@ const Profile = () => {
                                                         className="form-control"
                                                         value={formData.confirmedPass}
                                                         onChange={handleChange}
+                                                        required
                                                     />
                                                 </div>
                                             </div>
@@ -405,6 +452,8 @@ const Profile = () => {
                     </div>                 
                 </div>
             </div>
+        </div>
+        {isLoading && (<LoadingModal/>)}
         </div>
     )
 }

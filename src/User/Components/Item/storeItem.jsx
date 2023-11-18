@@ -1,19 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-const StoreItem = ({like, store}) => {
+const StoreItem = ({ like, store }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const handleStore = () => {
-        navigate("/home/storeDetail", {state: {store:{store}}});
-        // console.log(store)
+        navigate("/home/storeDetail", { state: { store: { store } } });
     };
     return (
         <div class="item-restaurant" onClick={handleStore}>
             <a
                 target="_blank"
                 class="item-content"
-                // href={link}
+            // href={link}
             ><div class="img-restaurant">
                     {like === "no" ? null : (
                         <div className="tag-preferred">

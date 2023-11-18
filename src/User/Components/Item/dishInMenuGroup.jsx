@@ -1,6 +1,12 @@
 import React from "react";
 
-const DishInMenuGroup = ({ dish, handleOpen }) => {
+const DishInMenuGroup = ({ dish, handleOpen, handleAddToCart }) => {
+
+    const handleAdd = () => {
+        // console.log(dish)
+        handleAddToCart(dish);
+        handleOpen();
+    }
 
     return (
         <div>
@@ -26,7 +32,7 @@ const DishInMenuGroup = ({ dish, handleOpen }) => {
                         <h2 class="item-restaurant-name">
                             {dish.name}
                         </h2>
-                        <div class="item-restaurant-desc">8 chân</div>
+                        <div class="item-restaurant-desc">Yêu thích</div>
                         <div class="item-restaurant-total">
                             Đã được đặt<span class="txt-bold"
                             >&nbsp;10+&nbsp;</span>lần
@@ -50,7 +56,7 @@ const DishInMenuGroup = ({ dish, handleOpen }) => {
                             <div
                                 class="col-auto adding-food-cart txt-right"
                             >
-                                <div class="btn-adding" onClick={handleOpen}>+</div>
+                                <div class="btn-adding" onClick={handleAdd}>+</div>
                             </div>
                         </div>
                     </div>

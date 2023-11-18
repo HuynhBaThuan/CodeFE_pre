@@ -3384,8 +3384,8 @@ input[type="submit"].btn-block {
   color: #cf2127;
 }
 .btn-blue-4 {
-  background-color: #4073a7;
-  border-color: #4073a7;
+  background-color:  var(--primary-color);
+  border-color: var(--primary-color);
   color: #fff;
 }
 .btn-done {
@@ -14578,7 +14578,7 @@ span.flatpickr-weekday {
 .user-profile-update .title-user {
   font-weight: 700;
   font-size: 15px;
-  color: #4073a7;
+  color: var(--primary-color);
   padding-bottom: 20px;
   position: relative;
 }
@@ -15583,7 +15583,7 @@ span.flatpickr-weekday {
   flex: 0 0 auto;
 }
 .history-table-col5 {
-  width: 200px;
+  width: 150px;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
 }
@@ -15610,7 +15610,7 @@ span.flatpickr-weekday {
   line-height: 26px;
   padding: 0 10px;
   border-radius: 3px;
-  background: #6cc942;
+  /* background: #6cc942; */
   text-align: center;
   color: #464646;
 }
@@ -20535,6 +20535,6 @@ outline: none;
   background-size: cover;
 }
 
-.icon-address, .icon-app-phone, .icon-app-store-big, .icon-app-store-lg, .icon-app-store-md, .icon-app-store-sm, .icon-benefit-air-conditioner, .icon-benefit-booking, .icon-benefit-bring-on, .icon-benefit-card, .icon-benefit-delivery, .icon-benefit-disabilities, .icon-benefit-football, .icon-benefit-heater, .icon-benefit-karaoke, .icon-benefit-member, .icon-benefit-music, .icon-benefit-parking, .icon-benefit-parking-free, .icon-benefit-playground, .icon-benefit-pool, .icon-benefit-room, .icon-benefit-seminor, .icon-benefit-smoking, .icon-benefit-sun, .icon-benefit-tennis, .icon-benefit-tip, .icon-benefit-vat, .icon-benefit-wifi, .icon-box, .icon-cash-payment, .icon-cc-payment, .icon-check-green, .icon-clock, .icon-close-gray, .icon-corporate, .icon-discount-airpay, .icon-discount-code, .icon-discount-first-order, .icon-discount-free-ship, .icon-discount-new, .icon-discount-order-group, .icon-discount-order-larger, .icon-gg-play-big, .icon-gg-play-lg, .icon-gg-play-md, .icon-gg-play-sm, .icon-ib-payment, .icon-jcb, .icon-lag-en, .icon-lag-th, .icon-lag-vn, .icon-local-map, .icon-location, .icon-master, .icon-merchant-airpay, .icon-merchant-lg, .icon-merchant-marketing, .icon-merchant-shipper, .icon-merchant-system, .icon-money, .icon-money-sm, .icon-now-payment, .icon-paging-next, .icon-paging-pre, .icon-parnership, .icon-phone, .icon-phone-verified, .icon-phone-white, .icon-pickup, .icon-power-off, .icon-preorder, .icon-price-tag, .icon-promo, .icon-promotion-now, .icon-restaurant, .icon-search, .icon-search-gray, .icon-search-orangen, .icon-sprite, .icon-tablenow, .icon-tablenow-footer, .icon-tb-blog, .icon-tb-dessert, .icon-tb-entertainment, .icon-tb-restaurant, .icon-thumbtack, .icon-time-gray, .icon-time-white, .icon-upload, .icon-user-history, .icon-user-logout, .icon-user-update, .icon-vatnot, .icon-verify-merchant, .icon-via-key, .icon-via-sms, .icon-visa, .modal .close {
+.icon-address, .icon-app-phone, .icon-app-store-big, .icon-app-store-lg, .icon-app-store-md, .icon-app-store-sm, .icon-benefit-air-conditioner, .icon-benefit-booking, .icon-benefit-bring-on, .icon-benefit-card, .icon-benefit-delivery, .icon-benefit-disabilities, .icon-benefit-football, .icon-benefit-heater, .icon-benefit-karaoke, .icon-benefit-member, .icon-benefit-music, .icon-benefit-parking, .icon-benefit-parking-free, .icon-benefit-playground, .icon-benefit-pool, .icon-benefit-room, .icon-benefit-seminor, .icon-benefit-smoking, .icon-benefit-sun, .icon-benefit-tennis, .icon-benefit-tip, .icon-benefit-vat, .icon-benefit-wifi, .icon-box, .icon-cash-payment, .icon-cc-payment, .icon-check-green, .icon-clock, .icon-close-gray, .icon-corporate, .icon-discount-airpay, .icon-discount-code, .icon-discount-first-order, .icon-discount-free-ship, .icon-discount-new, .icon-discount-order-group, .icon-discount-order-larger, .icon-gg-play-big, .icon-gg-play-lg, .icon-gg-play-md, .icon-gg-play-sm, .icon-ib-payment, .icon-jcb, .icon-lag-en, .icon-lag-th, .icon-lag-vn, .icon-local-map, .icon-location, .icon-master, .icon-merchant-airpay, .icon-merchant-lg, .icon-merchant-marketing, .icon-merchant-shipper, .icon-merchant-system, .icon-money, .icon-money-sm, .icon-now-payment, .icon-paging-next, .icon-paging-pre, .icon-parnership, .icon-phone, .icon-phone-verified, .icon-phone-white, .icon-pickup, .icon-power-off, .icon-preorder, .icon-price-tag, .icon-promo, .icon-promotion-now, .icon-restaurant, .icon-search, .icon-search-gray, .icon-search-orangen, .icon-sprite, .icon-tablenow, .icon-tablenow-footer, .icon-tb-blog, .icon-tb-dessert, .icon-tb-entertainment, .icon-tb-restaurant, .icon-thumbtack, .icon-time-gray, .icon-time-white, .icon-upload, .icon-user-history, .icon-user-logout, .icon-user-update, .icon-vatnot, .icon-verify-merchant, .icon-via-key, .icon-via-sms, .icon-visa  {
   background-image: url(../../assets/img/bg-icon.png?2404d5c…);
 }

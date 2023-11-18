@@ -1,33 +1,31 @@
 import React, {useState, useEffect} from "react";
 
-const AddDish = ({show, handleClose, inputQuantity, linkImage, dishName, specialRequest, price, onConfirm}) => {
-  const [quantity, setQuantity] = useState(inputQuantity);
-  const [totalPrice, setTotalPrice] = useState(quantity * price);
-  const [specialRequestValue, setSpecialRequestValue] = useState(specialRequest);
+const AddDish = ({show, handleClose, onConfirm, product, updateTotalPrice}) => {
+  const [totalPrice, setTotalPrice] = useState(product.amount * product.price);
+  const [specialRequestValue, setSpecialRequestValue] = useState(product.specialRequest);
 
   const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-
+    if (product.amount > 1) {
+        updateTotalPrice(product._id, product.amount - 1);
     }
-  };
+};
 
-  const handleIncrease = () => {
-    if (quantity < 10) {
-      setQuantity(quantity + 1);
-    }
-  };
+const handleIncrease = () => {
+  if (product.amount < 10) {
+      updateTotalPrice(product._id, product.amount + 1);
+  }
+};
 
-  useEffect(() => {
-    setTotalPrice(quantity * price);
-  }, [quantity, price]);
+useEffect(() => {
+  setTotalPrice(product.amount * product.price);
+}, [product.amount, product.price]);
 
   const handleSpecialRequestChange = (e) => {
     setSpecialRequestValue(e.target.value);
   };
 
   const handleConfirm = () => {
-    onConfirm({ quantity, totalPrice, specialRequest: specialRequestValue });
+    onConfirm(specialRequestValue);
     handleClose();
   };
 
@@ -63,7 +61,7 @@ const AddDish = ({show, handleClose, inputQuantity, linkImage, dishName, special
                                 style={{paddingLeft: '12px', paddingRight: '12px'}}
                               >
                                 <img
-                                  src={linkImage}
+                                  src={product.images[0]}
                                   class="itemImage___r2IN2"
                                   alt=""
                                 />
@@ -78,13 +76,13 @@ const AddDish = ({show, handleClose, inputQuantity, linkImage, dishName, special
                                 }}
                               >
                                 <div class="nameAndPriceWrapper___r4GvS">
-                                  <h5>{dishName}</h5>
+                                  <h5>{product.name}</h5>
                                   <div class="itemDescription___2mtvG">
                                     Tặng Coco ly lớn khi mua combo 2 món
                                   </div>
                                 </div>
                                 <div class="priceInfo___2eeNb">
-                                  <h5>{price}</h5>
+                                  <h5>{product.price}</h5>
                                 </div>
                               </div>
                             </div>
@@ -99,7 +97,7 @@ const AddDish = ({show, handleClose, inputQuantity, linkImage, dishName, special
                             </div>
                             <textarea
                               // defaultValue={specialRequest === "" ? "" : specialRequest}
-                              defaultValue={specialRequest} 
+                              defaultValue={product.specialRequest} 
                               class="ant-input inputTextArea___3ULyx"
                               maxlength="130"
                               style={{
@@ -130,7 +128,7 @@ const AddDish = ({show, handleClose, inputQuantity, linkImage, dishName, special
                             class="quantityButton___1Wsr8"
                             onClick={handleDecrease}
                             ><i class="fa-solid fa-minus" style={{ cursor: 'pointer', fontSize: '20px' }} ></i></button>
-                          <div class="itemQuantityNumber___2vbCd">{quantity}</div>
+                          <div class="itemQuantityNumber___2vbCd">{product.amount}</div>
                           <button
                             tabindex="0"
                             onClick={handleIncrease}

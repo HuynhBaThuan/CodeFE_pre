@@ -13,9 +13,18 @@ export function CityProvider({ children }) {
   const updateKey = (newKey) => {
     setKey(newKey);
   };
-
+  // const existingCart = localStorage.getItem('cart');
+  const [cart, setCart] = useState({
+    idStore: '',
+    nameStore: '',
+    products: []
+});
+const [productsCount, setProductsCount] = useState(0);
+const updateProductsCount = (count) => {
+  setProductsCount(count);
+};
   return (
-    <CityContext.Provider value={{ selectedLocation, updateLocation, key, updateKey}}>
+    <CityContext.Provider value={{ selectedLocation, updateLocation, key, updateKey, cart, setCart, productsCount, setProductsCount}}>
       {children}
     </CityContext.Provider>
   );

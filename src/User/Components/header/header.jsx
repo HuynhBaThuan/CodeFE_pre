@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 const Header = () => {
     const { t } = useTranslation();
     const { isLoggedIn, setIsLoggedIn, userName, setUserName, img, setImg } = useAuth()
-    const { selectedLocation, updateLocation, key, updateKey } = useCity();
+    const { selectedLocation, updateLocation, key, updateKey, cart, setCart, productsCount, setProductsCount } = useCity();
     const { selectedLang, updateLang } = useLang();
     const [isDropdownLocationOpen, setDropdownLocationOpen] = useState(false);
     const [isDropdownInfoOpen, setDropdownInfoOpen] = useState(false);
@@ -63,8 +63,8 @@ const Header = () => {
         // setIsLoggedIn(false)
         navigate("/")
     }
-    
-    const cities = ['Hà Nội','Hồ Chí Minh','Hải Phòng','Cần Thơ','Đà Nẵng','Bắc Ninh','Bắc Giang','Hà Tĩnh','Thái Bình','Nam Định','Ninh Bình','Hòa Bình','Lào Cai','Sơn La','Lai Châu','Điện Biên','Lạng Sơn','Bắc Kạn','Lâm Đồng','Bình Dương','Đồng Nai','Bà Rịa - Vũng Tàu','An Giang','Bạc Liêu','Bến Tre','Bình Định','Bình Phước','Bình Thuận','Cà Mau','Hà Nam','Hà Giang','Hà Tây','Hà Đông','Hà Nội','Hải Dương','Hải Phòng','Hà Tĩnh','Hòa Bình','Hưng Yên','Khánh Hòa','Kiên Giang','Kon Tum','Lai Châu','Lâm Đồng','Lạng Sơn','Lào Cai','Long An','Nam Định','Nghệ An','Ninh Bình','Ninh Thuận','Phú Thọ','Phú Yên','Quảng Bình','Quảng Nam','Quảng Ngãi','Quảng Ninh','Quảng Trị','Sóc Trăng','Sơn La','Tây Ninh','Thái Bình','Thái Nguyên','Thanh Hóa','Thừa Thiên-Huế','Tiền Giang','Trà Vinh','Tuyên Quang','Vĩnh Long','Vĩnh Phúc','Yên Bái']
+
+    const cities = ['Hà Nội', 'Hồ Chí Minh', 'Hải Phòng', 'Cần Thơ', 'Đà Nẵng', 'Bắc Ninh', 'Bắc Giang', 'Hà Tĩnh', 'Thái Bình', 'Nam Định', 'Ninh Bình', 'Hòa Bình', 'Lào Cai', 'Sơn La', 'Lai Châu', 'Điện Biên', 'Lạng Sơn', 'Bắc Kạn', 'Lâm Đồng', 'Bình Dương', 'Đồng Nai', 'Bà Rịa - Vũng Tàu', 'An Giang', 'Bạc Liêu', 'Bến Tre', 'Bình Định', 'Bình Phước', 'Bình Thuận', 'Cà Mau', 'Hà Nam', 'Hà Giang', 'Hà Tây', 'Hà Đông', 'Hà Nội', 'Hải Dương', 'Hải Phòng', 'Hà Tĩnh', 'Hòa Bình', 'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu', 'Lâm Đồng', 'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An', 'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng', 'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa', 'Thừa Thiên-Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long', 'Vĩnh Phúc', 'Yên Bái']
     const handleLocationSelect = (location) => {
         updateLocation(location);
         setDropdownLocationOpen(false)
@@ -81,21 +81,20 @@ const Header = () => {
         updateKey(tempKey)
         setTempKey('')
         console.log('Search value:', key);
-      };
-    
-      const handleInputChange = (event) => {
+    };
+
+    const handleInputChange = (event) => {
         setTempKey(event.target.value);
-      };
-    
-      const handleKeyPress = (event) => {
+    };
+
+    const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-          handleSearch();
+            handleSearch();
         }
-      };
+    };
 
 
     useEffect(() => {
-        console.log(isLoggedIn)
 
         const fetchData = async () => {
             try {
@@ -105,8 +104,8 @@ const Header = () => {
                     const savedUser = localStorage.getItem('user');
                     if (savedUser) {
                         const user = (JSON.parse(savedUser));
-                        console.log(user.firstName + user.lastName);
-                        setUserName(user.firstName + user.lastName)
+                        // console.log(user.firstName + user.lastName);
+                        setUserName(user.firstName + " " + user.lastName)
                         setImg(user.photo)
                     }
                 } else {
@@ -119,37 +118,29 @@ const Header = () => {
         fetchData();
     },);
 
-    const [cart, setCart] = useState({
-        idStore : "",
-        nameStore : "",
-        products : []
-    });
-    const [productsCount, setProductsCount] = useState(0);
+    useEffect(() => {
+        const updateCartCount = () => {
+            const cartdata = JSON.parse(localStorage.getItem('cart'));
+            console.log(cartdata)
+            if (cartdata && cartdata.products) {
+                const count = cartdata.products.length;
+                setProductsCount(count);
+                setCart({
+                    ...cart,
+                    idStore: cartdata.idStore,
+                    nameStore: cartdata.nameStore,
+                    products: cartdata.products
+                });
+            }
+        }
 
-  useEffect(() => {
-    const updateCartCount = () => {
-        const cartdata = JSON.parse(localStorage.getItem('cart'));
-      if (cartdata && cartdata.products) {
-        const count = cartdata.products.length;
-        setProductsCount(count);
-        setCart({
-            ...cart,
-            idStore: cartdata.idStore,
-            nameStore: cartdata.nameStore,
-            products: cartdata.products
-          });
-        console.log(cartdata)
-        console.log(productsCount)
-      }
-    }
+        updateCartCount(); // Cập nhật ban đầu
+        window.addEventListener('cartUpdated', updateCartCount);
 
-    updateCartCount(); // Cập nhật ban đầu
-    window.addEventListener('cartUpdated', updateCartCount);
-
-    return () => {
-      window.removeEventListener('cartUpdated', updateCartCount);
-    }
-  }, []);
+        return () => {
+            window.removeEventListener('cartUpdated', updateCartCount);
+        }
+    }, []);
 
     return (
         <div>
@@ -176,23 +167,23 @@ const Header = () => {
                                         aria-haspopup="true"
                                         aria-expanded={isDropdownLocationOpen}
                                         onClick={toggleDropdownLocation}
-                                    >                                       
+                                    >
                                         {selectedLocation ? selectedLocation : t("headLocation")}
                                     </div>
                                     {isDropdownLocationOpen && (
-                                        <div class="dropdown-menu" style={{height:'200px', overflow:'auto'}}>
-                                            <button onClick={() => handleLocationSelect('')} style={{ width: '100%',textAlign:'left' }}>
+                                        <div class="dropdown-menu" style={{ height: '200px', overflow: 'auto' }}>
+                                            <button onClick={() => handleLocationSelect('')} style={{ width: '100%', textAlign: 'left' }}>
                                                 <div class="dropdown-item">
                                                     <span class="name col" >{t("headLocation")}</span>
                                                 </div>
                                             </button>
                                             {cities.map((city, index) => (
-                                                <button onClick={() => handleLocationSelect(city)} style={{ width: '100%',textAlign:'left' }}>
+                                                <button onClick={() => handleLocationSelect(city)} style={{ width: '100%', textAlign: 'left' }}>
                                                     <div class="dropdown-item">
                                                         <span class="name col" >{city}</span>
                                                     </div>
                                                 </button>
-                                            ))}                                           
+                                            ))}
                                         </div>
                                     )}
                                 </div>
@@ -200,9 +191,9 @@ const Header = () => {
                             <div class="main-nav col">
                                 <div class="header__search">
                                     <div class="header__search-input-wrap">
-                                        <input 
-                                            type="text" 
-                                            class="header__search-input" 
+                                        <input
+                                            type="text"
+                                            class="header__search-input"
                                             placeholder={t("headSearch")}
                                             value={tempKey}
                                             onChange={handleInputChange}
@@ -231,11 +222,11 @@ const Header = () => {
                                 aria-expanded={isDropdownLangOpen}
                                 onClick={toggleDropdownLang}>
                                 <div className='dropdown'>
-                                    <div 
-                                        class="dropdown-toggle" 
+                                    <div
+                                        class="dropdown-toggle"
                                         role='button'
-                                        id="dropdownMenuButton" 
-                                        data-toggle="dropdown" 
+                                        id="dropdownMenuButton"
+                                        data-toggle="dropdown"
                                         tabindex="0"
                                         aria-haspopup="true"
                                         aria-expanded={isDropdownLangOpen}
@@ -245,18 +236,18 @@ const Header = () => {
                                     </div>
                                     {isDropdownLangOpen && (
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
-                                            <button onClick={() => handleSelectLanguage('icon icon-lag-vn', 'vi')} style={{ width: '100%',textAlign:'left' }}>
+                                            <button onClick={() => handleSelectLanguage('icon icon-lag-vn', 'vi')} style={{ width: '100%', textAlign: 'left' }}>
                                                 <div class="dropdown-item">
                                                     <span class="icon icon-lag-vn"></span>
                                                     <span class="language-item">Vietnamese</span>
                                                 </div>
                                             </button>
-                                            <button onClick={() => handleSelectLanguage('icon icon-lag-en', 'en')} style={{ width: '100%'}}>
+                                            <button onClick={() => handleSelectLanguage('icon icon-lag-en', 'en')} style={{ width: '100%' }}>
                                                 <div class="dropdown-item">
                                                     <span class="icon icon-lag-en"></span>
                                                     <span class="language-item">English</span>
                                                 </div>
-                                            </button>                                           
+                                            </button>
                                         </div>
                                     )}
                                 </div>
@@ -313,42 +304,7 @@ const Header = () => {
                             <div class="header__cart">
                                 <div class="header__cart-wrap">
                                     <i class="header__cart-icon fas fa-shopping-cart" onClick={openModal}></i>
-                                    <span class="header__cart-notice" onClick={openModal}>{productsCount}</span>
-                                    {/* <!-- No cart: header__cart-list--no-cart --> */}
-                                    <div class="header__cart-list">
-                                        <img src={emptycart} alt="" class="header__cart-no-cart-img" />
-                                        <span class="header__cart-list-no-cart-msg">{t("headEmptyCart")}</span>
-
-                                        <h4 class="header__cart-heading">{t("headCartTitle")}</h4>
-                                        <h4 class="header__cart-heading" style={{color:"black"}}>{cart.nameStore}</h4>
-                                        <ul class="header__cart-list-item">
-                                            {cart.products.map((product) => (
-                                                <li class="header__cart-item">
-                                                    <img src={product.image[0]} alt="" class="header__cart-img" />
-                                                    <div class="header__cart-item-info">
-                                                        <div class="header__cart-item-head">
-                                                            <h5 class="header__cart-item-name">{product.name}</h5>
-                                                            <div class="header__cart-item-price-wrap">
-                                                                <span class="header__cart-item-price">{product.price}đ</span>
-                                                                <span class="header__cart-item-mul">x</span>
-                                                                <span class="header__cart-item-qnt">{product.amount}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="header__cart-item-body">
-                                                            <span class="header__cart-item-description">
-                                                                {/* {t("headCartRequire")} */}
-                                                                {product.specialRequest}
-                                                            </span>
-                                                            <span class="header__cart-item-del">{t("delete")}</span>
-                                                        </div>
-                                                    </div>
-                                                </li>        
-                                            ))}
-                                            
-                                        </ul>
-
-                                        <button class="header__cart-view btn btn--primary" style={{ backgroundColor: '#fd5c63', border: 'none' }} onClick={openModal}>{t("headViewCart")}</button>
-                                    </div>
+                                    <span class="header__cart-notice" onClick={openModal}>{productsCount}</span>                                   
                                 </div>
                             </div>
                         </div>
@@ -356,7 +312,7 @@ const Header = () => {
                 </div>
             </header>
             {showModal && (
-                <CartModal show={showModal} handleClose={closeModal} />
+                <CartModal show={showModal} handleClose={closeModal} handleOpen={openModal}/>
             )}
         </div>
     );

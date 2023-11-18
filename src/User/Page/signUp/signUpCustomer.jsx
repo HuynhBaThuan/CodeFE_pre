@@ -4,8 +4,9 @@ import useLocationSelect from "./address";
 import './signUp.css'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-
+import LoadingModal from '../../Components/Loading/Loading'
 const SignUpCustomer = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {
@@ -81,6 +82,7 @@ const SignUpCustomer = () => {
             setError(t("error9"))
         } else {
             try {
+                setIsLoading(true)
               // Gọi API đăng ký người dùng
               const response = await axios.post('https://falth.vercel.app/api/user', registrationData);
     
@@ -92,6 +94,7 @@ const SignUpCustomer = () => {
             } catch (error) {
               setError(t("error10"));
             }
+            setIsLoading(false)
 
         }
     };
@@ -207,6 +210,7 @@ const SignUpCustomer = () => {
                     </div>
                 </div>
             </div>
+            {isLoading && (<LoadingModal/>)}
         </div>
     )
 }

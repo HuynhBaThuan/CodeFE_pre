@@ -2222,7 +2222,7 @@ button._3WkjWD.div-style {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 90000;
+  z-index: 1;
 }
 .jRFwds {
   z-index: 1;
@@ -16294,5 +16294,42 @@ th {
   margin-bottom: 12px;
   border-radius: 3px;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+}
+
+.shopee-rating-stars {
+  position: relative;
+  display: inline-block;
+}
+
+.shopee-rating-stars__stars {
+  display: flex;
+}
+.shopee-rating-stars__star-wrapper {
+  position: relative;
+  margin-right: 1px;
+}
+.shopee-rating-stars__star-wrapper>.shopee-rating-stars__lit {
+  overflow: hidden;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.shopee-rating-stars__hollow-star {
+  color: #ee4d2d;
+  display: block;
+  stroke: currentColor;
+}
+.shopee-svg-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  position: relative;
+}
+svg:not(:root) {
+  overflow: hidden;
 }
 /*# sourceMappingURL=https://sourcemap.webfe.shopeemobile.com/pcmall-checkout/_/pcmall-checkout.4ccb08892ef5c9ffd45b.css.map*/

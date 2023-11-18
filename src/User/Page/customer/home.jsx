@@ -4,7 +4,10 @@ import StoreItem from '../../Components/Item/storeItem';
 import { useCity } from '../../services/CityContext';
 import { useTranslation } from 'react-i18next';
 import useLocationSelect from '../signUp/address';
+import LoadingModal from '../../Components/Loading/Loading';
+import Skeleton from '../../Components/Skeleton/skeleton';
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
@@ -14,7 +17,7 @@ const Home = () => {
     cities,
     districts,
     handleCityChange2,
-} = useLocationSelect();
+  } = useLocationSelect();
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -50,15 +53,15 @@ const Home = () => {
   const [stores, setStores] = useState({ data: [] });
 
   const handleRemove = (name) => {
-    if(name === "key") {
+    if (name === "key") {
       updateKey("")
-    } else if(name === "cat") {
+    } else if (name === "cat") {
       setSelectedCategories([])
-    } else if(name === "area") {
+    } else if (name === "area") {
       setSelectedAreas([])
     }
   }
-  
+
   const [categories, setCategories] = useState({ data: [] })
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedAreas, setSelectedAreas] = useState([]);
@@ -68,7 +71,6 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
-        // console.log(categories)
       })
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);
@@ -102,17 +104,20 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true)
     const selectedCat = selectedCategories[0] || '';
     console.log(selectedLocation, key, selectedCat)
-    const api = `https://falth.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&name=${key}`
+    const api = `https://falth.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&search=${key}`
     console.log(api)
     fetch(api)
       .then((response) => response.json())
       .then((data) => {
         setStores(data);
+        setIsLoading(false)
       })
       .catch((error) => {
         console.error('Lỗi khi gọi API', error);
+        setIsLoading(false)
       });
   }, [selectedLocation, key, selectedCategories]);
 
@@ -140,9 +145,9 @@ const Home = () => {
                 {isOpen && (
                   <div class="container-box-filter">
                     <div class="content">
-                    
-                        
-                      {districts.map((district) => (                       
+
+
+                      {districts.map((district) => (
                         <div className="custom-checkbox" key={district.Id}>
                           <input
                             type="checkbox"
@@ -199,16 +204,16 @@ const Home = () => {
               </div>
             )}
             {selectedAreas.length > 0 && (
-            <div class="widget-tag">
-               {t("homeArea")}: <span class="key-word">({selectedAreas.length})</span>
-              <span class="btn-delete-tag" onClick={()=>handleRemove("area")}>x</span>
-            </div>
+              <div class="widget-tag">
+                {t("homeArea")}: <span class="key-word">({selectedAreas.length})</span>
+                <span class="btn-delete-tag" onClick={() => handleRemove("area")}>x</span>
+              </div>
             )}
             {selectedCategories.length > 0 && (
-            <div class="widget-tag">
-               {t("homeCategory")}: <span class="key-word">({selectedCategories.length})</span>
-              <span class="btn-delete-tag" onClick={()=>handleRemove("cat")}>x</span>
-            </div>
+              <div class="widget-tag">
+                {t("homeCategory")}: <span class="key-word">({selectedCategories.length})</span>
+                <span class="btn-delete-tag" onClick={() => handleRemove("cat")}>x</span>
+              </div>
             )}
           </div>
         </div>
@@ -222,31 +227,22 @@ const Home = () => {
                 <div class="box-line-lg"></div>
               </div>
             </div>
-            {/* <StoreItem
-              id="1"
-              name="Cơm Gà Nam Chợ Mới - Hoàng Diệu"
-              address="589 Hoàng Diệu, P. Hòa Thuận Đông, Quận Hải Châu, Đà Nẵng"
-              linkImage="https://images.foody.vn/res/g28/277130/prof/s280x175/foody-upload-api-foody-mobile-5-201006112619.jpg"
-              link="/da-nang/com-ga-nam-cho-moi-hoang-dieu"
-              open="8.00"
-              close="23.00"
-              rate={4.8}
-              like="yes"
-              store = {null}
-
-            />
-            <StoreItem
-              id="2"
-              name="Duyên - Cơm Gà Xối Mỡ - Hoàng Diệu"
-              address="264 Hoàng Diệu, P. Nam Dương, Quận Hải Châu, Đà Nẵng"
-              linkImage="https://images.foody.vn/res/g100001/1000000248/prof/s280x175/foody-upload-api-foody-mobile-im-e485ae6c-230917121851.jpg"
-              link="/da-nang/duyen-com-ga-xoi-mo-hoang-dieu"
-              open="8.00"
-              close="23.00"
-              rate="4.8"
-              like="yes"
-              store = {null}
-            />  */}
+            {isLoading && Array(4).fill(0).map((item, index) => (
+              <div class="item-restaurant" >
+              <div class="img-restaurant">
+                <Skeleton />
+              </div>
+              <div class="info-restaurant">
+                <div class="info-basic-res" style={{ height: '50px', width: '285px' }}>
+                  <Skeleton />
+                </div>
+                <p class="content-promotion" style={{ height: '30px', width: '285px' }}>
+                  <Skeleton />
+                </p>
+              </div>
+            </div>
+            ))}
+            
             {stores.data.map((store) => (
 
               <StoreItem
@@ -276,9 +272,6 @@ const Home = () => {
         </ul>
       </div>
     </div>
-
-
-
   )
 }
 export default Home;

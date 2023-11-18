@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserInfo } from '../../services/userServices';
 import { useLogout } from '../../services/authContext';
 import { useTranslation } from 'react-i18next';
+
 const UpdateAddress = () => {
     const {t} = useTranslation()
     const logout = useLogout();
@@ -19,15 +20,18 @@ const UpdateAddress = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [action, setAction] = useState('');
+    const [actionDel, setActionDel] = useState('');
+    const [idContact, setIdContact] = useState('');
+    const [contacts, setContacts] = useState([]);
 
-    const handleShowModal = (address1, phoneNumber1, action1) => {
+    const handleShowModal = (address1, phoneNumber1, action1, id) => {
         setAddress(address1)
         setPhoneNumber(phoneNumber1)
         setAction(action1)
+        setIdContact(id)
         console.log(phoneNumber, address)
         setShowModal(true);
     };
-
     const handleCloseModal = () => {
         setShowModal(false);
         setAddress('')
@@ -37,8 +41,8 @@ const UpdateAddress = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [itemToDelete, setItemToDelete] = useState('');
 
-    const handleShowDeleteModal = (id) => {
-        // console.log(id)
+    const handleShowDeleteModal = (id, action) => {
+        setActionDel(action)
         setItemToDelete(id);
         setShowDeleteModal(true);
     };
@@ -56,7 +60,7 @@ const UpdateAddress = () => {
         navigate(`/${nav}`);
     };
 
-    const [contacts, setContacts] = useState([]);
+    
     const [userName, setUserName] = useState("");
     const [img, setImg] = useState("")
     useEffect(() => {;
@@ -65,8 +69,6 @@ const UpdateAddress = () => {
                 const user = localStorage.getItem("user");
                 const token = localStorage.getItem("token");
                 const userData = JSON.parse(user);
-                const defaultContactId = userData.defaultContact;
-                const defaultContact = userData.contact.find(contact => contact._id === defaultContactId);
                 if (token) {
                     // const userData = await getUserInfo(token);
                     setUserName(userData.firstName + " " + userData.lastName)
@@ -182,10 +184,10 @@ const UpdateAddress = () => {
                                             <div class="col col-5">{contact.address}</div>
                                             <div class="col col-3">{contact.phoneNumber}</div>
                                             <div class="col col-2 txt-center">
-                                                <span style={{ backgroundColor: 'white' }} className="margin-05 link-button" variant="primary" onClick={() => handleShowModal(contact.address, contact.phoneNumber, 'update')}>
+                                                <span style={{ backgroundColor: 'white' }} className="margin-05 link-button" variant="primary" onClick={() => handleShowModal(contact.address, contact.phoneNumber, 'update', contact._id)}>
                                                 {t("change")}
                                                 </span>
-                                                <span class="margin-05 link-button" variant="danger" onClick={() => handleShowDeleteModal(contact._id)}>{t("delete")}</span>
+                                                <span class="margin-05 link-button" variant="danger" onClick={() => handleShowDeleteModal(contact._id, 'contact')}>{t("delete")}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -198,7 +200,7 @@ const UpdateAddress = () => {
                                                 handleShowModal(                                                   
                                                     '',
                                                     '', 
-                                                    'add'
+                                                    'add',
                                                 )}>
                                                 {t("add")}
                                             </button>
@@ -211,8 +213,9 @@ const UpdateAddress = () => {
                 </div>
             </div>
 
-            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action}/>
-            <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} id={itemToDelete} />
+            <ModalUpdateAddress show={showModal} handleClose={handleCloseModal} phoneNumber1={phoneNumber} address1={address} action1 = {action} contactId={idContact} setContacts={setContacts}/>
+            <DeleteConfirmationModal show={showDeleteModal} handleClose={handleCloseDeleteModal} id={itemToDelete} action={actionDel} setContacts={setContacts}/>
+                           
         </div>
     )
 }

@@ -1,34 +1,20 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import CartModal from "../../Components/Modal/cart";
 import { useLocation } from "react-router-dom";
 import { getAllCategoryByStoreId } from "../../services/userServices";
 import { useTranslation } from "react-i18next";
 import MenuGroup from "../../Components/Item/menuGroup";
 import { Link, Element } from "react-scroll";
-import axios from "axios";
+import Skeleton from "../../Components/Skeleton/skeleton";
+import { useNavigate } from "react-router-dom";
 const StoreDetail = () => {
+    const navigate = useNavigate()
     const { t } = useTranslation()
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState([]);
     const location = useLocation()
+    const [isLoading, setIsLoading] = useState(false)
     const store = location.state.store.store;
-    const data = [
-        {
-            id: '1',
-            catName: "Món nướng",
-            photo: "photo1.jpg",
-        },
-        {
-            id: '2',
-            catName: "Ăn vặt",
-            photo: "photo2.jpg",
-        },
-        {
-            id: '3',
-            catName: "Món lẩu",
-            photo: "photo3.jpg",
-        },
-    ];
     const openModal = () => {
         setShowModal(true);
     };
@@ -40,14 +26,14 @@ const StoreDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setCategories(data)
-                // const data1 = await getAllCategoryByStoreId(store._id)
-                // const data1 = await axios.get("https://falth.vercel.app/api/category/store/651d7093e1494e0d580de293")
-                // console.log(data1)
+                setIsLoading(true)
+                const data = await getAllCategoryByStoreId(store._id)
+                setCategories(data.data)
 
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin quán ăn:", error);
             }
+            setIsLoading(false)
         }
         fetchData();
     }, []);
@@ -58,10 +44,14 @@ const StoreDetail = () => {
         setActiveCategory(categoryId);
     };
 
+    const handleComment = () => {
+            navigate("/home/storeComment", { state: { store: { store } } });
+    }
+
     return (
         <div>
             <div class="wrapper">
-                <div class="now-detail-restaurant clearfix">
+                <div class="now-detail-restaurant clearfix" style={{width:'80%', marginLeft:'10%', height:'310px'}}>
                     <div class="container">
                         <div class="detail-restaurant-img">
                             <img
@@ -69,6 +59,7 @@ const StoreDetail = () => {
                                 src={store.image}
                                 alt={store.name}
                                 class=""
+                                style={{height:'250px', width:'100%', marginLeft:'8%'}}
                             />
                         </div>
                         <div class="detail-restaurant-info">
@@ -80,7 +71,7 @@ const StoreDetail = () => {
                             <div class="address-restaurant">
                                 {store.address}
                             </div>
-                            <div class="rating">
+                            <div class="rating" style={{cursor:'pointer'}} onClick={handleComment}>
                                 <div class="stars">
                                     <span class=""><i class="fas fa-solid fa-star"></i></span>
                                 </div>
@@ -130,6 +121,11 @@ const StoreDetail = () => {
                                 <div class="menu-restaurant-category">
                                     <div class="list-category" id="scroll-spy">
                                         <div class="scrollbar-container ps">
+                                            {isLoading && Array(3).fill(0).map((item, index) => (
+                                                <div className="item" key={index} style={{ height: '30px', width: '100px' }}>
+                                                    <Skeleton />
+                                                </div>
+                                            ))}
                                             {categories.map((category) => (
                                                 <Link to={category.catName} spy={true} smooth={true} duration={500} offset={-150}>
 
@@ -199,6 +195,7 @@ const StoreDetail = () => {
                                                             <MenuGroup
                                                                 category={category}
                                                                 openModal={openModal}
+                                                                store={store}
                                                             />
                                                         </Element>
                                                     ))}
@@ -218,10 +215,12 @@ const StoreDetail = () => {
                 </div>
 
             </div>
-            {showModal && (
-                <CartModal show={showModal} handleClose={closeModal} />
-            )}
-        </div>
+            {
+                showModal && (
+                    <CartModal show={showModal} handleClose={closeModal} handleOpen={openModal} />
+                )
+            }
+        </div >
     )
 }
 

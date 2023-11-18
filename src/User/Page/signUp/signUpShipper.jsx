@@ -3,8 +3,10 @@ import useLocationSelect from "./address";
 import './signUp.css'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import LoadingModal from '../../Components/Loading/Loading';
 import axios from 'axios';
 const SignUpShipper = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {
@@ -30,10 +32,10 @@ const SignUpShipper = () => {
         detailAddress: '',
         frontImageCCCD: null,
         behindImageCCCD: null,
-        licenseId: '',
         licenseImage: null,
         vehicleNumber:'',
         vehicleType:'',
+        vehicleLicense: '',
         licenseNumber:'',
     });
 
@@ -62,18 +64,9 @@ const SignUpShipper = () => {
             });
     };
 
-    // const handleChangeImg = (e) => {
-    //     const { name, files } = e.target;
-    //     if (files.length > 0) {
-    //       setFormData({
-    //         ...formData,
-    //         [name]: files[0],
-    //       });
-    //     }
-    //   };
     const handleChangeImg = (e) => {
         const name = e.target.name;
-        const value = e.target.files[0]; // Get the selected file
+        const value = e.target.files[0]; 
       
         setFormData({
           ...formData,
@@ -93,14 +86,16 @@ const SignUpShipper = () => {
             passwordConfirm: formData.passwordConfirm,
             address: address,
             phoneNumber: formData.phoneNumber,
-            frontImageCCCD: formData.frontImageCCCD,
-            behindImageCCCD: formData.behindImageCCCD,
-            licenseId: formData.licenseId,
-            licenseImage: formData.licenseImage,
+            frontImageCCCD: formData.frontImageCCCD.name,
+            behindImageCCCD: formData.behindImageCCCD.name,
+            licenseImage: formData.licenseImage.name,
             vehicleNumber:formData.vehicleNumber,
             vehicleType:formData.vehicleType,
+            vehicleLicense: formData.vehicleLicense,
             licenseNumber:formData.licenseNumber,
         };
+            console.log(registrationData)
+        
         if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(registrationData.email)) {
             setError(t("error8"))
         } else if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(registrationData.password)) {
@@ -111,17 +106,18 @@ const SignUpShipper = () => {
             setError(t("error9"))
         } else {
             try {
-                // console.log(registrationData)
+                setIsLoading(true)
+                console.log(registrationData)
 
               const response = await axios.post('https://falth.vercel.app/api/shipper', registrationData);
               console.log('Đăng ký thành công', response.data);
               setError('')
               setSuccess('Đã nhận được thông tin! Mời bạn xác nhận email')
-                navigate("/verify", { state: { action: "verifyUser", email: registrationData.email } });
+                navigate("/verify", { state: { action: "verifyShipper", email: registrationData.email } });
             } catch (error) {
               setError('Địa chỉ email đã tồn tại');
             }
-
+            setIsLoading(false)
         }
     };
     return (
@@ -164,9 +160,10 @@ const SignUpShipper = () => {
                                 <div class="input-group_su">
                                     <input style={{border:'none'}}class="input--style-2" type="text" placeholder={t("phoneNumber")} name="phoneNumber" required value={formData.phoneNumber} onChange={handleChange} maxLength={10}/>
                                 </div>
-
+                               
+                                
                                 <div class="row_su row-space">
-                                    <div class="col-3_su">
+                                <div class="col-3_su">
                                         <div class="input-group_su">
                                             <div class="rs-select2 js-select-simple select--no-search">
                                                 <select onChange={handleChangeCity} name="city" class="form-select form-select-sm" id="city" aria-label=".form-select-sm" required value={formData.city}>
@@ -217,17 +214,24 @@ const SignUpShipper = () => {
                                     <input style={{border:'none'}}class="input--style-2" type="text" placeholder={t("address")} name="detailAddress" value={formData.detailAddress} onChange={handleChange}/>
                                 </div>
                                 <div class="row_su row-space">
-                                    <div class="col-3_su">
+                                    <div class="col-2_su">
                                         <div class="input-group_su">
-                                            <input style={{border:'none'}}class="input--style-2" type="text" placeholder={t("licenseId")} name="licenseId" value={formData.licenseId} onChange={handleChange}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="text" placeholder={t("licenseId")} name="licenseNumber" value={formData.licenseNumber} onChange={handleChange}/>
                                         </div>
                                     </div>
-                                    <div class="col-3_su">
+                                    <div class="col-2_su">
+                                        <div class="input-group_su">
+                                            <input style={{border:'none'}}class="input--style-2" type="text" placeholder="Mã giấy đăng kí xe" name="vehicleLicense" value={formData.vehicleLicense} onChange={handleChange}/>
+                                        </div>
+                                    </div>                                   
+                                </div>
+                                <div class="row_su row-space">
+                                    <div class="col-2_su">
                                         <div class="input-group_su">
                                             <input style={{border:'none'}}class="input--style-2" type="text" placeholder={t("vehicleNumber")} name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange}/>
                                         </div>
                                     </div>
-                                    <div class="col-3_su">
+                                    <div class="col-2_su">
                                         <div class="input-group_su">
                                             <input style={{border:'none'}}class="input--style-2" type="text" placeholder={t("vehicleType")} name="vehicleType" value={formData.vehicleType} onChange={handleChange}/>
                                         </div>
@@ -242,7 +246,7 @@ const SignUpShipper = () => {
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="frontImageCCCD" accept="image/*" onChange={handleChangeImg}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="file" name="frontImageCCCD" accept="image/*" onChange={handleChangeImg} required/>
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +259,7 @@ const SignUpShipper = () => {
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="behindImageCCCD" accept="image/*" onChange={handleChangeImg}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="file" name="behindImageCCCD" accept="image/*" onChange={handleChangeImg} required/>
                                         </div>
                                     </div>
                                 </div>
@@ -267,7 +271,7 @@ const SignUpShipper = () => {
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su" >
-                                            <input style={{border:'none'}}class="input--style-2" type="file" name="licenseImage" accept="image/*" onChange={handleChangeImg}/>
+                                            <input style={{border:'none'}}class="input--style-2" type="file" name="licenseImage" accept="image/*" onChange={handleChangeImg} required/>
                                         </div>
                                     </div>
                                 </div>
