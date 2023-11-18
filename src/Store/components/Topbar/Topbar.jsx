@@ -27,7 +27,8 @@ const Topbar = () => {
     };
 
     return (
-        <Box display="flex" justifyContent="space-between" p={2}>
+        <Box display="flex" justifyContent="space-between" p={2} borderBottom="0.1px solid rgb(230, 230, 230);"
+            boxShadow="0px 4px 4px rgba(0, 0, 0, 0.1)">
             <Box
                 display="flex"
                 backgroundColor={colors.primary[400]}

@@ -14,11 +14,17 @@ const Acceptstore = ({ Catname }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [openDetail, setOpenDetail] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-    const handleDeleteClick = (row) => {
-        // Xử lý sự kiện khi click vào nút "Delete"
-        // Hiển thị thông báo
-        toast.success('Xin chào!', { autoClose: 2000 });
+    const handleAcceptClick = (row) => {
+        const isConfirmed = window.confirm('Bạn có chắc chắn muốn thực hiện hành động này không?');
+
+        if (isConfirmed) {
+            Accept(row._id)
+            alert('Bạn đã chấp nhận!');
+        } else {
+        }
     };
+
+
     const formRef = useRef();
 
     useEffect(() => {
@@ -37,7 +43,7 @@ const Acceptstore = ({ Catname }) => {
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/store/city/Đà Nẵng`;
+    const api = `https://falth.vercel.app/api/admin/owner/approve`;
 
     const fetchData = async () => {
         try {
@@ -46,7 +52,8 @@ const Acceptstore = ({ Catname }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            const responseData = response.data.data.data;
+            const responseData = response.data.data;
+            console.log(responseData);
             setData(responseData);
         } catch (error) {
             console.log(error);
@@ -74,6 +81,19 @@ const Acceptstore = ({ Catname }) => {
             setIsLoading(false);
         }
     };
+    const Accept = async (id) => {
+        try {
+            await axios.get(`https://falth.vercel.app/api/admin/owner/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            fetchData();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     useEffect(() => {
         fetchData();
@@ -106,8 +126,8 @@ const Acceptstore = ({ Catname }) => {
         },
         {
             flex: 3,
-            field: "user",
-            headerName: "Tên người đang kí",
+            field: "phoneNumber",
+            headerName: "Số điện thoại",
             headerAlign: "center",
             align: "center",
         },
@@ -121,7 +141,6 @@ const Acceptstore = ({ Catname }) => {
                 return (
                     <div>
                         <button style={{ height: "40px", width: "40px", background: "#51cc8a", borderRadius: "20px" }} onClick={() => handleDetailClick(params.row)}><i class="fa-solid fa-magnifying-glass"></i></button>
-
                     </div >
                 );
             },
@@ -135,8 +154,7 @@ const Acceptstore = ({ Catname }) => {
             renderCell: (params) => {
                 return (
                     <div>
-
-                        <button style={{ height: "40px", width: "40px", background: "#747af2", borderRadius: "20px" }} onClick={() => handleDeleteClick()}><i class="fa-solid fa-file"></i></button>
+                        <button style={{ height: "40px", width: "40px", background: "#747af2", borderRadius: "20px" }} onClick={() => handleAcceptClick(params.row)}><i class="fa-solid fa-file"></i></button>
                     </div >
                 );
             },
@@ -151,7 +169,7 @@ const Acceptstore = ({ Catname }) => {
             renderCell: (params) => {
                 return (
                     <div>
-                        <button style={{ height: "40px", width: "40px", background: "#ef376e", borderRadius: "20px" }} onClick={() => handleDeleteClick()}><i className="fa-solid fa-trash-can"></i></button>
+                        <button style={{ height: "40px", width: "40px", background: "#ef376e", borderRadius: "20px" }} onClick={() => handleAcceptClick()}><i className="fa-solid fa-trash-can"></i></button>
                     </div >
                 );
             },
@@ -168,43 +186,53 @@ const Acceptstore = ({ Catname }) => {
             <Box
                 m="40px 0 0 0"
                 height="75vh"
-                sx={{
-                    "& .MuiDataGrid-root": {
-                        border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                        borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                        color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.blueAccent[700],
-                        borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                        borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
-                    },
-                }}
+            // sx={{
+            //     "& .MuiDataGrid-root": {
+            //         border: "none",
+            //     },
+            //     "& .MuiDataGrid-cell": {
+            //         borderBottom: "none",
+            //     },
+            //     "& .name-column--cell": {
+            //         color: colors.greenAccent[300],
+            //     },
+            //     "& .MuiDataGrid-columnHeaders": {
+            //         backgroundColor: colors.blueAccent[700],
+            //         borderBottom: "none",
+            //     },
+            //     "& .MuiDataGrid-virtualScroller": {
+            //         backgroundColor: colors.primary[400],
+            //     },
+            //     "& .MuiDataGrid-footerContainer": {
+            //         borderTop: "none",
+            //         backgroundColor: colors.blueAccent[700],
+            //     },
+            // }}
             >
                 {openDetail && (
-                    <div className="form-container" >
-                        <div ref={formRef} className={style.add} style={{ zIndex: 1, top: 0, right: 0, background: colors.primary[400], width: '40%', maxHeight: "100%", overflowy: "auto" }}>
-                            <Bill rows={selectedRow} />
+                    <Bill rows={selectedRow} show={true} handleClose={setOpenDetail} />
+                )}
+                <div className={style.dsdh} >
+                    <div className={style.dshd1} style={{ background: colors.primary[400], }} >
+                        <div className={style.titledsdh}>Danh sách cửa hàng chờ duyệt</div>
+                        <div className={style.searchBar}>
+                            <input
+                                type="text"
+                                className={style.searchInput}
+                                placeholder="Tìm kiếm cửa hàng..."
+                                onChange={(e) => Searchproduct(e.target.value)}
+                            />
                         </div>
                     </div>
-                )}
+
+                </div>
                 <DataGrid rows={rowsWithUniqueIds} columns={columns}
                     disableSelectionOnClick
                     loading={isLoading}
 
                     initialState={{
                         pagination: {
-                            pageSize: 10,
+                            pageSize: 8,
                         },
 
                     }} />

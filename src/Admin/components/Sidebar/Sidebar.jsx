@@ -3,8 +3,7 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import "react-pro-sidebar/dist/css/styles.css";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import CategoryIcon from '@mui/icons-material/Category';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import CommentIcon from '@mui/icons-material/Comment';
@@ -12,6 +11,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 
@@ -56,7 +56,7 @@ const Sidebara = ({ Catname, Admin }) => {
                     backgroundColor: "transparent !important",
                 },
                 "& .pro-inner-item": {
-                    padding: "5px 35px 5px 20px !important",
+                    padding: "5px 30px 5px 5px !important",
                 },
                 "& .pro-inner-item:hover": {
                     color: "#868dfb !important",
@@ -71,7 +71,7 @@ const Sidebara = ({ Catname, Admin }) => {
                 <Menu iconShape="square">
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
-                        icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+                        icon={isCollapsed ? <ArrowForwardIcon /> : undefined}
                         style={{
                             margin: "10px 0 20px 0",
                             color: colors.grey[100],
@@ -82,61 +82,20 @@ const Sidebara = ({ Catname, Admin }) => {
                                 display="flex"
                                 justifyContent="space-between"
                                 alignItems="center"
-                                ml="15px"
+                                ml="25px"
+
                             >
                                 <Typography variant="h3" color={colors.grey[100]}>
                                     ADMINIS
                                 </Typography>
                                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                                    <MenuOutlinedIcon />
+                                    <ArrowBackIcon />
                                 </IconButton>
                             </Box>
                         )}
                     </MenuItem>
 
-                    {!isCollapsed && (
-                        <Box mb="25px">
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                <img
-                                    alt="profile-user"
-                                    src={Admin.photo}
-                                    style={{
-                                        cursor: "pointer", borderRadius: "50%", width: "100px", height: "100px"
-                                    }}
-                                />
-                            </Box>
-                            <Box textAlign="center">
-                                <Typography
-                                    variant="h2"
-                                    color={colors.grey[100]}
-                                    fontWeight="bold"
-                                    sx={{ m: "10px 0 0 0" }}
-                                >
-                                    {Admin.firstName} {Admin.lastName}
-                                </Typography>
-                                <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    {Admin.email}
-                                </Typography>
-                            </Box>
-                        </Box>
-                    )}
-
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                        {/* <Item
-                            title="Dashboard"
-to="./"
-                            icon={<HomeOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        /> */}
-
-                        {!isCollapsed && (<Typography
-                            variant="h6"
-                            color={colors.grey[300]}
-                            sx={{ m: "15px 0 5px 20px" }}
-                        >
-                            Của hàng
-                        </Typography>)}
                         <Item
                             title="Danh sách cửa hàng"
                             to="/"
@@ -154,13 +113,6 @@ to="./"
 
                         />
 
-                        {!isCollapsed && (<Typography
-                            variant="h6"
-                            color={colors.grey[300]}
-                            sx={{ m: "15px 0 5px 20px" }}
-                        >
-                            Của hàng
-                        </Typography>)}
                         <Item
                             title="Danh sách Shipper"
                             to="/ViewAllShipper"
@@ -174,6 +126,14 @@ to="./"
                             icon={<CommentIcon />}
                             selected={selected}
                             setSelected={setSelected}
+                        />
+                        <Item
+                            title="Danh sách người dùng"
+                            to="/ManageUser"
+                            icon={<MenuOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+
                         />
 
                         <Item

@@ -135,6 +135,14 @@
     font-size: 16px;
 }
 
+.searchInput1 {
+    width: 100%;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
 .searchBar {
     display: flex;
     text-align: center;
@@ -176,6 +184,13 @@
     flex-direction: column;
     gap: 10px;
 
+}
+
+.container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-left: 10px;
+    height: 100%;
 }
 
 .Store {

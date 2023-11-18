@@ -7,7 +7,7 @@ function Notify({ error, message, setOpenNotify }) {
     return (
         <div className="modal-content">
             <div class="modal-header"><div class="txt-bold font13">
-                <span class="txt-red">FHALT</span> Thông báo</div>
+                <span class="txt-red">FALTH</span> Thông báo</div>
             </div><div class="modal-body">
                 <p class="font15">
                     <span>{message}</span>

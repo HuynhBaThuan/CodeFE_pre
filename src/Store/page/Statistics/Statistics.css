@@ -1,0 +1,12 @@
+.left {
+    width: 60%;
+    background-color: antiquewhite;
+    height: 100%;
+}
+
+.right {
+    width: 30%;
+    background-color: rgb(234, 135, 6);
+    height: 100%;
+    margin: 5px;
+}

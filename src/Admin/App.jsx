@@ -17,6 +17,8 @@ import Comments from './components/Comment/Comment';
 import ManageShipper from './Page/ManageShipper/ManageShipper';
 import ViewAllShipper from './Page/ManageShipper/ViewAllShipper';
 import { LanguageProvider } from './services/languageContext';
+import ManageUser from "./Page/ManageUser/ManageUser"
+
 
 const App = () => {
     const [theme, colorMode] = useMode();
@@ -27,7 +29,7 @@ const App = () => {
     const Login = async () => {
         try {
             const response = await axios.post('https://falth.vercel.app/api/auth/login/', {
-                email: 'user321@gmail.com',
+                email: 'admin@gmail.com',
                 password: 'leduchuy123',
             });
             const token = response.data.token;
@@ -110,7 +112,15 @@ const App = () => {
                 {
                     path: '/ManageShipper',
                     element: <ManageShipper />
-                }
+                },
+                {
+                    path: '/ManageShipper',
+                    element: <ManageShipper />
+                },
+                {
+                    path: '/ManageUser',
+                    element: <ManageUser />
+                },
             ]
         },
     ]);

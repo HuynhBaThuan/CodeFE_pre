@@ -3,50 +3,41 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from "../../theme";
 import { mockDataTeam } from "../../data/mockData";
-import Header from "../../components/Header/Header";
-import * as yup from "yup";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import { Button, TextField } from "@mui/material";
-import Bill from './Bill';
-import useMediaQuery from "@mui/material/useMediaQuery"; import style from './Custumer.module.css'
+import Header2 from "../../components/Header/Header";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import style from './Listorder.module.css'
 import axios from 'axios'
-import {
-    useQuery,
-} from 'react-query'
 
 const Product = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
+    const [data, setData] = useState([]);
+    const [row, setRow] = useState([]);
     const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
     const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10));
-    const [Data, setData] = useState([])
     const [isLoading, setisLoading] = useState(false)
     const handleFormSubmit = (values) => {
         console.log(values);
     };
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/product/store/${_id}`
+    const api = `https://falth.vercel.app/api/order/owner/${_id}`;
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(api, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const responseData = response.data.data;
+            console.log(responseData);
+            setData(responseData);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
     useEffect(() => {
-        const GetListOrder = async () => {
-            try {
-                const response = await axios.get(`https://falth.vercel.app/api/product/store/${_id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setData(response.data)
-            } catch (error) {
-                console.log(error);
-            }
-            finally {
-                setTimeout(() => {
-                    setisLoading(false)
-                }, 3000);
-
-            }
-        };
-
-        GetListOrder();
+        fetchData();
     }, []);
 
     const [open, setOpen] = useState(false);
@@ -65,38 +56,40 @@ const Product = () => {
         };
     }, []);
 
-    const initialValues = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        contact: "",
-    };
 
-    const handleAccessLevelClick = () => {
-        setOpen(true);
+    const handleAccessLevelClick = (row) => {
+        console.log(row)
+        setRow(row)
     };
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const columns = [
-        { field: "id", headerName: "ID" },
+        { field: "id", flex: 1, headerName: "ID" },
         {
-            field: "idorder",
+            field: "_id",
             headerName: "ID đơn hàng",
-            flex: 1,
+            flex: 2,
+            headerAlign: "center",
+            align: "center",
 
         },
         {
-            field: "price",
-            headerName: "Giá tiền",
+            field: "totalPrice",
+            headerName: "Giá tiền(VNĐ)",
+            headerAlign: "center",
+            align: "center",
+            flex: 2,
 
         },
 
         {
             field: "accessLevel",
-            headerName: "Access Level",
+            headerName: "Xem",
+            headerAlign: "center",
+            align: "center",
             flex: 1,
-            renderCell: () => {
+            renderCell: (params) => {
                 return (
                     <Box
                         width="60%"
@@ -104,13 +97,12 @@ const Product = () => {
                         p="5px"
                         display="flex"
                         justifyContent="center"
-                        backgroundColor={colors.greenAccent[600]}
                         borderRadius="4px"
-                        onClick={handleAccessLevelClick}
+                        onClick={() => handleAccessLevelClick(params.row)}
                     >
-                        <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                            Xem chi tiết
-                        </Typography>
+                        <div>
+                            <button style={{ height: "40px", width: "40px", background: "#51cc8a", borderRadius: "20px" }} ><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div >
                     </Box>
                 );
             },
@@ -118,80 +110,110 @@ const Product = () => {
         {
             field: "status",
             headerName: "Trạng thái",
+            headerAlign: "center",
+            align: "center",
+            flex: 2,
+            renderCell: (params) => {
+                let color;
+                switch (params.row.status) {
+                    case "Finished":
+                        color = "#4caf4fb9"; // Màu xanh lá cây cho trạng thái Finished
+                        break;
+                    case "Refused":
+                        color = "#FF5722"; // Màu cam cho trạng thái Refused
+                        break;
+                    case "Cancelled":
+                        color = "#F44336"; // Màu đỏ cho trạng thái Cancelled
+                        break;
+                    default:
+                        color = "#000000"; // Màu mặc định nếu không phải các trạng thái trên
+                }
 
-        },
+                return (
+                    <Box
+                        width="60%"
+                        m="0 auto"
+                        p="5px"
+                        display="flex"
+                        justifyContent="center"
+                    >
+                        <div style={{ padding: "2px 10px", background: color, borderRadius: "30px", }}>
+                            <i style={{ color: "#ffffff" }} className="fa-regular fa-circle"></i>
+                            <span style={{ padding: "0 5px" }}>{params.row.status}</span>
+                        </div >
+                    </Box>
+                );
+            },
+        }
+
     ];
+    const rowsWithUniqueIds = data.map((item, index) => {
+        const uniqueId = index;
+        return { ...item, id: uniqueId };
+    });
 
     return (
 
-        <Box m="20px" position='relative'>
-            <Box
-                m="40px 0 0 0"
-                height="75vh"
-                sx={{
-                    "& .MuiDataGrid-root": {
-                        border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                        borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                        color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.blueAccent[700],
-                        borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                        borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
-                    },
-                }}
-            >
-                {open && (
-                    <div className="form-container" >
-                        <div className={style.add} ref={formRef} style={{ zIndex: 1, top: 0, right: 0, background: colors.primary[400], width: '30%' }}>
-                            <Bill />
-                        </div>
-                    </div>
-                )}
-                <div className={style.dsdh} >
-                    <div className={style.dshd1} style={{ background: colors.primary[400], }} >
-                        <div className={style.titledsdh}>Danh sách đơn hàng</div>
-                        <div className={style.searchBar}>
-                            <input
-                                type="text"
-                                className={style.searchInput}
-                                placeholder="Tìm kiếm đơn hàng..."
-                            />
-                        </div>
-                        <div className={style.searchBar}>
-                            <span>Từ:</span>
-                            <input
-                                type="date"
-                                className={style.searchInput}
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
+        <Box m="20px">
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Header2 title="Danh sách đơn hàng" />
 
-                            />
-                        </div>
-                        <div className={style.searchBar}>
-                            <span>Đến:</span>
-                            <input
-                                type="date"
-                                className={style.searchInput}
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
-                        </div>
+                <Box>
+                    <div className={style.searchBar}>
+                        <input
+                            type="text"
+                            className={style.searchInput}
+                            placeholder="Tìm kiếm đơn hàng..."
+                        />
                     </div>
-                    <DataGrid rows={mockDataTeam} columns={columns} isLoading={isLoading} />
-                </div>
+
+
+                </Box>
+                <Box>
+                    <div className={style.searchBar}>
+                        <span>Từ:</span>
+                        <input
+                            type="date"
+                            className={style.searchInput1}
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                    </div>
+                </Box>
+                <Box>
+                    <div className={style.searchBar}>
+                        <span>Đến:</span>
+                        <input
+                            type="date"
+                            className={style.searchInput1}
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+                    </div>
+                </Box>
             </Box>
-        </Box>
+            <Box display="flex">
+                <Box
+                    m="10px 0 0"
+                    width="100%"
+                    height="75vh"
+                    sx={{
+                        "& .MuiDataGrid-columnHeaderTitle": {
+                            borderBottom: "none",
+                            fontSize: "14px"
+                            ,
+                            fontWeight: "bold",
+                        },
+                    }}
+                >
+                    <DataGrid rows={rowsWithUniqueIds} columns={columns} isLoading={isLoading}
+                        initialState={{
+                            pagination: {
+                                pageSize: 9,
+                            },
+                        }} />
+                </Box>
+            </Box></Box >
     );
 };
 

@@ -43,7 +43,7 @@ function ManageShipper() {
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/admin/shipper/`;
+    const api = `https://falth.vercel.app/api/admin/shipper/approve`;
 
 
     const fetchData = async () => {
@@ -126,13 +126,6 @@ function ManageShipper() {
         },
         {
             flex: 2,
-            field: "phoneNumber",
-            headerAlign: "center",
-            align: "center",
-            headerName: "Số điện thoại",
-        },
-        {
-            flex: 2,
             field: "status",
             headerAlign: "center",
             align: "center",
@@ -142,6 +135,8 @@ function ManageShipper() {
             field: "Detail",
             flex: 2,
             headerName: "Xem Chi Tiết",
+            headerAlign: "center",
+            align: "center",
             renderCell: (params) => {
                 return (
                     <Box
@@ -190,35 +185,32 @@ function ManageShipper() {
             <Box
                 m="40px 0 0 0"
                 height="75vh"
-                sx={{
-                    "& .MuiDataGrid-root": {
-                        border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                        borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                        color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.blueAccent[700],
-                        borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                        borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
-                    },
-                }}
+                // sx={{
+                //     "& .MuiDataGrid-root": {
+                //         border: "none",
+                //     },
+                //     "& .MuiDataGrid-cell": {
+                //         borderBottom: "none",
+                //     },
+                //     "& .name-column--cell": {
+                //         color: colors.greenAccent[300],
+                //     },
+                //     "& .MuiDataGrid-columnHeaders": {
+                //         backgroundColor: colors.blueAccent[700],
+                //         borderBottom: "none",
+                //     },
+                //     "& .MuiDataGrid-virtualScroller": {
+                //         backgroundColor: colors.primary[400],
+                //     },
+                //     "& .MuiDataGrid-footerContainer": {
+                //         borderTop: "none",
+                //         backgroundColor: colors.blueAccent[700],
+                //     },
+                // }}
             >
-                {openDetail && selectedRow && (
-                    <div className="form-container">
-                        <div ref={formRef} className={style.add} style={{ zIndex: 1, top: 0, right: 0, background: colors.primary[400], width: '40%', maxHeight: '100%' }}>
-                            <DetailShipper rows={selectedRow} />
-                        </div>
-                    </div>
+                {openDetail && (
+
+                    <DetailShipper rows={selectedRow} show={true} handleClose={setOpenDetail} />
                 )}
                 <div className={style.dsdh} >
                     <div className={style.dshd1} style={{ background: colors.primary[400], }} >

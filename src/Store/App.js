@@ -17,7 +17,10 @@ import Category from './page/Category/Category';
 import Login from './login';
 import Info from './page/Info/Info';
 import axios from 'axios';
-import * as yup from "yup";
+import Feedback from "./page/Feedback/Feedback";
+import Statistics from "./page/Statistics/Statistics";
+
+
 
 const App = () => {
   const queryClient = new QueryClient()
@@ -25,6 +28,7 @@ const App = () => {
   const [Catname, setCatname] = useState([]);
   const token = localStorage.getItem('autoken');
   const [isSidebar, setIsSidebar] = useState(true);
+  const _id = localStorage.getItem('_id');
 
   const fetchCatname = async () => {
     try {
@@ -81,6 +85,10 @@ const App = () => {
           element: <Login />
         },
         {
+          path: '/Statistics',
+          element: <Statistics />
+        },
+        {
           path: '/product',
           element: <Product Catname={Catname} />
         },
@@ -94,7 +102,11 @@ const App = () => {
         },
         {
           path: '/category',
-          element: <Category />
+          element: <Category listCat={Catname} />
+        },
+        {
+          path: '/Feedback',
+          element: <Feedback />
         },
       ]
     },
