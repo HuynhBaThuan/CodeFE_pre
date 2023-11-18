@@ -17,6 +17,7 @@ const MenuGroup = ({ category, openModal, store }) => {
                 setIsLoading(true)
                 const products = await getProductByStoreId(store._id, category.catName)
                 setDishes(products.data.data)
+                console.log(products.data.data)
             } catch (error) {
                 console.log("Lỗi khi lấy thông tin món ăn", error)
             }

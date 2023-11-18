@@ -32,7 +32,7 @@ const DishInMenuGroup = ({ dish, handleOpen, handleAddToCart }) => {
                         <h2 class="item-restaurant-name">
                             {dish.name}
                         </h2>
-                        <div class="item-restaurant-desc">8 chân</div>
+                        <div class="item-restaurant-desc">Yêu thích</div>
                         <div class="item-restaurant-total">
                             Đã được đặt<span class="txt-bold"
                             >&nbsp;10+&nbsp;</span>lần

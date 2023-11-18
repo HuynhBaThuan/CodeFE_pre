@@ -5,6 +5,7 @@ import { useCity } from '../../services/CityContext';
 import { useTranslation } from 'react-i18next';
 import useLocationSelect from '../signUp/address';
 import LoadingModal from '../../Components/Loading/Loading';
+import Skeleton from '../../Components/Skeleton/skeleton';
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ const Home = () => {
     cities,
     districts,
     handleCityChange2,
-} = useLocationSelect();
+  } = useLocationSelect();
 
   const handleToggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -52,15 +53,15 @@ const Home = () => {
   const [stores, setStores] = useState({ data: [] });
 
   const handleRemove = (name) => {
-    if(name === "key") {
+    if (name === "key") {
       updateKey("")
-    } else if(name === "cat") {
+    } else if (name === "cat") {
       setSelectedCategories([])
-    } else if(name === "area") {
+    } else if (name === "area") {
       setSelectedAreas([])
     }
   }
-  
+
   const [categories, setCategories] = useState({ data: [] })
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedAreas, setSelectedAreas] = useState([]);
@@ -144,9 +145,9 @@ const Home = () => {
                 {isOpen && (
                   <div class="container-box-filter">
                     <div class="content">
-                    
-                        
-                      {districts.map((district) => (                       
+
+
+                      {districts.map((district) => (
                         <div className="custom-checkbox" key={district.Id}>
                           <input
                             type="checkbox"
@@ -203,16 +204,16 @@ const Home = () => {
               </div>
             )}
             {selectedAreas.length > 0 && (
-            <div class="widget-tag">
-               {t("homeArea")}: <span class="key-word">({selectedAreas.length})</span>
-              <span class="btn-delete-tag" onClick={()=>handleRemove("area")}>x</span>
-            </div>
+              <div class="widget-tag">
+                {t("homeArea")}: <span class="key-word">({selectedAreas.length})</span>
+                <span class="btn-delete-tag" onClick={() => handleRemove("area")}>x</span>
+              </div>
             )}
             {selectedCategories.length > 0 && (
-            <div class="widget-tag">
-               {t("homeCategory")}: <span class="key-word">({selectedCategories.length})</span>
-              <span class="btn-delete-tag" onClick={()=>handleRemove("cat")}>x</span>
-            </div>
+              <div class="widget-tag">
+                {t("homeCategory")}: <span class="key-word">({selectedCategories.length})</span>
+                <span class="btn-delete-tag" onClick={() => handleRemove("cat")}>x</span>
+              </div>
             )}
           </div>
         </div>
@@ -226,6 +227,22 @@ const Home = () => {
                 <div class="box-line-lg"></div>
               </div>
             </div>
+            {isLoading && Array(4).fill(0).map((item, index) => (
+              <div class="item-restaurant" >
+              <div class="img-restaurant">
+                <Skeleton />
+              </div>
+              <div class="info-restaurant">
+                <div class="info-basic-res" style={{ height: '50px', width: '285px' }}>
+                  <Skeleton />
+                </div>
+                <p class="content-promotion" style={{ height: '30px', width: '285px' }}>
+                  <Skeleton />
+                </p>
+              </div>
+            </div>
+            ))}
+            
             {stores.data.map((store) => (
 
               <StoreItem
@@ -254,7 +271,6 @@ const Home = () => {
           </li>
         </ul>
       </div>
-      {isLoading && <LoadingModal />}  
     </div>
   )
 }

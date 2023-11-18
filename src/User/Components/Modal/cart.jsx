@@ -21,7 +21,6 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
     const handleOrder = async (activity) => {
         if (activity === "order") {
             setIsLoading(true)
-            handleClose()
             const user = localStorage.getItem("user");
             const token = localStorage.getItem("token");
             const userData = JSON.parse(user);
@@ -35,6 +34,7 @@ const CartModal = ({ show, handleClose, handleOpen }) => {
             console.log(feeShipElement)
             navigate("/user/order", { state: { total: total, feeDefault: feeShipElement, calArray: calArray } })
             setIsLoading(false)
+            handleClose()
         } else {
             handleClose()
             navigate("/signin")

@@ -6,7 +6,9 @@ import { useTranslation } from "react-i18next";
 import MenuGroup from "../../Components/Item/menuGroup";
 import { Link, Element } from "react-scroll";
 import Skeleton from "../../Components/Skeleton/skeleton";
+import { useNavigate } from "react-router-dom";
 const StoreDetail = () => {
+    const navigate = useNavigate()
     const { t } = useTranslation()
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -42,10 +44,14 @@ const StoreDetail = () => {
         setActiveCategory(categoryId);
     };
 
+    const handleComment = () => {
+            navigate("/home/storeComment", { state: { store: { store } } });
+    }
+
     return (
         <div>
             <div class="wrapper">
-                <div class="now-detail-restaurant clearfix">
+                <div class="now-detail-restaurant clearfix" style={{width:'80%', marginLeft:'10%', height:'310px'}}>
                     <div class="container">
                         <div class="detail-restaurant-img">
                             <img
@@ -53,6 +59,7 @@ const StoreDetail = () => {
                                 src={store.image}
                                 alt={store.name}
                                 class=""
+                                style={{height:'250px', width:'100%', marginLeft:'8%'}}
                             />
                         </div>
                         <div class="detail-restaurant-info">
@@ -64,7 +71,7 @@ const StoreDetail = () => {
                             <div class="address-restaurant">
                                 {store.address}
                             </div>
-                            <div class="rating">
+                            <div class="rating" style={{cursor:'pointer'}} onClick={handleComment}>
                                 <div class="stars">
                                     <span class=""><i class="fas fa-solid fa-star"></i></span>
                                 </div>

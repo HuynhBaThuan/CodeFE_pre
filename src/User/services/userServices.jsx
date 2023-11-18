@@ -117,7 +117,7 @@ const getProductByStoreId = async (storeId, catName) => {
 
 //order
 
-const placeOrder = async (totalPrice, shipCost) => {
+const placeOrder = async (totalPrice, shipCost, coordinates) => {
   const token = localStorage.getItem("token");
   const decodedToken = JSON.parse(atob(token.split(".")[1]));
   const cart = JSON.parse(localStorage.getItem("cart"));
@@ -132,6 +132,7 @@ const placeOrder = async (totalPrice, shipCost) => {
   console.log(products)
   const orderData = {
     cart: products, // Lấy thông tin giỏ hàng từ đối tượng cart
+    coordinates: coordinates,
     totalPrice: totalPrice,
     shipCost: shipCost,
   };
@@ -149,6 +150,40 @@ const placeOrder = async (totalPrice, shipCost) => {
   }
 }
 
+const getAllOder = async () => {
+  const token = localStorage.getItem("token");
+  const decodedToken = JSON.parse(atob(token.split(".")[1]));
+  try {
+    const response = await axios.get(`https://falth.vercel.app/api/order/user/${decodedToken.id}?fields=status,dateOrdered&sort=-createdAt`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log("Order placed successfully:");
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error get order:", error);
+  }
+}
+
+const viewOrder = async (id) => {
+  const token = localStorage.getItem("token");
+  const decodedToken = JSON.parse(atob(token.split(".")[1]));
+  try {
+    const response = await axios.get(`https://falth.vercel.app/api/order/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log("Order placed successfully:");
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error("Error get order:", error);
+  }
+}
+
 export {
   loginAPI,
   getUserInfo,
@@ -160,5 +195,7 @@ export {
   getAllCategoryByStoreId,
   updateContact,
   getProductByStoreId,
-  placeOrder
+  placeOrder,
+  getAllOder, 
+  viewOrder
 }

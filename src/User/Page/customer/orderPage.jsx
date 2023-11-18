@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import logo from '../../assets/img/logo.png'
 import '../../assets/css/b.css'
 import PickAddress from "../../Components/Modal/pickAddress";
-import ModalUpdateAddress from "../../Components/Modal/modalUpdateAddress";
-import UpdateAddressOrder from "../../Components/Modal/updateAddressOrder";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCity } from "../../services/CityContext";
 import OrderDishItem from "../../Components/Item/orderedDishItem";
 import LoadingModal from "../../Components/Loading/Loading";
 import { placeOrder } from "../../services/userServices";
-import axios from "axios";
 const OrderPage = () => {
   const [showModalAddress, setShowModalAddress] = useState(false);
   const { cart, setCart, productsCount } = useCity();
@@ -40,7 +37,7 @@ const OrderPage = () => {
   const handleOrder = async () => {
     try {
       setIsLoading(true)
-      const response = await placeOrder(totalPrice, shipFee);
+      const response = await placeOrder(totalPayment, shipFee, selectedContact.location.coordinates);
       const orderUrl = response.url; // Đặt tên phù hợp với trường cần lấy từ response
       window.open(orderUrl, '_blank'); // '_blank' để mở ở một tab mới
   } catch (error) {
@@ -91,6 +88,7 @@ const OrderPage = () => {
       } catch (error) {
         console.error("Lỗi khi lấy thông tin phí vận chuyển:", error);
       }
+      console.log(selectedContact)
   }, [selectedContact]);
 
   return (

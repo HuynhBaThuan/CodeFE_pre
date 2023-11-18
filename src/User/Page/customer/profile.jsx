@@ -184,6 +184,7 @@ const Profile = () => {
             }
         } 
     };
+
     
     return (
         <div>
@@ -284,7 +285,10 @@ const Profile = () => {
                         <form>
                             <div class="title-user">{t("changeInfo")}</div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("firstName")}</div>
+                                <div class="col-3 txt-bold">
+                                    {t("firstName")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
@@ -294,12 +298,13 @@ const Profile = () => {
                                             class="form-control"
                                             value={formDataInfo.firstName}
                                             onChange={handleChange1}
+                                            required
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("lastName")}</div>
+                                <div class="col-3 txt-bold">{t("lastName")}<span class="txt-red font-weight-bold">*</span></div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
@@ -309,6 +314,7 @@ const Profile = () => {
                                             value={formDataInfo.lastName}
                                             onChange={handleChange1}
                                             class="form-control"
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -322,7 +328,10 @@ const Profile = () => {
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("address1")}</div>
+                                <div class="col-3 txt-bold">
+                                    {t("address1")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
                                 <div class="col-8">
                                     <div class="input-group">
                                         <textarea
@@ -333,12 +342,16 @@ const Profile = () => {
                                             value={formDataInfo.address}
                                             onChange={handleChange1}
                                             style={{ wordWrap: "break-word", resize: "vertical" }}
+                                            required
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-group align-items-center">
-                                <div class="col-3 txt-bold">{t("phoneNumber")}</div>
+                                <div class="col-3 txt-bold">
+                                    {t("phoneNumber")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
                                 <div class="col-4">
                                     <div class="input-group">
                                         <input
@@ -349,6 +362,7 @@ const Profile = () => {
                                             onChange={handleChange1}
                                             class="form-control"
                                             maxLength={10}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -368,7 +382,10 @@ const Profile = () => {
                         <div class="title-user">{t("resetTitle")}</div>
                                     <div className="form-group verify-pass">
                                         <div className="row align-items-center mar-bottom5">
-                                            <div className="col-3 txt-bold">{t("oldPass")}</div>
+                                            <div className="col-3 txt-bold">
+                                                {t("oldPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
                                             <div className="col-4">
                                                 <div className="input-group validate-pass">
                                                     <input
@@ -378,12 +395,16 @@ const Profile = () => {
                                                         className="form-control"
                                                         value={formData.oldPass}
                                                         onChange={handleChange}
+                                                        required
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row align-items-center mar-bottom5">
-                                            <div className="col-3 txt-bold">{t("newPass")}</div>
+                                            <div className="col-3 txt-bold">
+                                                {t("newPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
                                             <div className="col-4">
                                                 <div className="input-group validate-pass">
                                                     <input
@@ -392,13 +413,17 @@ const Profile = () => {
                                                         type="password"
                                                         className="form-control"
                                                         value={formData.newPass}
-                                                        onChange={handleChange}
+                                                        onChange={handleChange}    
+                                                        required                                                   
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row align-items-center">
-                                            <div className="col-3 txt-bold">{t("confirmPass")}</div>
+                                            <div className="col-3 txt-bold">
+                                                {t("confirmPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
                                             <div className="col-4">
                                                 <div className="input-group validate-pass">
                                                     <input
@@ -408,6 +433,7 @@ const Profile = () => {
                                                         className="form-control"
                                                         value={formData.confirmedPass}
                                                         onChange={handleChange}
+                                                        required
                                                     />
                                                 </div>
                                             </div>

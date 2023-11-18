@@ -15,7 +15,7 @@ import OrderHistory from './Page/customer/orderHistory'
 import Home from './Page/customer/home'
 import OrderPage from './Page/customer/orderPage'
 import StoreDetail from './Page/customer/storeDetail'
-// import LoadingModal from './Components/Loading/Loading'
+import ViewComment from './Page/customer/viewComment'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider} from './services/authContext'
@@ -70,6 +70,7 @@ const App = () => {
                 <Route path="/verify" element={<Verify />} />
                 <Route path="/resetPass" element={<ResetPass />} />
                 <Route path="/home/storeDetail" element={<StoreDetail />}/>
+                <Route path="/home/storeComment" element={<ViewComment />}/>
 
                 <Route path="/user/profile" element={<ProtectedRoute element={<Profile />} />}/>
                 <Route path="/user/orderHistory" element={<ProtectedRoute element={<OrderHistory />} />} />

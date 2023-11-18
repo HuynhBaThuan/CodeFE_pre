@@ -3,9 +3,11 @@ import React, { useRef, useEffect, useState } from 'react';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Modal from 'react-bootstrap/Modal';
-import ava from '../../assets/img/images.jpg'
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { getAllOder, viewOrder } from '../../services/userServices';
+import RatingShipper from '../../Components/Modal/ratingShipper';
+import RatingStore from '../../Components/Modal/ratingStore';
 const OrderHistory = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -20,6 +22,15 @@ const OrderHistory = () => {
         flatpickr(toDateRef.current, {
             dateFormat: 'Y-m-d', // Định dạng ngày tháng
         });
+        const getOrder = async () => {
+            try {
+                const response1 = await getAllOder()
+                const response2 = await viewOrder("65546ead65254f0008541b84")
+            } catch (error) {
+                
+            }
+        }
+        getOrder()
     }, []);
 
     const [showModal, setShowModal] = useState(false);
@@ -35,6 +46,7 @@ const OrderHistory = () => {
 
     const handleShowModal1 = () => {
         setShowModal1(true);
+        console.log("Mở modal")
     };
     const handleCloseModal1 = () => {
         setShowModal1(false);
@@ -52,36 +64,7 @@ const OrderHistory = () => {
         setShowModal2(false); // Tắt modal 2
         setShowModal1(true); // Tắt modal 1
     };
-    const [rating, setRating] = useState(0);
-    const [reviewText, setReviewText] = useState('');
-    const [selectedImage, setSelectedImage] = useState(null);
-
-    const handleClose = () => {
-        setShowModal(false);
-        // Reset the selected image when closing the modal
-        setSelectedImage(null);
-    };
-    const handleShow = () => setShowModal(true);
-
-    const handleImageChange = (e) => {
-        // Get the selected image
-        const image = e.target.files[0];
-        setSelectedImage(image);
-    };
-
-    const handleSubmit = () => {
-        // Handle the review submission here, including the selected image
-        console.log('Rating:', rating);
-        console.log('Review Text:', reviewText);
-        console.log('Selected Image:', selectedImage);
-
-        // Reset form fields
-        setRating(0);
-        setReviewText('');
-        setSelectedImage(null);
-
-        handleClose(); // Close the modal after submission
-    };
+    
 
     const handleBack = () => {
         navigate("/user/profile")
@@ -91,39 +74,6 @@ const OrderHistory = () => {
         <div>
             <div class="block-section">
                 <div class="container">
-                    {/* <div class="now-incoming incoming-full">
-                        <div class="slick-slider slick-initialized">
-                            <div class="slick-list">
-                                <div
-                                    class="slick-track"
-                                    style={{ opacity: '1', transform: 'translate3d(0px, 0px, 0px)' }}
-                                ></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="modal fade"
-                        id="now-modal-order-re-pay"
-                        tabindex="-1"
-                        role="dialog"
-                        aria-hidden="true"
-                    >
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <span class="close" data-dismiss="modal">x</span>
-                                <div class="modal-body txt-center pt-5">
-                                    <p class="font24 txt-green txt-bold pb-3">
-                                        Đơn hàng của bạn đang được chờ xử lý
-                                    </p>
-                                </div>
-                                <div class="modal-footer content-center pb-5">
-                                    <div class="btn text-uppercase btn-cyan-dark btn-lg">
-                                        Lịch sử đơn hàng của bạn
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                     <h1 class="block-title mb-4 text-center">{t("orderHis")}</h1>
                     <div class="history-switch">
                         <div class="item now active">FALTH</div>
@@ -182,53 +132,8 @@ const OrderHistory = () => {
                                 <div class="history-table-cell history-table-col8">
                                     {t("detail")}
                                 </div>
-                            </div>
-                            <div class="history-table-row">
-                                <div class="history-table-cell history-table-col1">1</div>
-                                <div class="history-table-cell history-table-col3">
-                                    <div>{t("orderTime")}: 10/09/2023 13:56</div>
-                                    <div>{t("receiveTime")}: 10/09/2023 14:10</div>
-                                </div>
-                                <div class="history-table-cell history-table-col4">
-                                    <a
-                                        href="/da-nang/coco-che"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    ><div class="text-body">
-                                            <strong class="d-block text-truncate"
-                                            >Coco Chè - Hồ Xuân Hương</strong><span class="d-block text-truncate"
-                                            >82 Hồ Xuân Hương, P. Khuê Mỹ, Quận Ngũ Hành Sơn, Đà
-                                                Nẵng</span>
-                                        </div></a>
-                                </div>
-                                <div class="history-table-cell history-table-col5">
-                                    <strong class="d-block text-truncate">Tôn Long Tiến</strong>
-                                    <a href='#'
-                                        class="font-weight-bold"
-                                        onClick={handleShowModal1}
-                                    >{t("rating")}</a>
-                                </div>
-                                <div class="history-table-cell history-table-col6">
-                                    <div style={{ fontWeight: 'bold' }}><span>171,550đ</span></div>
-                                    <div style={{ color: 'green', fontWeight: 'bold' }}>
-                                        Thanh toán trực tiếp
-                                    </div>
-                                </div>
-                                <div class="history-table-cell history-table-col7">
-                                    <div class="font-weight-bold history-table-status">
-                                        Complete
-                                    </div>
-                                    {/* <button
-                                        title="Click here to re order."
-                                        class="font-weight-bold history-table-status gray pointer"
-                                    >
-                                        Re-order
-                                    </button> */}
-                                </div>
                                 <div class="history-table-cell history-table-col8">
-                                    <a href="#" className="d-block mb-1" onClick={handleShowModal}>
-                                        {t("orderDetail")}
-                                    </a>
+                                    {t("action")}
                                 </div>
                             </div>
                             <div class="history-table-row">
@@ -251,36 +156,42 @@ const OrderHistory = () => {
                                 </div>
                                 <div class="history-table-cell history-table-col5">
                                     <strong class="d-block text-truncate">Tôn Long Tiến</strong>
-                                    <a href='#'
-                                        class="font-weight-bold"
-                                        onClick={handleShowModal1}
-                                    >{t("rating")}</a>
                                 </div>
                                 <div class="history-table-cell history-table-col6">
                                     <div style={{ fontWeight: 'bold' }}><span>171,550đ</span></div>
                                     <div style={{ color: 'green', fontWeight: 'bold' }}>
-                                        Thanh toán trực tiếp
+                                        Thanh toán trực tuyến
                                     </div>
                                 </div>
                                 <div class="history-table-cell history-table-col7">
-                                    <div class="font-weight-bold history-table-status">
+                                    <div class="font-weight-bold history-table-status"  style={{color:'#6cc942'}}>
                                         Complete
                                     </div>
-                                    {/* <button
-                                        title="Click here to re order."
-                                        class="font-weight-bold history-table-status gray pointer"
-                                    >
-                                        Re-order
-                                    </button> */}
                                 </div>
                                 <div class="history-table-cell history-table-col8">
-                                    <a href="#" className="d-block mb-1" onClick={handleShowModal}>
+                                    <button className="d-block mb-1" onClick={handleShowModal} style={{color:'#0288d1', fontWeight:'600'}}>
                                         {t("orderDetail")}
-                                    </a>
+                                    </button>
+                                </div>
+                                <div class="history-table-cell history-table-col8">
+                                    <button
+                                        class="font-weight-bold history-table-status gray pointer"
+                                        style={{backgroundColor:'#e81f1b', color:'white'}}
+                                    >
+                                        {t('cancel')}
+                                    </button>
+                                    <button
+                                        class="font-weight-bold history-table-status gray pointer"
+                                        style={{backgroundColor:'#0288d1', color:'white'}}
+                                        onClick={handleShowModal1}
+                                    >
+                                        {t('rating')}
+                                    </button>
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="filter-table-item" style={{float:"right"}}>
+                        <div class="filter-table-item" style={{float:"right", marginTop:'30px'}}>
                                 <button type="button" class="btn btn-sm" onClick={handleBack}>{t("back")}</button>
                             </div>
                     </div>
@@ -412,7 +323,9 @@ const OrderHistory = () => {
                     </div>
                 </Modal.Body>
             </Modal>
-            <Modal className="modal fade modal-customer-feeback" show={showModal1} onHide={handleCloseModal1} size="lg">
+            <RatingShipper show={showModal1} handleClose={handleCloseModal1} handleShowRatingStore={handleShowModal2}/>
+            <RatingStore show={showModal2} handleClose={handleCloseModal2}/>
+            {/* <Modal className="modal fade modal-customer-feeback" show={showModal1} onHide={handleCloseModal1} size="lg">
                 <Modal.Header>
                     <span class="close" style={{ fontSize: '24px' }} onClick={handleCloseModal1}
                     >x</span>
@@ -500,8 +413,8 @@ const OrderHistory = () => {
                     </div>
                     <div class="modal-backdrop fade under-modal"></div>
                 </Modal.Body>
-            </Modal>
-            <Modal className="modal fade modal-customer-feeback" show={showModal2} onHide={handleCloseModal2} size="lg">
+            </Modal> */}
+            {/* <Modal className="modal fade modal-customer-feeback" show={showModal2} onHide={handleCloseModal2} size="lg">
                 <Modal.Header>
                     <span class="close" style={{ fontSize: '24px' }} onClick={handleCloseModal2}
                     >x</span>
@@ -595,7 +508,7 @@ const OrderHistory = () => {
                     </div>
                     <div class="modal-backdrop fade under-modal"></div>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
         </div>
     )
 }
