@@ -90,6 +90,14 @@ const Sidebar = () => {
           </MenuItem>
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Cửa hàng
+            </Typography>
             <Item
               title="Dashboard"
               to="/"
@@ -103,42 +111,11 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Cửa hàng
-            </Typography>
-            <Item
-              title="Dashboard"
-
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Danh sách Sản phẩm"
-              to="/product"
-              icon={<MenuOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-
-            />
-
-            <Item
-              title="Category"
-              to="/category"
-              icon={<CategoryIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
               Sản phẩm
             </Typography>
             <Item
               title="Danh sách Sản phẩm"
-              to="/product"
+              to="store/product"
               icon={<MenuOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -147,11 +124,12 @@ const Sidebar = () => {
 
             <Item
               title="Category"
-              to="/category"
+              to="store/category"
               icon={<CategoryIcon />}
               selected={selected}
               setSelected={setSelected}
             />
+
 
             <Typography
               variant="h6"
@@ -162,7 +140,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Danh sách Đơn hàng"
-              to="/listorder"
+              to="store/listorder"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -176,7 +154,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Feecback"
-              to="/team"
+              to="store/team"
               icon={<CommentIcon />}
               selected={selected}
               setSelected={setSelected}

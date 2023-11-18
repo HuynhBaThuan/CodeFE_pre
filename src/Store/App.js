@@ -1,48 +1,39 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet
-} from "react-router-dom";
-import './App.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import Sidebara from "./components/Sidebar/Sidebar";
-import Dashboard from "./page/Dashboard/Dashboard";
+import React, { useState, useEffect } from 'react';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Sidebara from './components/Sidebar/Sidebar';
+import Dashboard from './page/Dashboard/Dashboard';
 import Topbar from './components/Topbar/Topbar';
 import Product from './page/Product/Product';
 import Listorder from './page/Listorder/Listorder';
-import { ColorModeContext, useMode } from "./theme";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import React, { useState, useRef, useEffect } from 'react';
+import { ColorModeContext, useMode } from './theme';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import Category from './page/Category/Category';
 import Login from './login';
 import Info from './page/Info/Info';
 import axios from 'axios';
-import Feedback from "./page/Feedback/Feedback";
-import Statistics from "./page/Statistics/Statistics";
-
-
+import Feedback from './page/Feedback/Feedback';
+import Statistics from './page/Statistics/Statistics';
 
 const App = () => {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient();
   const [theme, colorMode] = useMode();
   const [Catname, setCatname] = useState([]);
   const token = localStorage.getItem('autoken');
-  const [isSidebar, setIsSidebar] = useState(true);
-  const _id = localStorage.getItem('_id');
 
   const fetchCatname = async () => {
     try {
-      const response = await axios.get(`https://falth.vercel.app/api/category`
-        , {
+      const response = await axios.get(
+        'https://falth.vercel.app/api/category',
+        {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const responseData = response.data;
       console.log(responseData);
       setCatname(responseData);
-
     } catch (error) {
       console.log(error);
     }
@@ -52,71 +43,74 @@ const App = () => {
     fetchCatname();
   }, []);
 
-
-
   const Layout = () => {
     return (
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <div className="app" style={{ display: 'flex', height: '100%' }}>
-            <Sidebara isSidebar={isSidebar} Catname={Catname} />
-            <main className="content" style={{ width: '100%', borderLeft: '1px soild white' }}>
+            <Sidebara isSidebar={true} Catname={Catname} />
+            <main
+              className="content"
+              style={{ width: '100%', borderLeft: '1px solid white' }}
+            >
               <Topbar />
               <Outlet />
             </main>
-
           </div>
         </ThemeProvider>
-      </ColorModeContext.Provider >
-    )
-  }
+      </ColorModeContext.Provider>
+    );
+  };
+
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       children: [
         {
-          path: '/',
-          element: <Dashboard Catname={Catname} />
+          index: true,
+          element: <Feedback Catname={Catname} />,
         },
         {
-          path: '/login',
-          element: <Login />
+          path: 'store/login',
+          element: <Login />,
+        },
+        // {
+        //   path: 'store/Statistics',
+        //   element: <Statistics />,
+        // },
+        {
+          path: 'store/product',
+          element: <Product Catname={Catname} />,
         },
         {
-          path: '/Statistics',
-          element: <Statistics />
+          path: 'store/listorder',
+          element: <Listorder />,
         },
         {
-          path: '/product',
-          element: <Product Catname={Catname} />
+          path: 'store/info',
+          element: <Info />,
         },
         {
-          path: '/listorder',
-          element: <Listorder />
+          path: 'store/category',
+          element: <Category listCat={Catname} />,
         },
-        {
-          path: '/info',
-          element: <Info />
-        },
-        {
-          path: '/category',
-          element: <Category listCat={Catname} />
-        },
-        {
-          path: '/Feedback',
-          element: <Feedback />
-        },
-      ]
+        // {
+        //   path: 'store/Feedback',
+        //   element: <Feedback />,
+        // },
+      ],
     },
   ]);
+
   return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
-  )
-}
+    <RouterProvider router={router}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </RouterProvider>
+  );
+};
 
-export default App
-
+export default App;
