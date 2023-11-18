@@ -1,100 +1,93 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
-import { tokens } from "../../theme";
+import { Box } from "@mui/material";
 import Header from "../../components/Header/Header";
 import * as yup from "yup";
 import { Formik, Form } from "formik";
-import { Button, TextField, Select, MenuItem } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from 'axios';
 import NativeSelect from '@mui/material/NativeSelect';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Sdata from '../../components/Sdata';
-import { withEmotionCache } from '@emotion/react';
-import { Carousel } from 'react-responsive-carousel';
+import Loading from '../../components/Loading/Loading'
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-
-const ImageCarousel = ({ images }) => {
-    return (
-        <Carousel showStatus={false} showThumbs={false} infiniteLoop={true} showIndicators={false} width="200px">
-            {
-                images.map((image, index) => (
-                    <div key={index}>
-                        <img style={{
-                            cursor: "pointer",
-                            borderRadius: "50%",
-                            width: "100px",
-                            height: "100px"
-                        }} src={image} alt={`Image ${index}`} />
-                    </div>
-                ))
-            }
-            < div >
-                <img style={{
-                    cursor: "pointer",
-                    borderRadius: "50%",
-                    width: "100px",
-                    height: "100px"
-                }}
-                    src="./avata.jpg" alt={`Image`} />
-            </div >
-        </Carousel >
-    );
-};
+import Image from "../../components/Image/Image";
+import Ims from "../../components/Image/showimage";
 
 
 
-function Update({ data, selectedRow,setOpenEdit, fetchData, setError, setMessage, setOpenNotify }) {
 
-    const [imgLink, setimgLink] = useState(selectedRow.images[0]);
-    const [img, setimg] = useState(null);
+function Update({ data, selectedRow, setOpenEdit, fetchData, setError, setMessage, setOpenNotify }) {
+
+    const [images, setImages] = useState([]);
     const [name, setname] = useState(selectedRow.name);
     const [price, setprice] = useState(selectedRow.price);
     const [des, setdes] = useState(selectedRow.description);
+    const [category, setCategory] = useState(selectedRow.category.catName);
+    const [deletedImageUrls, setDeletedImageUrls] = useState([]);
+    useEffect(() => {
+        setImages([])
+        selectedRow.images.map((image, i) =>
+
+            setImages((prevImages) => [
+                ...prevImages,
+                {
+                    url: image,
+                },
+            ])
+        )
+    }, []);
+
     const [isLoading, setIsLoading] = useState(true);
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const [category, setCategory] = useState(selectedRow.category.catName);
+
     const [selectActive, setSelectActive] = useState(false);
     const api = `https://falth.vercel.app/api/product/store/${_id}?limit=100`;
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    const phoneRegExp =
-        /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+    const priceRegExp = /^\d+$/;
+
 
     const checkoutSchema = yup.object().shape({
         name: yup.string().required("Tên là bắt buộc"),
-        price: yup.string().required("Giá tiền là bắt buộc").matches(phoneRegExp, "Giá tiền không hợp lệ"),
+        price: yup.string().required("Giá tiền là bắt buộc").matches(priceRegExp, "Giá tiền không hợp lệ"),
         description: yup.string().required("Mô tả là bắt buộc"),
     });
+    let formData = new FormData();
     const Updateproduct = (values) => {
         const tenSanPham = name;
         const giaTien = price;
         const moTa = des;
         const danhMuc = category;
-        const images = img
+        console.log(tenSanPham, giaTien, moTa)
 
         checkoutSchema.validate({
             name: tenSanPham,
             price: giaTien,
             description: moTa,
-            name: danhMuc,
         })
             .then(valid => {
-                let formData = new FormData();
+
                 formData.append('catName', danhMuc);
                 formData.append('name', tenSanPham);
-                formData.append('images', img);
                 formData.append('price', giaTien);
                 formData.append('description', moTa);
-
-                Update(formData);
+                if (images.length === 0) {
+                    setError(false);
+                    setMessage("Bạn cần chọn ít nhất một hình ảnh.");
+                    setOpenNotify(true);
+                } else {
+                    images.forEach((image, i) => { if (image.file) { formData.append('images', image.file) } }
+                    );
+                    deletedImageUrls.forEach(
+                        (imageUrl, i) => { formData.append('dels', imageUrl.url) }
+                    )
+                    Update(formData);
+                }
             })
             .catch(errors => {
                 console.log(errors);
                 setError(false);
-                setMessage(errors);
+                setMessage(errors.errors[0]);
                 setOpenNotify(true);
             });
     };
@@ -106,9 +99,9 @@ function Update({ data, selectedRow,setOpenEdit, fetchData, setError, setMessage
                 }
             });
             setError(true);
-            setMessage("Thêm thành công");
+            setMessage("Cập nhật thành công");
             setOpenEdit(false);
-
+            fetchData();
             setOpenNotify(true);
 
         } catch (error) {
@@ -125,30 +118,20 @@ function Update({ data, selectedRow,setOpenEdit, fetchData, setError, setMessage
     };
 
     const formRef = useRef();
-    const onSub = (values) => {
-
-
-    }
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (formRef.current && !formRef.current.contains(e.target) && !selectActive) {
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-        setimgLink(selectedRow.images);
-    }, [selectActive]);
     return (
-        <div>
+        <div >
             <div>
                 <Box>
-                    <div>
-                        <Header title={`Chi tiết sản phẩm: ${selectedRow.name}`} subtitle={`ID: ${selectedRow.id}`} />
-                        <Formik
+                    <div ><div>
+                    </div>
+                        <Box display="flex" justifyContent="end" mt="20px" gap="55px">
+                            <h3>Cập nhật sản phẩm</h3>
+                            <Button onClick={() => setOpenEdit(false)} pb="10px">
+                                <i style={{ fontSize: "20px" }} class="fa-solid fa-xmark"></i>
+                            </Button>
+                        </Box>
+
+                        < Formik
                             initialValues={initialValues}
                             validationSchema={checkoutSchema}
                         >
@@ -168,27 +151,12 @@ function Update({ data, selectedRow,setOpenEdit, fetchData, setError, setMessage
                                             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                                         }}
                                     >
-                                        <Box display="flex" justifyContent="center" alignItems="center" sx={{ gridColumn: "span 4" }}>
+                                        <Box display="flex" justifyContent="center" alignItems="center" sx={{ gridColumn: "span 4" }} >
                                             <Box>
-                                                <img
-                                                    src={imgLink}
-                                                    style={{
-                                                        cursor: "pointer",
-                                                        borderRadius: "50%",
-                                                        width: "100px",
-                                                        height: "100px"
-                                                    }}
-                                                    onClick={() => document.querySelector('.input-field').click()}
-                                                />
-                                                <input type="file" accept='image/*' hidden className='input-field'
-                                                    onChange={({ target: { files } }) => {
-                                                        if (files) {
-                                                            setimg((files[0]))
-                                                            setimgLink(URL.createObjectURL(files[0]))
-                                                        }
-                                                    }} />
+
+                                                <Image images={images} setImages={setImages} setDeletedImageUrls={setDeletedImageUrls} />
+
                                             </Box>
-                                            {/* <ImageCarousel images={selectedRow.images} /> */}
 
                                         </Box>
                                         <TextField
@@ -241,7 +209,7 @@ function Update({ data, selectedRow,setOpenEdit, fetchData, setError, setMessage
 
                                     </Box>
                                     <Box display="flex" justifyContent="end" mt="20px">
-                                        <Button type='submit' onClick={(values) => Updateproduct(values)} color="secondary" variant="contained">
+                                        <Button type='submit' onClick={() => Updateproduct(values)} color="secondary" variant="contained">
                                             Cập nhật
                                         </Button>
                                     </Box>
@@ -250,8 +218,8 @@ function Update({ data, selectedRow,setOpenEdit, fetchData, setError, setMessage
                         </Formik>
                     </div>
                 </Box>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

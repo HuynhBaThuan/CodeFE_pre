@@ -7,6 +7,23 @@
 
 }
 
+.addButton {
+    display: block;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-right: 20px;
+}
+
+
+
+.buttonadd {
+    font-size: 20px;
+    height: 25px;
+    width: 100%;
+    background: #0056b3;
+}
+
 .center {
     display: flex;
     gap: 150px;
@@ -231,4 +248,9 @@
 .Store {
     text-align: center;
     width: 90%;
+}
+
+.modal {
+    display: flex;
+    margin: auto;
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Detailstore from "../../Page/ManageStore/Detailstore";
 
 function Comment({ avatarSrc, author, upvotes, text, upvoted }) {
     return (
@@ -6,7 +7,15 @@ function Comment({ avatarSrc, author, upvotes, text, upvoted }) {
             <div className="d-flex flex-row align-items-center">
                 <img src={avatarSrc} alt="avatar" width="50" height="50" />
                 <div>
-                    <p className="" style={{ fontSize: "20", fontWeight: "600", padding: "10px", textAlign: "top" }}>{author}</p>
+                    <p className="" style={{ fontSize: "20", fontWeight: "600", padding: "0px 10px", margin: 0 }}>{author}</p>
+                    <p style={{ fontSize: "20", fontWeight: "600", padding: "0px 0px" }}>
+                        <i className="fa-solid fa-star" style={{ color: 'gold' }}></i>
+                        <i className="fa-solid fa-star" style={{ color: 'gold' }}></i>
+                        <i className="fa-solid fa-star" style={{ color: 'gold' }}></i>
+                        <i className="fa-solid fa-star" style={{ color: 'gold' }}></i>
+                        <i className="fa-solid fa-star" style={{ color: 'gold' }}></i>
+                    </p>
+
                 </div>
             </div>
             <div className="d-flex flex-row align-items-center">
@@ -22,7 +31,7 @@ function Comment({ avatarSrc, author, upvotes, text, upvoted }) {
     );
 }
 
-export default function CommentList() {
+export default function CommentList(rows) {
     const [comments, setComments] = useState([
         {
             id: 1,
@@ -59,7 +68,7 @@ export default function CommentList() {
     ]);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 4; // Số bình luận trên mỗi trang
+    const pageSize = 4;
     const totalPages = Math.ceil(comments.length / pageSize);
 
     const handlePageChange = (page) => {
@@ -73,7 +82,10 @@ export default function CommentList() {
 
     return (
         <div style={{ display: "flex" }}>
-            <div style={{ width: "65%", margin: "10px 10px 0 20px", borderRadius: "10px" }}>
+            <div style={{ width: "65%", margin: "10px 10px 10px 20px", borderRadius: "10px", background: "white" }}>
+                <div    >
+                    <span style={{ fontSize: "20px", borderBottom: "1px solid #51cc8a" }}>Đánh giá từ khách hàng</span>
+                </div>
                 {comments
                     .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                     .map((comment) => (
@@ -104,7 +116,8 @@ export default function CommentList() {
                     </li>
                 </ul>
             </div>
-            <div style={{ width: "35%", border: "1px soild #51cc8a", background: "black", borderRadius: "10px", margin: "10px 10px 0" }}>
+            <div style={{ width: "35%", border: "1px soild #51cc8a", borderRadius: "10px", margin: "10px 10px 0", boxShadow: "1 1 1 1" }}>
+                <Detailstore rows={rows} />
             </div>
         </div>
     );

@@ -5,11 +5,12 @@ import { tokens } from "../../theme";
 import Header from "../../components/Header/Header";
 import { Button } from "@mui/material";
 import axios from 'axios';
-import Add from './Add';
+import Add from './Ad';
 import Update from './Update';
 import Delete from './Delete';
 import Notify from '../../../Components/Notify/Notify';
 import style from './Product.module.css'
+
 
 
 const Product = ({ Catname }) => {
@@ -25,6 +26,7 @@ const Product = ({ Catname }) => {
     const [openNotify, setOpenNotify] = useState(null)
     const [error, setError] = useState(false)
     const [message, setMessage] = useState("")
+    const [show, setShow] = useState(true);
 
     const formRef = useRef();
 
@@ -46,7 +48,7 @@ const Product = ({ Catname }) => {
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/product/owner/${_id}`;
+    const api = `https://falth.vercel.app/api/product/owner/${_id}?limit=100`;
     const fetchData = async () => {
         try {
             const response = await axios.get(api, {
@@ -57,12 +59,9 @@ const Product = ({ Catname }) => {
             const responseData = response.data.data;
             console.log(responseData);
             setData(responseData);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
-        }
-        finally {
-            setIsLoading(false);
-            setOpenNotify(false)
         }
     };
     const Searchproduct = async (name) => {
@@ -111,17 +110,21 @@ const Product = ({ Catname }) => {
             field: "name",
             headerName: "Tên",
             type: "number",
-            headerAlign: "left",
-            align: "left",
+            headerAlign: "center",
+            align: "center",
             flex: 1,
         },
         {
             field: "price",
             headerName: "Giá tiền",
+            headerAlign: "center",
+            align: "center",
         },
         {
             field: "Detsil",
             headerName: "Xem Chi Tiết",
+            headerAlign: "center",
+            align: "center",
             flex: 1,
             renderCell: (params) => {
                 return (
@@ -145,6 +148,8 @@ const Product = ({ Catname }) => {
         {
             headerName: "Xóa",
             flex: 1,
+            headerAlign: "center",
+            align: "center",
             renderCell: (params) => {
                 return (
                     <Box
@@ -174,13 +179,6 @@ const Product = ({ Catname }) => {
 
     return (
         <Box m="20px" position='relative'>
-            <Header title="Sản phẩm" subtitle={
-                <Box display="flex" justifyContent="start" mt="20px" >
-                    <Button color="secondary" variant="contained" onClick={() => { setOpenAdd(true) }}>
-                        Thêm sản phẩm
-                    </Button>
-                </Box>
-            } />
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -208,27 +206,25 @@ const Product = ({ Catname }) => {
                 }}
             >
                 {openEdit && (
-                    <div ref={formRef} className="form-container" style={{ position: "absolute", zIndex: 1, top: 0, right: 0, background: colors.primary[400] }}>
+
+                    <div ref={formRef} className="form-container"
+                        style={{ position: "absolute", zIndex: 1000, width: "40%", top: '-5%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
                         <Box m="20px" >
-                            <Update data={Catname} selectedRow={selectedRow} setOpenEdit={setOpenEdit} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenNotify={setOpenNotify} />
+                            <Update show={true} showClode={setOpenEdit} data={Catname} selectedRow={selectedRow} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenEdit={setOpenEdit} setOpenNotify={setOpenNotify} />
                         </Box>
                     </div>
-
                 )
                 }
                 {
                     openAdd && (
-                        <div ref={formRef} className="form-container" style={{ position: "absolute", zIndex: 1, top: 0, right: 0, background: colors.primary[400] }}>
-                            <Box m="20px" >
-                                <Add data={Catname} setOpenAdd={setOpenAdd} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenNotify={setOpenNotify} />
-                            </Box>
-                        </div>)
+                        <Add data={Catname} show={true} handleClose={setOpenAdd} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenNotify={setOpenNotify} />
+                    )
                 }
 
                 {
                     openDelete && (
                         <div ref={formRef} className="form-container"
-                            style={{ position: "absolute", zIndex: 1, top: '30%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
+                            style={{ position: "absolute", zIndex: 1000, width: "40%", top: '5%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
                             <Box m="20px" >
                                 <Delete selectedRow={selectedRow} setOpenDelete={setOpenDelete} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenNotify={setOpenNotify} />
                             </Box>
@@ -238,15 +234,15 @@ const Product = ({ Catname }) => {
                 {
                     openNotify && (
                         <div ref={formRef} className="form-container"
-                            style={{ position: "absolute", zIndex: 1, top: '30%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
+                            style={{ position: "absolute", zIndex: 1000, width: "40%", top: '30%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
                             <Box m="20px" >
                                 <Notify error={error} message={message} setOpenNotify={setOpenNotify} />
                             </Box>
                         </div>
                     )
                 }
-                <div className={style.dsdh} >
-                    <div className={style.dshd1} style={{ background: colors.primary[400], }} >
+                <div className={style.dsdh}>
+                    <div className={style.dshd1} style={{ background: colors.primary[400] }}>
                         <div className={style.titledsdh}>Danh sách sản phẩm</div>
                         <div className={style.searchBar}>
                             <input
@@ -256,10 +252,18 @@ const Product = ({ Catname }) => {
                                 onChange={(e) => Searchproduct(e.target.value)}
                             />
                         </div>
+                        <div className={style.addButton}>
+                            <Button
+                                color="secondary"
+                                variant="contained"
+                                onClick={() => { setOpenAdd(true) }}
+                            >
+                                <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                            </Button>
+                        </div>
                     </div>
-
                 </div>
-                <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading} fontsize="16px"
+                <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading}
                     initialState={{
                         pagination: {
                             pageSize: 10,

@@ -44,6 +44,7 @@ const Acceptstore = ({ Catname }) => {
             });
             const responseData = response.data.data.data;
             setData(responseData);
+
         } catch (error) {
             console.log(error);
         }
@@ -85,24 +86,31 @@ const Acceptstore = ({ Catname }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const columns = [
-        { field: "id", headerName: "ID" },
+        {
+            field: "id", headerName: "ID", headerAlign: "center",
+            align: "center",
+        },
         {
             flex: 1,
             field: "name",
             headerName: "Tên",
             type: "number",
-            headerAlign: "left",
-            align: "left",
+            headerAlign: "center",
+            align: "center",
         },
         {
             flex: 1,
             field: "address",
             headerName: "Địa chỉ",
+            headerAlign: "center",
+            align: "center",
         },
         {
             field: "Detsil",
             flex: 1,
             headerName: "Xem Chi Tiết",
+            headerAlign: "center",
+            align: "center",
             renderCell: (params) => {
                 return (
                     <Box
@@ -125,6 +133,8 @@ const Acceptstore = ({ Catname }) => {
         {
             headerName: "Khóa của hàng",
             flex: 1,
+            headerAlign: "center",
+            align: "center",
             renderCell: (params) => {
                 return (
                     <Box
@@ -157,39 +167,13 @@ const Acceptstore = ({ Catname }) => {
             <Box
                 m="40px 0 0 0"
                 height="75vh"
-                sx={{
-                    "& .MuiDataGrid-root": {
-                        border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                        borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                        color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.blueAccent[700],
-                        borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                        borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
-                    },
-                }}
             >
                 {openDetail && (
-                    <div className="form-container" >
-                        <div className={style.add} ref={formRef} style={{ zIndex: 1, top: 0, right: 0, background: colors.primary[400], width: '40%', maxHeight: '100%' }}>
-                            <Bill rows={selectedRow} />
-                        </div>
-                    </div>
+                    <Bill rows={selectedRow} show={true} handleClose={setOpenDetail} />
                 )}
                 <div className={style.dsdh} >
                     <div className={style.dshd1} style={{ background: colors.primary[400], }} >
-                        <div className={style.titledsdh}>Danh sách của hàng</div>
+                        <div className={style.titledsdh}>Danh sách cửa hàng</div>
                         <div className={style.searchBar}>
                             <input
                                 type="text"
@@ -208,8 +192,6 @@ const Acceptstore = ({ Catname }) => {
                             pageSize: 10,
                         },
                     }} />
-
-
             </Box >
         </Box >
     );

@@ -1,29 +1,32 @@
 import React, { useState, useRef, } from 'react';
-import { Box, } from "@mui/material";
-import Header from "../../components/Header/Header";
-
+import { Box, colors, } from "@mui/material";
+import Image from "../../components/Image/Image";
 import * as yup from "yup";
 import { Formik, Form } from "formik";
-import { Button, TextField, NativeSelect } from "@mui/material";
+import { TextField, NativeSelect } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from 'axios';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import CloseButton from 'react-bootstrap/CloseButton';
+import Col from 'react-bootstrap/Col';
 
 
-function Add({ data, setOpenAdd, fetchData, setError, setMessage, setOpenNotify }) {
-    const fileInputRef = useRef();
 
-    const [imgLink, setimgLink] = useState("https://res.cloudinary.com/drk3oaeza/image/upload/v1697438641/default_images_pbl6/bbyyaztptndruabkylii.png");
-    const [img, setimg] = useState(null);
+function Add({ data, fetchData, setError, setMessage, setOpenNotify, show, handleClose }) {
+    const [images, setImages] = useState([]);
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(data[0].catName);
     const api = `https://falth.vercel.app/api/product/store/${_id}?limit=100`;
     const isNonMobile = useMediaQuery("(min-width:600px)");
+    const [deletedImageUrls, setDeletedImageUrls] = useState([]);
     const initialValues = {
         name: "",
         price: "",
         description: "",
     };
+    let formData = new FormData();
 
     const phoneRegExp =
         /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
@@ -36,15 +39,15 @@ function Add({ data, setOpenAdd, fetchData, setError, setMessage, setOpenNotify 
 
     const Addproduct = async (formData) => {
         try {
-            await axios.post(`https://falth.vercel.app/api/product/store/${_id}`, formData, {
+            await axios.post(`https://falth.vercel.app/api/product/owner/${_id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
             setError(true);
             setMessage("Thêm thành công");
-            setOpenAdd(false);
-
+            handleClose(false);
+            fetchData();
             setOpenNotify(true);
 
         } catch (error) {
@@ -58,37 +61,47 @@ function Add({ data, setOpenAdd, fetchData, setError, setMessage, setOpenNotify 
         const giaTien = values.price;
         const moTa = values.description;
         const danhMuc = category;
-        const images = img
 
         checkoutSchema.validate({
             name: tenSanPham,
             price: giaTien,
             description: moTa,
-            name: danhMuc,
         })
             .then(valid => {
-                let formData = new FormData();
+
                 formData.append('catName', danhMuc);
                 formData.append('name', tenSanPham);
-                formData.append('images', img);
                 formData.append('price', giaTien);
                 formData.append('description', moTa);
-
-                Addproduct(formData);
+                console.log(images)
+                if (images.length === 0) {
+                    setError(false);
+                    setMessage("Bạn cần chọn ít nhất một hình ảnh.");
+                    setOpenNotify(true);
+                } else {
+                    images.forEach((image, i) =>
+                        formData.append('images', image.file)
+                    );
+                    Addproduct(formData);
+                }
             })
             .catch(errors => {
                 console.log(errors);
                 setError(false);
-                setMessage(errors);
+                setMessage(errors.errors[0]);
                 setOpenNotify(true);
             });
-
     }
 
+
     return (
-        <div>
-            <div>
-                <Header title="Thêm sản phẩm" subtitle="thêm sản phẩm mới" />
+        <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal.Header closeButton>
+                <Modal.Title >Thêm sản phẩm</Modal.Title>
+                <CloseButton />
+                <CloseButton />
+            </Modal.Header>
+            <Modal.Body>
                 <Formik
                     initialValues={initialValues}
                     validationSchema={checkoutSchema}
@@ -112,23 +125,7 @@ function Add({ data, setOpenAdd, fetchData, setError, setMessage, setOpenNotify 
                             >
                                 <Box display="flex" justifyContent="center" alignItems="center" sx={{ gridColumn: "span 4" }}>
                                     <Box >
-                                        <img
-                                            src={imgLink}
-                                            style={{
-                                                cursor: "pointer",
-                                                borderRadius: "50%",
-                                                width: "100px",
-                                                height: "100px"
-                                            }}
-                                            onClick={() => document.querySelector('.input-field').click()}
-                                        />
-                                        <input type="file" accept='image/*' hidden className='input-field'
-                                            onChange={({ target: { files } }) => {
-                                                if (files) {
-                                                    setimg((files[0]))
-                                                    setimgLink(URL.createObjectURL(files[0]))
-                                                }
-                                            }} />
+                                        <Image images={images} setImages={setImages} setDeletedImageUrls={setDeletedImageUrls} />
                                     </Box>
                                 </Box>
                                 <TextField
@@ -141,6 +138,18 @@ function Add({ data, setOpenAdd, fetchData, setError, setMessage, setOpenNotify 
                                     name="name"
                                     sx={{ gridColumn: "span 2" }}
                                 />
+                                <Form.Group as={Col} md="4" controlId="validationCustom01">
+                                    <Form.Label>Tên sản phẩm</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="First name"
+                                        defaultValue="Mark"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                    />
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
                                 <TextField
                                     fullWidth
                                     variant="filled"
@@ -184,8 +193,8 @@ function Add({ data, setOpenAdd, fetchData, setError, setMessage, setOpenNotify 
                         </Form>
                     )}
                 </Formik>
-            </div>
-        </div >
+            </Modal.Body>
+        </Modal >
     )
 }
 
