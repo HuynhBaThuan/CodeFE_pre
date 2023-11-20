@@ -168,14 +168,13 @@ const getAllOderByUserId = async () => {
 
 const viewOrder = async (id) => {
   const token = localStorage.getItem("token");
-  const decodedToken = JSON.parse(atob(token.split(".")[1]));
   try {
     const response = await axios.get(`https://falth-api.vercel.app/api/order/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log("Order placed successfully:");
+    console.log("Get successfully:");
     return response.data
   } catch (error) {
     console.error("Error get order:", error);

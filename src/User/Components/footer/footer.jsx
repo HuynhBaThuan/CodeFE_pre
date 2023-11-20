@@ -1,6 +1,6 @@
 import React from 'react'
-import '../../assets/fonts/fontawesome-free-6.2.0-web/css/all.min.css'
-// import './footer.css'
+
+
 
 
 const App = () => {
