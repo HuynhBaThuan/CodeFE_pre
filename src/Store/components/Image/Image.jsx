@@ -18,7 +18,7 @@ function Image({ images, setImages, setDeletedImageUrls }) {
 
     for (let i = 0; i < files.length; i++) {
       if (images.length >= maxImageCount) {
-        alert('Bạn đã chọn đủ 9 ảnh. Không thể thêm nữa.');
+        alert('Bạn đã chọn đủ 6 ảnh. Không thể thêm nữa.');
         break;
       }
 

@@ -1,23 +1,37 @@
-import React from 'react';
-import style from "./Notify.css";
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
+function YourComponent({ error, message, setOpenNotify }) {
+    const [showModal, setShowModal] = useState(true);
 
-function Notify({ error, message, setOpenNotify }) {
+    const handleShowModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenNotify(false);
+    };
 
     return (
-        <div className="modal-content">
-            <div class="modal-header"><div class="txt-bold font13">
-                <span class="txt-red">FALTH</span> Thông báo</div>
-            </div><div class="modal-body">
-                <p class="font15">
-                    <span>{message}</span>
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-red align-right" onClick={() => setOpenNotify(false)}>Ok</button>
-            </div>
+        <div>
+
+            <Modal show={true} onHide={handleCloseModal} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{error}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{message}</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Đóng
+                    </Button>
+                    <Button variant="primary" onClick={handleCloseModal}>
+                        Lưu thay đổi
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
-    )
+    );
 }
 
-export default Notify;
+export default YourComponent;

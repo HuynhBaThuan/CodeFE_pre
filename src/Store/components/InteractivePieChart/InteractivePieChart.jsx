@@ -1,4 +1,3 @@
-// ApexChart.js
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
@@ -39,7 +38,7 @@ class ApexChart extends React.Component {
       this.setState({
         series: data.map((item) => item.count),
         options: {
-          ...this.state.options, 
+          ...this.state.options,
           labels: data.map((item) => item._id),
         },
       });
@@ -48,7 +47,7 @@ class ApexChart extends React.Component {
 
   render() {
     return (
-      <ReactApexChart options={this.state.options} series={this.state.series} type="donut" />
+      <ReactApexChart options={this.state.options} series={this.state.series} type="pie" />
     );
   }
 }

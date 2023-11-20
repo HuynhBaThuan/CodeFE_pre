@@ -11,6 +11,7 @@ import Delete from './Delete';
 import Notify from '../../../Components/Notify/Notify';
 import style from './Product.module.css'
 import Header2 from "../../components/Header/Header";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -18,8 +19,7 @@ const Product = ({ Catname }) => {
 
 
     const [data, setData] = useState([]);
-    const [selectActive, setSelectActive] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [openEdit, setOpenEdit] = useState(false);
     const [openAdd, setOpenAdd] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
@@ -27,29 +27,20 @@ const Product = ({ Catname }) => {
     const [openNotify, setOpenNotify] = useState(null)
     const [error, setError] = useState(false)
     const [message, setMessage] = useState("")
-    const [show, setShow] = useState(true);
 
+
+    const history = useNavigate();
+    const redirectToProductPage = () => {
+        history('/store/store/Formadd');
+    };
+    const redirectToEditProductPage = (id) => {
+        history('/store/store/Formedit', { state: id });
+    };
     const formRef = useRef();
-
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (formRef.current && !formRef.current.contains(e.target) && !selectActive) {
-                setOpenEdit(false);
-                setOpenDelete(false);
-                setOpenAdd(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [selectActive]);
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/product/owner/${_id}?limit=100`;
+    const api = `https://falth-api.vercel.app/api/product/owner/${_id}?limit=100`;
     const fetchData = async () => {
         try {
             const response = await axios.get(api, {
@@ -63,12 +54,13 @@ const Product = ({ Catname }) => {
             setIsLoading(false);
         } catch (error) {
             console.log(error);
+            setIsLoading(false);
         }
     };
     const Searchproduct = async (name) => {
         console.log(name);
         try {
-            const response = await axios.get(`https://falth.vercel.app/api/product/search?search=${name}`
+            const response = await axios.get(`https://falth-api.vercel.app/api/product/${_id}/search?search=${name}`
                 , {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -120,10 +112,41 @@ const Product = ({ Catname }) => {
             headerName: "Giá tiền",
             headerAlign: "center",
             align: "center",
+            flex: 1,
+        },
+        {
+            field: "isOutofOrder",
+            headerName: "Tên",
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            renderCell: (params) => {
+                let color;
+                switch (params.row.isOutofOrder) {
+                    case true:
+                        color = "#4caf4fb9";
+                        break;
+                    case false:
+                        color = "#FF5722";
+                        break;
+                    default:
+                        color = "#4caf4fb9";
+                }
+
+                return (
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                    >
+                        <div style={{ height: "10px", width: "10px", background: color, borderRadius: "30px", }}>
+                        </div >
+                    </Box>
+                );
+            },
         },
         {
             field: "Detsil",
-            headerName: "Xem Chi Tiết",
+            headerName: "Chỉnh sửa",
             headerAlign: "center",
             align: "center",
             flex: 1,
@@ -137,10 +160,10 @@ const Product = ({ Catname }) => {
                         justifyContent="center"
                         backgroundColor={colors.greenAccent[600]}
                         borderRadius="4px"
-                        onClick={() => handleDetailClick(params.row)}
+                        onClick={() => redirectToEditProductPage(params.row._id)}
                     >
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                            Xem chi tiết
+                            Chỉnh sửa
                         </Typography>
                     </Box>
                 );
@@ -201,7 +224,7 @@ const Product = ({ Catname }) => {
                     <Button
                         color="secondary"
                         variant="contained"
-                        onClick={() => { setOpenAdd(true) }}
+                        onClick={() => { redirectToProductPage() }}
                     >
                         <i className="fa-solid fa-plus"></i> Thêm sản phẩm
                     </Button>
@@ -215,7 +238,7 @@ const Product = ({ Catname }) => {
                         borderBottom: "none",
                         fontSize: "14px"
                         ,
-                        fontWeight: "500",
+                        fontWeight: "bold",
                     },
                 }}
             >
@@ -248,11 +271,12 @@ const Product = ({ Catname }) => {
                 {
                     openNotify && (
                         <div ref={formRef} className="form-container"
-                            style={{ position: "absolute", zIndex: 1000, width: "40%", top: '30%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
+                            style={{ position: "absolute", zIndex: 1000, width: "40%", top: '5%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
                             <Box m="20px" >
                                 <Notify error={error} message={message} setOpenNotify={setOpenNotify} />
                             </Box>
                         </div>
+
                     )
                 }
 

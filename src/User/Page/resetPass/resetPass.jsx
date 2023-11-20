@@ -1,22 +1,22 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import '../../assets/fonts/fontawesome-free-6.2.0-web/css/all.min.css'
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 const ResetPass = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const [newPass, setNewPass] = useState(""); 
-    const [confirm, setConfirm] = useState(""); 
+    const [newPass, setNewPass] = useState("");
+    const [confirm, setConfirm] = useState("");
     const [error, setError] = useState("");
     const email = location.state.email;
     const token = location.state.token;
     const [loadingAPI, setLoadingAPI] = useState(false)
     const handleResetPass = async () => {
-        if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(newPass.trim())) {
+        if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(newPass.trim())) {
             setError(t("error5"))
-        }else if(newPass.trim() !== confirm.trim()) {
+        } else if (newPass.trim() !== confirm.trim()) {
             setError(t("error6"));
         } else {
             setLoadingAPI(true)
@@ -27,7 +27,7 @@ const ResetPass = () => {
                     passwordConfirm: confirm
                 };
                 console.log(resetPasswordData)
-                const response = await axios.post(`https://falth.vercel.app/api/auth/reset-password/${email}`, resetPasswordData)
+                const response = await axios.post(`https://falth-api.vercel.app/api/auth/reset-password/${email}`, resetPasswordData)
                 navigate("/signin")
             } catch (error) {
                 setError(t("error7"));

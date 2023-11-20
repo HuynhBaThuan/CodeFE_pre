@@ -14,13 +14,13 @@ const Product = () => {
     const [row, setRow] = useState([]);
     const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
     const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10));
-    const [isLoading, setisLoading] = useState(false)
+    const [isLoading, setisLoading] = useState(true)
     const handleFormSubmit = (values) => {
         console.log(values);
     };
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/order/owner/${_id}`;
+    const api = `https://falth-api.vercel.app/api/order/owner/${_id}`;
     const fetchData = async () => {
         try {
             const response = await axios.get(api, {
@@ -31,9 +31,11 @@ const Product = () => {
             const responseData = response.data.data;
             console.log(responseData);
             setData(responseData);
+            setisLoading(false);
 
         } catch (error) {
             console.log(error);
+            setisLoading(false);
         }
     };
     useEffect(() => {
@@ -206,7 +208,7 @@ const Product = () => {
                         },
                     }}
                 >
-                    <DataGrid rows={rowsWithUniqueIds} columns={columns} isLoading={isLoading}
+                    <DataGrid rows={rowsWithUniqueIds} columns={columns} isloading={isLoading}
                         initialState={{
                             pagination: {
                                 pageSize: 9,

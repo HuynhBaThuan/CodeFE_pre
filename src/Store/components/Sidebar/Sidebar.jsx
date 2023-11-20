@@ -154,7 +154,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Feecback"
-              to="/store/feedback"
+              to="store/feedback"
               icon={<CommentIcon />}
               selected={selected}
               setSelected={setSelected}

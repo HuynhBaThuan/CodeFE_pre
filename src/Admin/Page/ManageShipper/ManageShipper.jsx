@@ -54,7 +54,7 @@ function ManageShipper() {
 
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const api = `https://falth.vercel.app/api/admin/shipper/approve`;
+    const api = `https://falth-api.vercel.app/api/admin/shipper/approve`;
 
 
     const fetchData = async () => {
@@ -78,7 +78,7 @@ function ManageShipper() {
 
         if (confirmed) {
             try {
-                axios.patch(`https://falth.vercel.app/api/admin/shipper/${id}`, {
+                axios.patch(`https://falth-api.vercel.app/api/admin/shipper/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -199,28 +199,28 @@ function ManageShipper() {
             <Box
                 m="40px 0 0 0"
                 height="75vh"
-                // sx={{
-                //     "& .MuiDataGrid-root": {
-                //         border: "none",
-                //     },
-                //     "& .MuiDataGrid-cell": {
-                //         borderBottom: "none",
-                //     },
-                //     "& .name-column--cell": {
-                //         color: colors.greenAccent[300],
-                //     },
-                //     "& .MuiDataGrid-columnHeaders": {
-                //         backgroundColor: colors.blueAccent[700],
-                //         borderBottom: "none",
-                //     },
-                //     "& .MuiDataGrid-virtualScroller": {
-                //         backgroundColor: colors.primary[400],
-                //     },
-                //     "& .MuiDataGrid-footerContainer": {
-                //         borderTop: "none",
-                //         backgroundColor: colors.blueAccent[700],
-                //     },
-                // }}
+            // sx={{
+            //     "& .MuiDataGrid-root": {
+            //         border: "none",
+            //     },
+            //     "& .MuiDataGrid-cell": {
+            //         borderBottom: "none",
+            //     },
+            //     "& .name-column--cell": {
+            //         color: colors.greenAccent[300],
+            //     },
+            //     "& .MuiDataGrid-columnHeaders": {
+            //         backgroundColor: colors.blueAccent[700],
+            //         borderBottom: "none",
+            //     },
+            //     "& .MuiDataGrid-virtualScroller": {
+            //         backgroundColor: colors.primary[400],
+            //     },
+            //     "& .MuiDataGrid-footerContainer": {
+            //         borderTop: "none",
+            //         backgroundColor: colors.blueAccent[700],
+            //     },
+            // }}
             >
                 {openDetail && (
                     <DetailShipper rows={selectedRow} show={true} handleClose={setOpenDetail} />

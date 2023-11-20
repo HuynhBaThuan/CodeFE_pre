@@ -10,8 +10,12 @@ import Category from './page/Category/Category';
 import Login from './login';
 import Info from './page/Info/Info';
 import axios from 'axios';
-import Feedback from './page/Feedback/Feedback';
+import Formadd from './page/Product/Formadd';
+import Formedit from './page/Product/Formedit';
+import Detailorder from './page/Feedback/Detailorder';
+
 import Statistics from './page/Statistics/Statistics';
+
 import './Store.css'
 
 const Store = () => {
@@ -20,10 +24,12 @@ const Store = () => {
   const [Catname, setCatname] = useState([]);
   const token = localStorage.getItem('autoken');
 
+
+
   const fetchCatname = async () => {
     try {
       const response = await axios.get(
-        'https://falth.vercel.app/api/category',
+        'https://falth-api.vercel.app/api/category',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,16 +58,19 @@ const Store = () => {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Statistics Catname={Catname} />} />
-              <Route path="/store/feedback" element={<Feedback Catname={Catname} />} />
+              <Route path="/store/Formadd" element={<Formadd Catname={Catname} />} />
+              <Route path="/store/Formedit" element={<Formedit Catname={Catname} />} />
               <Route path="/store/product" element={<Product Catname={Catname} />} />
               <Route path='/store/listorder' element={<Listorder />} />
               <Route path='/store/info' element={<Info />} />
               <Route path='/store/category' element={<Category listCat={Catname} />} />
+              <Route path="/store/detailorder" element={<Detailorder Catname={Catname} />} />
             </Routes>
           </main>
         </div>
       </ThemeProvider>
     </ColorModeContext.Provider>
+
   );
 };
 

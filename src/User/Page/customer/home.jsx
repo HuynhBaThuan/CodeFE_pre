@@ -66,7 +66,7 @@ const Home = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedAreas, setSelectedAreas] = useState([]);
   useEffect(() => {
-    const api = `https://falth.vercel.app/api/category`
+    const api = `https://falth-api.vercel.app/api/category`
     fetch(api)
       .then((response) => response.json())
       .then((data) => {
@@ -107,7 +107,7 @@ const Home = () => {
     setIsLoading(true)
     const selectedCat = selectedCategories[0] || '';
     console.log(selectedLocation, key, selectedCat)
-    const api = `https://falth.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&search=${key}`
+    const api = `https://falth-api.vercel.app/api/store?address=${selectedLocation}&catName=${selectedCat}&limit=12&isLocked=false&page=1&search=${key}`
     console.log(api)
     fetch(api)
       .then((response) => response.json())
@@ -229,20 +229,20 @@ const Home = () => {
             </div>
             {isLoading && Array(4).fill(0).map((item, index) => (
               <div class="item-restaurant" >
-              <div class="img-restaurant">
-                <Skeleton />
-              </div>
-              <div class="info-restaurant">
-                <div class="info-basic-res" style={{ height: '50px', width: '285px' }}>
+                <div class="img-restaurant">
                   <Skeleton />
                 </div>
-                <p class="content-promotion" style={{ height: '30px', width: '285px' }}>
-                  <Skeleton />
-                </p>
+                <div class="info-restaurant">
+                  <div class="info-basic-res" style={{ height: '50px', width: '285px' }}>
+                    <Skeleton />
+                  </div>
+                  <p class="content-promotion" style={{ height: '30px', width: '285px' }}>
+                    <Skeleton />
+                  </p>
+                </div>
               </div>
-            </div>
             ))}
-            
+
             {stores.data.map((store) => (
 
               <StoreItem
