@@ -11,7 +11,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Topbar from './components/Topbar/Topbar';
-import ManageStore from './Page/ManageStore/manageStore';
+import ManageStore from './Page/ManageStore/ManageStore';
 import Acceptstore from './Page/Acceptstore/Acceptstore';
 import Comments from './components/Comment/Comment';
 import ManageShipper from './Page/ManageShipper/ManageShipper';

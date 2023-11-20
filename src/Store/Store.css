@@ -7,13 +7,8 @@ body,
 .content {
   height: 100%;
   width: 100%;
-<<<<<<< HEAD
   font-family: "Source Sans Pro", sans-serif;
   z-index: 1;
-=======
-  /* font-family: "Source Sans Pro", sans-serif; */
-  font-family:  Noto Sans, Arial, sans-serif;
->>>>>>> 0786647195aea2f87a7059ad1520bd85fdf4a5f4
 }
 
 .app {
