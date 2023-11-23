@@ -49,8 +49,8 @@
 .card .container .image i {
   position: absolute;
   color: rgb(134, 134, 134);
-  top: 10px;
-  right: 30px;
+  top: 17px;
+  right: 24px;
   font-size: 30px;
   cursor: pointer;
 }

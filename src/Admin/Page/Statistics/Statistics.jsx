@@ -3,20 +3,24 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import style from './Statistics.module.css';
 import LineChart from "../../components/LineChart";
+import LineChartUser from "../../components/LineChartUser";
 import ApexChart from "../../components/InteractivePieChart/InteractivePieChart"
 import Header2 from "../../components/Header/Header";
 import axios from 'axios';
 import Loading from '../../components/Loading/Loading'
 import { useNavigate } from 'react-router-dom';
 
-const Product = () => {
+const Statistics = () => {
     const history = useNavigate();
-    const redirectToProductPage = () => {
-        history('/store/product');
+    const redirectToManageStorePage = () => {
+        history('/admin');
     };
-    const redirectToOrderPage = () => {
-        history('/store/listorder');
-    }
+    const redirectToManageUserPage = () => {
+        history('/admin/ManageUser');
+    };
+    const redirectToManageShipperPage = () => {
+        history('/admin/ManageUser');
+    };
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [dataorder, setDataorder] = useState([]);
@@ -25,19 +29,20 @@ const Product = () => {
     const [dataLineChart, setDataLineChart] = useState([]);
     const token = localStorage.getItem('autoken');
     const [isLoading, setIsLoading] = useState(true);
-    const [Dataproduct, setDataproduct] = useState("");
+    const [status, SetStatus] = useState(true);
 
     const _id = localStorage.getItem('_id');
     const fetchDataorder = async (value) => {
+
         try {
-            const response = await axios.get(`https://falth-api.vercel.app/api/owner/${_id}/${value}?limit=0`, {
+            const response = await axios.get(`https://falth-api.vercel.app/api/admin/user/${value}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            const responseData = response.data.data[0];
-            console.log(response.data.data);
-            setDataorder(response.data.data[0]);
+            const responseData = response.data.data;
+            console.log(responseData);
+            setDataorder(responseData);
         } catch (error) {
             console.log(error);
         }
@@ -45,7 +50,7 @@ const Product = () => {
     const fetchDataLinechart = async (value) => {
 
         try {
-            const response = await axios.get(`https://falth-api.vercel.app/api/owner/${_id}/${value}?limit=7`, {
+            const response = await axios.get(`https://falth-api.vercel.app/api/admin/revenue/${value}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -57,55 +62,29 @@ const Product = () => {
         }
     };
 
-    const fetchDatabestseller = async () => {
+    const fetchDataselect = async (value) => {
         try {
-            const response = await axios.get(`https://falth-api.vercel.app/api/owner/${_id}/best-seller`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const responseData = response.data.data;
-            console.log(responseData);
-            setDatabestseller(responseData);
+            setIsLoading(true);
+            if (value === "quarterly") {
+                SetStatus(false);
+            } else {
+                SetStatus(true);
+            }
+
+            await fetchDataLinechart(value);
+            await fetchDataorder(value);
+            setIsLoading(false);
         } catch (error) {
             console.log(error);
+            setIsLoading(false);
         }
     };
-    const fetchDatachart = async () => {
-        try {
-            const response = await axios.get(`https://falth-api.vercel.app/api/owner/${_id}/chart`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const responseData = response.data.data;
-            console.log(responseData);
-            setDatachart(responseData);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const fetchAddproduct = async () => {
-        try {
-            const response = await axios.get(`https://falth-api.vercel.app/api/product/owner/${_id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const responseData = response.data.data.length;
-            console.log(responseData);
-            setDataproduct(responseData);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+
+
     const fetchData = async () => {
         try {
-            await fetchAddproduct();
-            await fetchDataorder("daily");
-            await fetchDatachart();
-            await fetchDatabestseller();
-            await fetchDataLinechart("daily");
+            await fetchDataLinechart("monthly");
+            await fetchDataorder("monthly");
             setIsLoading(false);
         } catch (error) {
             console.log(error);
@@ -120,7 +99,21 @@ const Product = () => {
     return (
 
         <Box m="20px">
-            <Header2 title={"Thống kê"} />
+            <Box display="flex" justifyContent="space-between" alignItems="end">
+                <Box><Header2 title={"Thống kê"} /></Box>
+                <Box>
+                    <div className={style.SelectTime}>
+                        <select name="" id="" onChange={(event) => fetchDataselect(event.target.value)}>
+                            <option value="monthly">Tháng</option>
+                            <option value="quarterly">Quý</option>
+
+                        </select>
+                    </div>
+                </Box>
+            </Box>
+
+
+
             {isLoading ? (
                 <div className={style.isloading}><Loading /></div>
 
@@ -132,7 +125,68 @@ const Product = () => {
                     gap="5px"
                 >
 
-                    <Box
+                    {/* <Box
+                        gridColumn="span 2"
+                        gridRow="span 4"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <div className={style.box}>
+                            <div className={style.box1}>
+                                <div className={style.container}>
+                                    <div className={style.top}>
+                                        <div className={style.icon}>
+                                            <i class="fa-solid fa-truck-fast"></i>
+                                        </div>
+
+                                    </div>
+                                    <div className={style.center}>
+                                        <span>Người giao hàng</span>
+                                    </div>
+                                    <div className={style.botton}>
+                                        <span>{dataorder.numShippers} người</span>
+                                    </div>
+                                </div>
+                                <div className={style.view} onClick={() => redirectToManageShipperPage()}>
+                                    <div className={style.tittle}>
+                                        <span>Xem chi tiết</span>
+                                    </div>
+                                    <div className={style.rightContent}>
+                                        <i class="fa-solid fa-right-long"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </Box> */}
+                     <Box
+                        gridColumn="span 12"
+                        gridRow="span 7"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <div className={style.box}>
+                            <div className={style.box1}>
+                                <div className={style.container}>
+                                    <div className={style.top}>
+                                        <div className={style.tranding}>
+                                            <span>Thông kê người dùng</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={style.LineChart}>
+                                    <LineChartUser data={dataorder} status={status} />
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </Box>
+                    {/* <Box
                         gridColumn="span 2"
                         display="flex"
                         gridRow="span 4"
@@ -144,26 +198,18 @@ const Product = () => {
                                 <div className={style.container}>
                                     <div className={style.top}>
                                         <div className={style.icon}>
-                                            <i class="fa-solid fa-cart-shopping"></i>
-                                        </div>
-                                        <div className={style.rightContent1}>
-                                            <select name="" id="" onChange={(event) => fetchDataorder(event.target.value)}>
-
-                                                <option value="daily">Daily</option>
-                                                <option value="weekly">Weekly</option>
-                                                <option value="monthly">Monthly</option>
-                                            </select>
+                                            <i class="fa-solid fa-user"></i>
                                         </div>
 
                                     </div>
                                     <div className={style.center}>
-                                        <span>Đơn hàng</span>
+                                        <span>Người dùng</span>
                                     </div>
                                     <div className={style.botton}>
-                                        <span>{dataorder.count} đơn</span>
+                                        <span>{dataorder.numUsers} người</span>
                                     </div>
                                 </div>
-                                <div className={style.view} onClick={() => redirectToOrderPage()}>
+                                <div className={style.view} onClick={() => redirectToManageUserPage()}>
                                     <div className={style.tittle}>
                                         <span>Xem chi tiết</span>
                                     </div>
@@ -187,19 +233,19 @@ const Product = () => {
                                 <div className={style.container}>
                                     <div className={style.top}>
                                         <div className={style.icon}>
-                                            <i class="fa-solid fa-cart-shopping"></i>
+                                            <i class="fa-solid fa-store"></i>
                                         </div>
 
                                     </div>
                                     <div className={style.center}>
-                                        <span>Số lượng sản phẩm</span>
+                                        <span>Cửa hàng</span>
                                     </div>
                                     <div className={style.botton}>
-                                        <span>{Dataproduct} sản phẩm</span>
+                                        <span>{dataorder.numOwners} cửa hàng </span>
                                     </div>
                                 </div>
-                                <div className={style.view} >
-                                    <div className={style.tittle} onClick={() => redirectToProductPage()}>
+                                <div className={style.view} onClick={() => redirectToManageStorePage()}>
+                                    <div className={style.tittle}>
                                         <span>Xem chi tiết</span>
                                     </div>
                                     <div className={style.rightContent}>
@@ -209,41 +255,6 @@ const Product = () => {
                             </div>
 
                         </div>
-                    </Box>
-                    <Box
-                        gridColumn="span 8"
-                        // backgroundColor={colors.primary[400]}
-                        gridRow="span 8"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        <div className={style.box}>
-                            <div className={style.box1}>
-                                <div className={style.container}>
-                                    <div className={style.top}>
-                                        <div className={style.tranding}>
-                                            <span>Thông kê doanh thu</span>
-                                        </div>
-                                        <div className={style.rightContent1}>
-                                            <select name="" id="" onChange={(event) => fetchDataLinechart(event.target.value)}>
-
-                                                <option value="daily">Daily</option>
-                                                <option value="weekly">Weekly</option>
-                                                <option value="monthly">Monthly</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={style.LineChart}>
-                                    <LineChart data={dataLineChart} />
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
                     </Box>
                     <Box
                         gridColumn="span 4"
@@ -268,14 +279,11 @@ const Product = () => {
                             </div>
                         </div>
 
-                    </Box>
-
-
-
-
+                    </Box>  */}
                     <Box
-                        gridColumn="span 8"
-                        gridRow="span 6 "
+                        gridColumn="span 12"
+                        // backgroundColor={colors.primary[400]}
+                        gridRow="span 7"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
@@ -285,38 +293,26 @@ const Product = () => {
                                 <div className={style.container}>
                                     <div className={style.top}>
                                         <div className={style.tranding}>
-                                            <span>Sản phẩm bán chạy nhất</span>
+                                            <span>Thông kê doanh thu</span>
                                         </div>
                                     </div>
-                                    <div>
-                                        {databestseller.slice(0, 3).map((value, index) => (
-                                            <div className={style.producttop} key={index}>
-                                                <div className={style.img}>
-                                                    <img src={value.images} alt="" />
-                                                </div>
-
-                                                <div className={style.name}>
-                                                    <span>{value.product}</span>
-                                                </div>
-                                                <div className={style.price}>
-                                                    <span>{value.price} đ</span>
-                                                </div>
-                                                <div className={style.sold}>
-                                                    <span>{value.count} sản phẩm</span>
-                                                </div>
-                                            </div>
-                                        ))}
-
-                                    </div>
                                 </div>
+                                <div className={style.LineChart}>
+                                    <LineChart data={dataLineChart} status={status} />
+                                </div>
+
+
                             </div>
 
                         </div>
+
                     </Box>
+
+
 
                 </Box>)}
         </Box>
     );
 };
 
-export default Product;
+export default Statistics;

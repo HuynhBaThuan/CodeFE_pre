@@ -15,10 +15,14 @@ import Loading from '../../components/Loading/Loading'
 import style from './Formedit.module.css';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Spinner from 'react-bootstrap/Spinner';
+import { toast } from 'react-toastify';
+
 
 
 const Product = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingbutton, setIsLoadingbutton] = useState(false);
     const [images, setImages] = useState([]);
     const [deletedImageUrls, setDeletedImageUrls] = useState([]);
     const [message, setMessage] = useState("");
@@ -35,6 +39,16 @@ const Product = () => {
     const redirectToEditProductPage = (id) => {
         history('/store/store/Formedit', { state: id });
     };
+    const notify = (er, message) => toast[er](message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
     const fetchCatname = async () => {
         try {
             const response = await axios.get(
@@ -81,9 +95,10 @@ const Product = () => {
     };
     const fetchData = async () => {
         try {
+            setIsLoadingbutton(false);
+            setIsLoading(true);
             await fetchCatname();
             await fetchDataProductbyid();
-
             setIsLoading(false);
         } catch (error) {
             console.log(error);
@@ -92,26 +107,30 @@ const Product = () => {
     };
     useEffect(() => {
         fetchData();
+        console.log(data.category)
     }, []);
 
     const Update = async (json) => {
         try {
+            setIsLoadingbutton(true);
             await axios.put(`https://falth-api.vercel.app/api/product/${dataFromPreviousPage}`, json, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
 
             });
-            redirectToEditProductPage(dataFromPreviousPage);
+            notify("success", "Cập nhật thành công");
+            fetchData();
         } catch (error) {
-            console.error(error);
+            notify("error", "Cập nhật thất bại");
+            setIsLoadingbutton(false);
         }
     };
-    const phoneRegExp =
-        /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+    const priceRegExp = /^\d+(\.\d{1,2})?$/;
+
     const schema = yup.object().shape({
         name: yup.string().required("Tên là bắt buộc"),
-        price: yup.string().required("Giá tiền là bắt buộc").matches(phoneRegExp, "Giá tiền không hợp lệ"),
+        price: yup.string().required("Giá tiền là bắt buộc").matches(priceRegExp, "Giá tiền không hợp lệ"),
         description: yup.string().required("Mô tả là bắt buộc"),
     });
 
@@ -143,7 +162,7 @@ const Product = () => {
 
     return (
         <Box m="20px 100px">
-            <Header1 title={"Cập nhật sản phẩm"} />
+            <Header1 title={"Cập nhật sản phẩm"} to="/store/product" />
             {isLoading ? (
                 <div className={style.isloading}><Loading /></div>
             ) : (
@@ -168,7 +187,8 @@ const Product = () => {
                                     name: data.name,
                                     price: data.price,
                                     description: data.description,
-                                    category: data.category
+                                    category: data.category["catName"],
+
 
                                 }}
                             >
@@ -182,7 +202,6 @@ const Product = () => {
                                                     required
                                                     type="text"
                                                     placeholder=""
-                                                    defaultValue=""
                                                     name="name"
                                                     value={values.name}
                                                     onChange={handleChange}
@@ -198,8 +217,7 @@ const Product = () => {
 
                                                     <Form.Control
                                                         type="text"
-                                                        placeholder=""
-                                                        aria-describedby="inputGroupPrepend"
+                                                        placeholder="Giá tiền"
                                                         required
                                                         name="price"
                                                         value={values.price}
@@ -224,6 +242,7 @@ const Product = () => {
                                                 <Form.Control
                                                     required
                                                     as="textarea"
+                                                    rows={3}
                                                     placeholder="Mô tả"
                                                     name="description"
                                                     value={values.description}
@@ -251,25 +270,41 @@ const Product = () => {
                                                         handleChange(e);
                                                         values.category = e.target.value;
                                                     }}
+                                                    defaultValue={values.category}
                                                 >
                                                     {Catname.map((option, index) => (
                                                         <option key={index} value={option.catName}>
                                                             {option.catName}
                                                         </option>
                                                     ))}
+
                                                 </Form.Select>
                                             </Form.Group>
                                         </Row>
+
                                         <Row className="mb-3" style={{ marginTop: "30px" }}>
-                                            <Form.Group
+                                            {isLoadingbutton ? (
+                                                <Form.Group
+                                                    as={Col}
+                                                    md="12"
+                                                    controlId="validationFormik103"
+                                                    className="position-relative"
+                                                    style={{ display: 'flex', justifyContent: 'center' }}
+                                                >
+                                                    <Spinner animation="border" />
+                                                </Form.Group>
+
+
+                                            ) : (<Form.Group
                                                 as={Col}
                                                 md="12"
                                                 controlId="validationFormik103"
                                                 className="position-relative"
                                                 justifyContent="bottom"
                                             >
-                                                <Button type="submit" >Submit form</Button>
+                                                <Button type="submit" >Lưu</Button>
                                             </Form.Group>
+                                            )}
                                         </Row>
                                     </Form>
                                 )}

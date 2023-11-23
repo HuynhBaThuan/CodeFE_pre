@@ -7,6 +7,7 @@ import Header2 from "../../components/Header/Header";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import style from './Listorder.module.css'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Product = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -15,8 +16,9 @@ const Product = () => {
     const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
     const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10));
     const [isLoading, setisLoading] = useState(true)
-    const handleFormSubmit = (values) => {
-        console.log(values);
+    const history = useNavigate();
+    const redirectToDetailorderPage = (id) => {
+        history('/store/detailorder', { state: id });
     };
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
@@ -38,31 +40,46 @@ const Product = () => {
             setisLoading(false);
         }
     };
+    function formatDate(inputDate) {
+        const dateObject = new Date(inputDate);
+
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+        const formattedDate = dateObject.toLocaleDateString('vi-VN', options).replace(/\//g, '-');
+
+        return formattedDate;
+    }
+
+    const Search = async () => {
+        try {
+            const e = formatDate(endDate);
+            const s = formatDate(startDate);
+            const response = await axios.get(`https://falth-api.vercel.app/api/order/owner/${_id}?start=${s}&end=${e}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const responseData = response.data.data;
+            console.log(responseData);
+            setData(responseData);
+        } catch (error) {
+            console.log(error);
+            setisLoading(false);
+        }
+    };
     useEffect(() => {
         fetchData();
     }, []);
+    const setEndDateSr = (e) => {
+        if (e < startDate) { setStartDate(e) }
+        console.log(e);
+        Search();
+    }
+    const setStartDateSr = (e) => {
+        if (e > endDate) { setEndDate(e) }
+        setStartDate(e);
+        Search();
+    }
 
-    const [open, setOpen] = useState(false);
-    const formRef = useRef();
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (formRef.current && !formRef.current.contains(e.target)) {
-                setOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-
-    const handleAccessLevelClick = (row) => {
-        console.log(row)
-        setRow(row)
-    };
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -100,7 +117,7 @@ const Product = () => {
                         display="flex"
                         justifyContent="center"
                         borderRadius="4px"
-                        onClick={() => handleAccessLevelClick(params.row)}
+                        onClick={() => redirectToDetailorderPage(params.row._id)}
                     >
                         <div>
                             <button style={{ height: "40px", width: "40px", background: "#51cc8a", borderRadius: "20px" }} ><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -128,7 +145,7 @@ const Product = () => {
                         color = "#F44336"; // Màu đỏ cho trạng thái Cancelled
                         break;
                     default:
-                        color = "#000000"; // Màu mặc định nếu không phải các trạng thái trên
+                        color = "#4caf4fb9"; // Màu mặc định nếu không phải các trạng thái trên
                 }
 
                 return (
@@ -160,7 +177,7 @@ const Product = () => {
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header2 title="Danh sách đơn hàng" />
 
-                <Box>
+                {/* <Box>
                     <div className={style.searchBar}>
                         <input
                             type="text"
@@ -170,28 +187,30 @@ const Product = () => {
                     </div>
 
 
-                </Box>
-                <Box>
-                    <div className={style.searchBar}>
-                        <span>Từ:</span>
-                        <input
-                            type="date"
-                            className={style.searchInput1}
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                        />
-                    </div>
-                </Box>
-                <Box>
-                    <div className={style.searchBar}>
-                        <span>Đến:</span>
-                        <input
-                            type="date"
-                            className={style.searchInput1}
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                        />
-                    </div>
+                </Box> */}
+                <Box display="flex" justifyContent="space-between" alignItems="center" gap={20}>
+                    <Box>
+                        <div className={style.searchBar}>
+                            <span>Từ:</span>
+                            <input
+                                type="date"
+                                className={style.searchInput1}
+                                value={startDate}
+                                onChange={(e) => setStartDateSr(e.target.value)}
+                            />
+                        </div>
+                    </Box>
+                    <Box>
+                        <div className={style.searchBar}>
+                            <span>Đến:</span>
+                            <input
+                                type="date"
+                                className={style.searchInput1}
+                                value={endDate}
+                                onChange={(e) => setEndDateSr(e.target.value)}
+                            />
+                        </div>
+                    </Box>
                 </Box>
             </Box>
             <Box display="flex">
@@ -208,10 +227,10 @@ const Product = () => {
                         },
                     }}
                 >
-                    <DataGrid rows={rowsWithUniqueIds} columns={columns} isloading={isLoading}
+                    <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading}
                         initialState={{
                             pagination: {
-                                pageSize: 9,
+                                pageSize: 8,
                             },
                         }} />
                 </Box>

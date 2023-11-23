@@ -14,8 +14,8 @@ const Header = ({ title, to }) => {
         <Box m="15px 0" display="flex" alignItems="center">
             <Box
                 fontSize="20px"
-                height="35px"
-                width="35px"
+                height="40px"
+                width="40px"
                 border="0.1px solid gray"
                 borderRadius="2px"
                 display="flex"
@@ -33,7 +33,7 @@ const Header = ({ title, to }) => {
                 alignItems="center"
                 justifyContent="center"
                 fontSize="24px"
-                fontWeight="400"
+                fontWeight="600"
             >
                 {title}
             </Typography>

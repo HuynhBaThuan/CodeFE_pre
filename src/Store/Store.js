@@ -13,6 +13,8 @@ import axios from 'axios';
 import Formadd from './page/Product/Formadd';
 import Formedit from './page/Product/Formedit';
 import Detailorder from './page/Feedback/Detailorder';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Statistics from './page/Statistics/Statistics';
 
@@ -26,26 +28,25 @@ const Store = () => {
 
 
 
-  const fetchCatname = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(
-        'https://falth-api.vercel.app/api/category',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const responseData = response.data;
-      console.log(responseData);
-      setCatname(responseData);
+      const response = await axios.post('https://falth-api.vercel.app/api/auth/login/', {
+        email: 'owner1@gmail.com',
+        password: 'leduchuy123',
+      });
+      const token = response.data.token;
+      const _id = response.data.data.user._id;
+      localStorage.setItem('autoken', token);
+      localStorage.setItem('_id', _id);
+      console.log(token);
+      console.log(response.data.data.user._id);
+      console.log('Đăng nhập thành công');
     } catch (error) {
-      console.log(error);
+      console.log('Lỗi đăng nhập:', error);
     }
   };
-
   useEffect(() => {
-    fetchCatname();
+    fetchData();
   }, []);
 
   return (
@@ -58,14 +59,15 @@ const Store = () => {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Statistics Catname={Catname} />} />
-              <Route path="/store/Formadd" element={<Formadd Catname={Catname} />} />
-              <Route path="/store/Formedit" element={<Formedit Catname={Catname} />} />
-              <Route path="/store/product" element={<Product Catname={Catname} />} />
-              <Route path='/store/listorder' element={<Listorder />} />
-              <Route path='/store/info' element={<Info />} />
-              <Route path='/store/category' element={<Category listCat={Catname} />} />
-              <Route path="/store/detailorder" element={<Detailorder Catname={Catname} />} />
+              <Route path="/Formadd" element={<Formadd Catname={Catname} />} />
+              <Route path="/Formedit" element={<Formedit Catname={Catname} />} />
+              <Route path="/product" element={<Product Catname={Catname} />} />
+              <Route path='/listorder' element={<Listorder />} />
+              <Route path='/info' element={<Info />} />
+              <Route path='/category' element={<Category listCat={Catname} />} />
+              <Route path="/detailorder" element={<Detailorder Catname={Catname} />} />
             </Routes>
+            <ToastContainer />
           </main>
         </div>
       </ThemeProvider>

@@ -6,6 +6,7 @@ import { useTheme, Box } from "@mui/material";
 import { tokens } from "../../theme";
 import Loading from '../../components/Loading/Loading'
 import Notify from '../../../Components/Notify/Notify';
+import Header2 from '../../components/Header/Header2'
 
 
 const UserProfile = () => {
@@ -39,7 +40,7 @@ const UserProfile = () => {
         openingHours: yup.string().required("Giờ mở cửa là bắt buộc"),
         closingHours: yup.string().required("Giờ đóng cửa là bắt buộc"),
     });
-    let formData = new FormData()
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -51,6 +52,7 @@ const UserProfile = () => {
             closingHours: closingHours,
         })
             .then(valid => {
+                let formData = new FormData()
                 console.log(img)
                 formData.append("image", img);
                 formData.append("name", name);
@@ -124,7 +126,7 @@ const UserProfile = () => {
 
 
 
-    const UpdateStore = async () => {
+    const UpdateStore = async (formData) => {
         try {
             const response = await axios.put(`https://falth-api.vercel.app/api/store/${_id}`, formData
                 , {
@@ -178,6 +180,7 @@ const UserProfile = () => {
 
     return (
         <Box m="0px 20px" position='relative'>
+            <Header2 title=" Thông tin cửa hàng" />
             <Box
                 m="0 0 0 0"
                 sx={{
@@ -207,16 +210,7 @@ const UserProfile = () => {
                     borderRadius: "4px",
                     boxShadow: " 0 0 3px 0 rgba(50,50,50,.3)"
                 }} >
-                    <div style={{
-                        fontSize: "18px",
-                        fontWeight: 700,
-                        padding: "15px 15px",
-                        borderBottom: "1px solid #ebebeb",
-                        position: "relative",
-                        verticalAlign: "middle",
-                    }}>
-                        Thông tin cửa hàng
-                    </div>
+
                     {isLoading ? (
                         <div style={{
                             display: "flex",
@@ -303,7 +297,7 @@ const UserProfile = () => {
                                                     placeholder="Giờ mở cửa"
                                                     type="time"
                                                     className="form-control"
-                                                    value="09:00"
+                                                    value={openingHours}
                                                     onChange={handleOpeningHoursChange}
                                                 />
                                             </div>

@@ -1,198 +1,232 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import Header1 from "../../components/Header/Header1";
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Image from "../../components/Image/Image";
-import * as yup from 'yup';
-import { Formik } from 'formik';
-import { getAllCategory } from '../../services/StoreApi';
+import { useLocation } from 'react-router-dom';
+import Loading from '../../components/Loading/Loading';
 import style from './Detailorder.module.css';
 
-const Product = () => {
-    const [images, setImages] = useState([]);
-    const [deletedImageUrls, setDeletedImageUrls] = useState([]);
-    const [message, setMessage] = useState("");
-    const [validated, setValidated] = useState(false);
-    const [categories, setCategories] = useState([]);
+
+const Detailorder = () => {
     const token = localStorage.getItem('autoken');
     const _id = localStorage.getItem('_id');
-    const [Catname, setCatname] = useState([]);
-    const fetchCatname = async () => {
+    const [Order, setOrder] = useState([]);
+    const [tatol, settatol] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation();
+    const dataFromPreviousPage = location.state;
+    console.log(dataFromPreviousPage)
+
+
+    const fetchOrder = async () => {
         try {
             const response = await axios.get(
-                'https://falth-api.vercel.app/api/category',
+                `https://falth-api.vercel.app/api/order/${dataFromPreviousPage}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            const responseData = response.data;
+            const responseData = response.data.data;
             console.log(responseData);
-            setCatname(responseData);
+            setOrder(responseData);
         } catch (error) {
-            console.log(error);
+        }
+    };
+    const fetchData = async () => {
+        try {
+            await fetchOrder();
+            setIsLoading(false);
+        } catch (error) {
         }
     };
     useEffect(() => {
-        fetchCatname();
+        fetchData();
     }, []);
-    const Addproduct = async (formData) => {
-        try {
-            await axios.post(`https://falth-api.vercel.app/api/product/owner/${_id}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+    function convertUTCtoLocalDateTime(utcDateString) {
+        const utcDate = new Date(utcDateString);
+        const localDate = new Date(utcDate.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+        const day = localDate.getDate();
+        const month = localDate.getMonth() + 1;
+        const year = localDate.getFullYear();
+        const hours = localDate.getHours();
+        const minutes = localDate.getMinutes();
+        const seconds = localDate.getSeconds();
+        const formattedDateTime = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day} ${hours}:${minutes}:${seconds}`;
 
-        } catch (error) {
-        }
-    };
-    const phoneRegExp =
-        /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-    const schema = yup.object().shape({
-        name: yup.string().required("Tên là bắt buộc"),
-        price: yup.string().required("Giá tiền là bắt buộc").matches(phoneRegExp, "Giá tiền không hợp lệ"),
-        description: yup.string().required("Mô tả là bắt buộc"),
-    });
+        return formattedDateTime;
+    }
 
-    const handleSubmit = (values) => {
-        console.log('Dữ liệu đã submit:', values);
-        const tenSanPham = values.name;
-        const giaTien = values.price;
-        const moTa = values.description;
-        const danhMuc = values.catName;
-
-        formData.append('catName', danhMuc);
-        formData.append('name', tenSanPham);
-        formData.append('price', giaTien);
-        formData.append('description', moTa);
-        console.log(images)
-        if (images.length === 0) {
-            setMessage("Bạn cần chọn ít nhất một hình ảnh.");
-        } else {
-            images.forEach((image, i) =>
-                formData.append('images', image.file)
-            );
-            Addproduct(formData);
-        }
-    };
-    let formData = new FormData();
 
     return (
-        <Box m="20px 100px">
-            <Header1 title={"Thống kê"} />
-            <Box
-                display="grid"
-                gridTemplateColumns="repeat(6, 1fr)"
-                gridAutoRows="5vh"
-                gap="20px"
-                mt="30px"
-            >
+        <Box m="20px 130px">
+            <Header1 title={"Chi tiết đơn hàng"} to="/store/listorder" />
+            {isLoading ? (
+                <div className={style.isloading}><Loading /></div>
+            ) : (
                 <Box
-                    gridColumn="span 4"
-                    display="flex"
-                    gridRow="span 10"
+                    display="grid"
+                    gridTemplateColumns="repeat(6, 1fr)"
+                    gridAutoRows="5vh"
+                    gap="20px"
+                    mt="30px"
                 >
-                    <div style={{ width: "100%", height: "100%", padding: "20px", gap: "40px", border: " 0.1px solid rgb(223, 223, 223)", borderRadius: "10px" }}>
-                        <h5>Sản phẩm</h5>
-                        <div>
+                    <Box
+                        gridColumn="span 4"
+                        display="flex"
+                        gridRow="span 10"
+                    >
+                        <div className={style.Cont}>
+                            <h5>Sản phẩm</h5>
                             <div>
-                                <div className={style.producttop} >
-                                    <div className={style.img}>
-                                        <img src={images} alt="" />
-                                    </div>
-
-                                    <div className={style.name}>
-                                        <span>product</span>
-                                    </div>
-                                    <div className={style.price}>
-                                        <span>price đ</span>
-                                    </div>
-                                    <div className={style.sold}>
-                                        <span>count sản phẩm</span>
-                                    </div>
-                                </div>
+                                {Order.cart && Order.cart.map((value) => (
+                                    value.product ? (
+                                        <div key={value.id} className={style.producttop}>
+                                            <div className={style.name}>
+                                                <span>{value.product.name}</span>
+                                            </div>
+                                            <div className={style.price}>
+                                                <span>{value.price} VNĐ x {value.quantity}</span>
+                                            </div>
+                                            <div className={style.sold}>
+                                                <span>{value.notes}</span>
+                                            </div>
+                                        </div>
+                                    ) : null
+                                ))}
 
                             </div>
-                            <div>
-                                <div className={style.producttop} >
-                                    <div className={style.img}>
-                                        <img src={images} alt="" />
+                            <div className={style.bottom}>
+                                <div>
+                                    <div className={style.producttop1} >
+
+                                        <div className={style.title}>
+                                            <span>Tiền hàng</span>
+                                        </div>
+                                        <div className={style.tatol}>
+                                            <span>{Order.cart.length} sản phẩm</span>
+                                        </div>
+                                        <div className={style.sold1}>
+                                            <span>{Order.totalPrice - Order.shipCost} VNĐ</span>
+                                        </div>
+                                    </div>
+                                    <div className={style.producttop1} >
+
+                                        <div className={style.title}>
+                                            <span>Phí vận chuyển</span>
+                                        </div>
+                                        <div className={style.tatol}>
+                                            <span></span>
+                                        </div>
+                                        <div className={style.sold1}>
+                                            <span>{Order.shipCost} VNĐ</span>
+                                        </div>
+                                    </div>
+                                    <div className={style.producttop1} >
+
+                                        <div className={style.title}>
+                                            <span>Tổng tiền</span>
+                                        </div>
+                                        <div className={style.tatol}>
+                                            <span></span>
+                                        </div>
+                                        <div className={style.sold1}>
+                                            <span>{Order.totalPrice} VNĐ </span>
+                                        </div>
                                     </div>
 
-                                    <div className={style.name}>
-                                        <span>product</span>
-                                    </div>
-                                    <div className={style.price}>
-                                        <span>price đ</span>
-                                    </div>
-                                    <div className={style.sold}>
-                                        <span>count sản phẩm</span>
-                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </Box>
+                    <Box
+                        gridColumn="span 2"
+                        gridRow="span 3"
+                        display="flex"
+                    >
+                        <div style={{
+                            width: "100%", padding: "20px", border: " 0.1px solid rgb(223, 223, 223)", borderRadius: "10px"
+                        }}> <h5>Trạng thái</h5>
+                            <Box
+                                width="60%"
+                                p="5px"
+                                display="flex"
+                            >
+                                {(() => {
+                                    let color;
+                                    switch (Order.status) {
+                                        case "Finished":
+                                            color = "#4caf4fb9"; // Màu xanh lá cây cho trạng thái Finished
+                                            break;
+                                        case "Refused":
+                                            color = "#FF5722"; // Màu cam cho trạng thái Refused
+                                            break;
+                                        case "Cancelled":
+                                            color = "#F44336"; // Màu đỏ cho trạng thái Cancelled
+                                            break;
+                                        default:
+                                            color = "#4caf4fb9"; // Màu mặc định nếu không phải các trạng thái trên
+                                    }
+
+                                    return (
+                                        <div style={{ padding: "2px 10px", background: color, borderRadius: "30px", }}>
+                                            <i style={{ color: "#ffffff" }} className="fa-regular fa-circle"></i>
+                                            <span style={{ padding: "0 5px" }}>{Order.status}</span>
+                                        </div>
+                                    );
+                                })()}
+                            </Box>
+
+                            <div className={style.infocustumer}>
+                                <span>
+                                    Ngày đặt hàng: {convertUTCtoLocalDateTime(Order.dateOrdered)}
+                                </span>
 
                             </div>
                         </div>
-                    </div>
-                </Box>
-                <Box
-                    gridColumn="span 2"
-                    gridRow="span 3"
-                    display="flex"
-                >
-                    <div style={{
-                        width: "100%", padding: "20px", border: " 0.1px solid rgb(223, 223, 223)", borderRadius: "10px"
-                    }}>
-                        <h5>Note</h5>
-                    </div>
 
-                </Box>
-                <Box
-                    gridColumn="span 2"
-                    gridRow="span 7"
-                    display="flex"
+                    </Box>
+                    <Box
+                        gridColumn="span 2"
+                        gridRow="span 7"
+                        display="flex"
 
-                >
-                    <div style={{
-                        width: "100%",
-                        padding: "20px",
-                        border: "0.1px solid rgb(223, 223, 223)",
-                        borderRadius: "10px"
-                    }}> <h5>Khách hàng</h5>
-                        <div className={style.infocustumer}>
-                            <h6>CONTACT INFORMATION</h6>
-                            <span>
-                                moizabdul320@gmail.com
-                            </span>
-                            <span>
-                                03169089872
-                            </span>
+                    >
+                        <div style={{
+                            width: "100%",
+                            padding: "20px",
+                            border: "0.1px solid rgb(223, 223, 223)",
+                            borderRadius: "10px"
+                        }}> <h5>Khách hàng</h5>
+                            <div className={style.infocustumer}>
+                                <h6>Thông tin liên lạc</h6>
+                                <span>
+                                    moizabdul320@gmail.com
+                                </span>
+                                <span>
+                                    03169089872
+                                </span>
 
-                        </div>
-                        <div className={style.infocustumer}>
-                            <h6>SHIPPING ADDRESS</h6>
-                            <span>Streat no 7 zostel hostel in hostel city</span>
-                            <span>Streat no 7 zostel hostel in hostel city</span>
+                            </div>
+                            <div className={style.infocustumer}>
+                                <h6>Địa chỉ</h6>
+                                <span>339 Đ. Trần Hưng Đạo, P, Sơn Trà, Đà Nẵng 550000</span>
+
+                            </div>
+                            <div className={style.infocustumer}>
+                                <h6>Người nhận hàng</h6>
+                                <span>Trần Hưng Đạo</span>
+                                <span>Trần Hưng Đạo</span>
+                            </div>
 
                         </div>
-                        <div className={style.infocustumer}>
-                            <h6>0776230217</h6>
+                    </Box>
 
-                        </div>
-
-                    </div>
-                </Box>
-
-            </Box>
+                </Box>)}
         </Box >
     );
 };
 
-export default Product;
+export default Detailorder;

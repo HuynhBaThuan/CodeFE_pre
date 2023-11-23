@@ -31,10 +31,10 @@ const Product = ({ Catname }) => {
 
     const history = useNavigate();
     const redirectToProductPage = () => {
-        history('/store/store/Formadd');
+        history('/store/Formadd');
     };
     const redirectToEditProductPage = (id) => {
-        history('/store/store/Formedit', { state: id });
+        history('/store/Formedit', { state: id });
     };
     const formRef = useRef();
 
@@ -60,14 +60,14 @@ const Product = ({ Catname }) => {
     const Searchproduct = async (name) => {
         console.log(name);
         try {
-            const response = await axios.get(`https://falth-api.vercel.app/api/product/${_id}/search?search=${name}`
+            const response = await axios.get(`https://falth-api.vercel.app/api/product/owner/${_id}?search=${name}`
                 , {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 }
             );
-            const responseData = response.data.data.data;
+            const responseData = response.data.data;
             console.log(responseData);
             setData(responseData);
 
@@ -82,12 +82,6 @@ const Product = ({ Catname }) => {
     useEffect(() => {
         fetchData();
     }, []);
-
-    const handleDetailClick = (row) => {
-        setSelectedRow(row);
-        setOpenEdit(true);
-        setOpenAdd(false);
-    };
 
     const handleDeleteClick = (row) => {
         setSelectedRow(row);
@@ -116,7 +110,7 @@ const Product = ({ Catname }) => {
         },
         {
             field: "isOutofOrder",
-            headerName: "Tên",
+            headerName: "Trạng thái",
             headerAlign: "center",
             align: "center",
             flex: 1,
@@ -226,7 +220,7 @@ const Product = ({ Catname }) => {
                         variant="contained"
                         onClick={() => { redirectToProductPage() }}
                     >
-                        <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                        Thêm sản phẩm
                     </Button>
                 </Box>
             </Box>
@@ -283,7 +277,7 @@ const Product = ({ Catname }) => {
                 <DataGrid rows={rowsWithUniqueIds} columns={columns} loading={isLoading}
                     initialState={{
                         pagination: {
-                            pageSize: 7,
+                            pageSize: 8,
                         },
                     }} />
             </Box >

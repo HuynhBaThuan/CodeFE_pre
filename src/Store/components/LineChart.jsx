@@ -13,7 +13,7 @@ class YourChartComponent extends React.Component {
       options: {
         chart: {
           type: 'bar',
-          height: 350,
+          height: 250,
           stacked: true,
           toolbar: {
             show: false,
