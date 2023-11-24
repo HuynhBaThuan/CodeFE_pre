@@ -93,38 +93,30 @@ const Product = () => {
             align: "center",
 
         },
+
         {
-            field: "totalPrice",
-            headerName: "Giá tiền(VNĐ)",
+            field: "orderCost",
+            headerName: "Giá đơn hàng (VNĐ)",
             headerAlign: "center",
             align: "center",
             flex: 2,
 
         },
-
         {
-            field: "accessLevel",
-            headerName: "Xem",
+            field: "depreciation",
+            headerName: "Hoa hồng(VNĐ)",
             headerAlign: "center",
             align: "center",
-            flex: 1,
-            renderCell: (params) => {
-                return (
-                    <Box
-                        width="60%"
-                        m="0 auto"
-                        p="5px"
-                        display="flex"
-                        justifyContent="center"
-                        borderRadius="4px"
-                        onClick={() => redirectToDetailorderPage(params.row._id)}
-                    >
-                        <div>
-                            <button style={{ height: "40px", width: "40px", background: "#51cc8a", borderRadius: "20px" }} ><i class="fa-solid fa-magnifying-glass"></i></button>
-                        </div >
-                    </Box>
-                );
-            },
+            flex: 2,
+
+        },
+        {
+            field: "revenue",
+            headerName: "Tiền nhận được(VNĐ)",
+            headerAlign: "center",
+            align: "center",
+            flex: 2,
+
         },
         {
             field: "status",
@@ -157,13 +149,40 @@ const Product = () => {
                         justifyContent="center"
                     >
                         <div style={{ padding: "2px 10px", background: color, borderRadius: "30px", }}>
-                            <i style={{ color: "#ffffff" }} className="fa-regular fa-circle"></i>
+                            <i style={{ color: "#ffffff" }} className="fas fa-info-circle"></i>
                             <span style={{ padding: "0 5px" }}>{params.row.status}</span>
                         </div >
                     </Box>
                 );
             },
-        }
+        },
+        {
+            field: "accessLevel",
+            headerName: "Xem",
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            renderCell: (params) => {
+                return (
+                    <Box
+                        width="60%"
+                        m="0 auto"
+                        p="5px"
+                        display="flex"
+                        justifyContent="center"
+                        borderRadius="4px"
+                        onClick={() => redirectToDetailorderPage(params.row._id)}
+                    >
+                        <div>
+                            <button style={{ height: "40px", width: "40px", background: "#51cc8a", borderRadius: "20px" }} ><i class="fas fa-info-circle"></i></button>
+                        </div >
+                    </Box>
+                );
+
+
+
+            },
+        },
 
     ];
     const rowsWithUniqueIds = data.map((item, index) => {

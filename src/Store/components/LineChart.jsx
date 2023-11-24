@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-class YourChartComponent extends React.Component {
+class YourChartComponent extends Component {
   constructor(props) {
     super(props);
-    const { data } = props;
+    const { data, status } = props;
     this.state = {
       series: [{
         name: 'PRODUCT A',
-        data: data.map((item) => item.revenue),
+        data: data.map((item) => item[status]),
       }],
       options: {
         chart: {
@@ -25,20 +25,35 @@ class YourChartComponent extends React.Component {
         },
         legend: {
           position: 'right',
-          offsetY: 40,
+          offsetY: 20,
+        },
+        plotOptions: {
+          bar: {
+            dataLabels: {
+              position: 'top',
+            },
+          },
+        },
+        dataLabels: {
+          enabled: true,
+          offsetY: -20,
+          style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+          }
         },
       },
     };
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) {
-      const { data } = this.props;
+    if (prevProps.data !== this.props.data || prevProps.status !== this.props.status) {
+      const { data, status } = this.props;
 
       this.setState({
         series: [{
           name: 'PRODUCT A',
-          data: data.map((item) => item.revenue),
+          data: data.map((item) => item[status]),
         }],
         options: {
           ...this.state.options,

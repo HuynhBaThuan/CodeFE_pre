@@ -26,6 +26,9 @@ const Product = () => {
     const token = localStorage.getItem('autoken');
     const [isLoading, setIsLoading] = useState(true);
     const [Dataproduct, setDataproduct] = useState("");
+    const [datarevenue, setdatarevenue] = useState("count");
+    const [GetRevenueByCat, setGetRevenueByCat] = useState([])
+
 
     const _id = localStorage.getItem('_id');
     const fetchDataorder = async (value) => {
@@ -99,19 +102,36 @@ const Product = () => {
             console.log(error);
         }
     };
-    const fetchData = async () => {
+    const fecthGetRevenueByCat = async () => {
         try {
-            await fetchAddproduct();
-            await fetchDataorder("daily");
-            await fetchDatachart();
-            await fetchDatabestseller();
-            await fetchDataLinechart("daily");
-            setIsLoading(false);
+            const response = await axios.get(`https://falth-api.vercel.app/api/owner/${_id}/revenue-by-cat`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const responseData = response.data.data;
+            console.log(responseData);
+            setGetRevenueByCat(responseData);
         } catch (error) {
             console.log(error);
-            setIsLoading(false);
         }
     };
+    const fetchData = async () => {
+        try {
+            fetchAddproduct();
+            fetchDataorder("daily");
+            fetchDatachart();
+            fetchDatabestseller();
+            fetchDataLinechart("daily");
+            setIsLoading(false);
+            fecthGetRevenueByCat();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const fetchSelectLinechart = (e) => {
+        setdatarevenue(e)
+    }
 
 
     useEffect(() => {
@@ -132,7 +152,7 @@ const Product = () => {
                     gap="5px"
                 >
 
-                    <Box
+                    {/* <Box
                         gridColumn="span 2"
                         display="flex"
                         gridRow="span 4"
@@ -149,9 +169,9 @@ const Product = () => {
                                         <div className={style.rightContent1}>
                                             <select name="" id="" onChange={(event) => fetchDataorder(event.target.value)}>
 
-                                                <option value="daily">Daily</option>
-                                                <option value="weekly">Weekly</option>
-                                                <option value="monthly">Monthly</option>
+                                                <option value="daily">Ngày</option>
+                                                <option value="weekly">Tuần</option>
+                                                <option value="monthly">Tháng</option>
                                             </select>
                                         </div>
 
@@ -209,6 +229,30 @@ const Product = () => {
                             </div>
 
                         </div>
+                    </Box> */}
+                    <Box
+                        gridColumn="span 4"
+                        gridRow="span 7"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                    >
+                        <div className={style.box}>
+                            <div className={style.box1}>
+                                <div className={style.top}>
+                                    <div className={style.tranding}>
+                                        <span>Biểu đồ doanh thu theo danh mục</span>
+                                    </div>
+                                    <div className={style.rightContent1}>
+                                        <span>...</span>
+                                    </div>
+                                </div>
+                                <div className={style.InteractivePieChart}>
+                                    <ApexChart data={GetRevenueByCat} status={"revenue"} />
+                                </div>
+                            </div>
+                        </div>
+
                     </Box>
                     <Box
                         gridColumn="span 8"
@@ -223,20 +267,23 @@ const Product = () => {
                                 <div className={style.container}>
                                     <div className={style.top}>
                                         <div className={style.tranding}>
-                                            <span>Thông kê doanh thu</span>
+                                            <select className={style.select} id="" onChange={(event) => fetchSelectLinechart(event.target.value)}>
+                                                <option value="count"><span>Thông kê đơn hàng</span></option>
+                                                <option value="revenue"><span>Thông kê doanh thu</span></option>
+                                            </select>
                                         </div>
                                         <div className={style.rightContent1}>
                                             <select name="" id="" onChange={(event) => fetchDataLinechart(event.target.value)}>
 
-                                                <option value="daily">Daily</option>
-                                                <option value="weekly">Weekly</option>
-                                                <option value="monthly">Monthly</option>
+                                                <option value="daily">Ngày</option>
+                                                <option value="weekly">Tuần</option>
+                                                <option value="monthly">Tháng</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div className={style.LineChart}>
-                                    <LineChart data={dataLineChart} />
+                                    <LineChart data={dataLineChart} status={datarevenue} />
                                 </div>
 
 
@@ -247,7 +294,7 @@ const Product = () => {
                     </Box>
                     <Box
                         gridColumn="span 4"
-                        gridRow="span 10"
+                        gridRow="span 7"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
@@ -263,7 +310,7 @@ const Product = () => {
                                     </div>
                                 </div>
                                 <div className={style.InteractivePieChart}>
-                                    <ApexChart data={datachart} />
+                                    <ApexChart data={datachart} status={"count"} />
                                 </div>
                             </div>
                         </div>
@@ -292,7 +339,7 @@ const Product = () => {
                                         {databestseller.slice(0, 3).map((value, index) => (
                                             <div className={style.producttop} key={index}>
                                                 <div className={style.img}>
-                                                    <img src={value.images} alt="" />
+                                                    <img src={value.images[0]} alt="" />
                                                 </div>
 
                                                 <div className={style.name}>

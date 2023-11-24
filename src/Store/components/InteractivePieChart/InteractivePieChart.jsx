@@ -5,10 +5,10 @@ class ApexChart extends React.Component {
   constructor(props) {
     super(props);
 
-    const { data } = props;
+    const { data, status } = props;
 
     this.state = {
-      series: data.map((item) => item.count),
+      series: data.map((item) => item[status]),
       options: {
         chart: {
           type: 'donut',
@@ -33,10 +33,10 @@ class ApexChart extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
-      const { data } = this.props;
+      const { data,status } = this.props;
 
       this.setState({
-        series: data.map((item) => item.count),
+        series: data.map((item) => item[status]),
         options: {
           ...this.state.options,
           labels: data.map((item) => item._id),

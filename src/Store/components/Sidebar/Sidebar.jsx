@@ -137,7 +137,7 @@ const Sidebar = () => {
             />
 
             <Item
-              title="Category"
+              title="Danh mục"
               to="/store/category"
               icon={<CategoryIcon />}
               selected={selected}
