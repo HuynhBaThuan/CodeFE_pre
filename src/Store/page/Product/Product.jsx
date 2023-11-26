@@ -5,8 +5,6 @@ import { tokens } from "../../theme";
 import Header from "../../components/Header/Header";
 import { Button } from "@mui/material";
 import axios from 'axios';
-import Add from './Ad';
-import Update from './Update';
 import Delete from './Delete';
 import Notify from '../../../Components/Notify/Notify';
 import style from './Product.module.css'
@@ -38,7 +36,7 @@ const Product = ({ Catname }) => {
     };
     const formRef = useRef();
 
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const api = `https://falth-api.vercel.app/api/product/owner/${_id}?limit=100`;
     const fetchData = async () => {
@@ -236,22 +234,6 @@ const Product = ({ Catname }) => {
                     },
                 }}
             >
-                {openEdit && (
-
-                    <div ref={formRef} className="form-container"
-                        style={{ position: "absolute", zIndex: 1000, width: "40%", top: '-5%', right: '30%', background: colors.primary[400], border: colors.primary[900] }}>
-                        <Box m="20px" >
-                            <Update show={true} showClode={setOpenEdit} data={Catname} selectedRow={selectedRow} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenEdit={setOpenEdit} setOpenNotify={setOpenNotify} />
-                        </Box>
-                    </div>
-                )
-                }
-                {
-                    openAdd && (
-                        <Add data={Catname} show={true} handleClose={setOpenAdd} fetchData={fetchData} setError={setError} setMessage={setMessage} setOpenNotify={setOpenNotify} />
-                    )
-                }
-
                 {
                     openDelete && (
                         <div ref={formRef} className="form-container"

@@ -55,6 +55,8 @@
 
 .label-custom11 {
     border: 0.1px solid rgb(84, 84, 84);
+    width: 65px;
+    padding: 5px 5px 5px 0px;
     border-radius: 2px;
     margin: 0 5px;
     padding: 0 10px;
@@ -66,7 +68,10 @@
     padding-bottom: 10px;
 }
 
-.custom-file-image1 {}
+.custom-file-image1 {
+    display: flex;
+    flex-direction: column;
+}
 
 .btn11 {
     height: 30px;

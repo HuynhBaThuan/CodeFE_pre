@@ -6,7 +6,6 @@ import axios from 'axios';
 import style from './DetailShipper.module.css';
 import Form from 'react-bootstrap/Form';
 import { useLocation } from 'react-router-dom';
-//import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from '../../components/Loading/Loading'
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
@@ -15,7 +14,7 @@ const DetailShipper = () => {
     const location = useLocation();
     const dataFromPreviousPage = location.state;
     const [images, setImages] = useState([]);
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const [data, setdata] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

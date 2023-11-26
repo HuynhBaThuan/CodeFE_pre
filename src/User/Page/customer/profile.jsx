@@ -10,7 +10,7 @@ import { useAuth } from '../../services/authContext';
 import axios from 'axios';
 const Profile = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const { t } = useTranslation();
+    const {t} = useTranslation(); 
     const logout = useLogout();
     function handleLogout() {
         logout();
@@ -88,14 +88,14 @@ const Profile = () => {
             [name]: value,
         });
     };
-    const [error, setError] = useState("")
+    const  [error, setError] = useState("")
     const [openNotify, setOpenNotify] = useState(false)
     const [message, setMessage] = useState("")
     const handleChangePassword = async (e) => {
         e.preventDefault();
-        if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.newPass.trim())) {
+        if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.newPass.trim())) {
             setError(t("error5"))
-        } else if (formData.newPass === formData.confirmedPass) {
+        }else if(formData.newPass === formData.confirmedPass) {
             setIsLoading(true)
             try {
                 const token = localStorage.getItem("token");
@@ -115,7 +115,7 @@ const Profile = () => {
                     })
                     logout();
                     localStorage.removeItem('token')
-                    localStorage.removeItem('user')
+                    localStorage.removeItem('user')                   
                     setMessage(t("alert"))
                     navigate("/signin")
                     setOpenNotify(true);
@@ -133,7 +133,7 @@ const Profile = () => {
         }
     };
 
-
+    
 
     const handleChange1 = (e) => {
         const { name, value } = e.target;
@@ -142,15 +142,15 @@ const Profile = () => {
             [name]: value,
         });
     };
-    const [errorInfo, setErrorInfo] = useState("")
-
+    const  [errorInfo, setErrorInfo] = useState("")
+    
     const handleChangeInfo = async (e) => {
         e.preventDefault();
-        if (formDataInfo.firstName === '' || formDataInfo.lastName === '' || formDataInfo.address === '' || formDataInfo.phoneNumber === '') {
+        if(formDataInfo.firstName === '' || formDataInfo.lastName === ''|| formDataInfo.address === ''|| formDataInfo.phoneNumber === '') {
             setErrorInfo(t("error11"))
-        } else if (!/^\d{10}$/.test(formDataInfo.phoneNumber)) {
+        }else if(!/^\d{10}$/.test(formDataInfo.phoneNumber)) {
             setErrorInfo(t("error9"))
-        } else {
+        }else {
             setIsLoading(true)
             try {
                 const user = localStorage.getItem("user");
@@ -182,278 +182,278 @@ const Profile = () => {
                 setIsLoading(false);
                 setOpenNotify(true);
             }
-        }
+        } 
     };
 
-
+    
     return (
         <div>
 
-            <div class="container">
-                {openNotify && (<Notify message={message} setOpenNotify={setOpenNotify} />)}
-                <div class="now-navigation-profile">
-                    <div class="header-profile">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <img
-                                    class="avatar-circle"
-                                    src={img}
-                                    alt={userName}
-                                />
-                            </div>
-                            <div class="col txt-bold font15">{userName}</div>
+        <div class="container">
+        {openNotify && (<Notify message={message} setOpenNotify={setOpenNotify}/>)}
+            <div class="now-navigation-profile">
+                <div class="header-profile">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <img
+                                class="avatar-circle"
+                                src={img}
+                                alt={userName}
+                            />
                         </div>
+                        <div class="col txt-bold font15">{userName}</div>
                     </div>
-                    <div class="navigation-profile">
-                        <a
-                            class="item-navigation active"
-                            title="Cập nhật tài khoản"
-                            onClick={() => handleNav({ nav: "user/profile" })}
-                        >
-                            <div class="row">
-                                <div class="col-auto"><i class="fas fa-user"></i></div>
-                                <div class="col">{t("infoNav1")}</div>
+                </div>
+                <div class="navigation-profile">
+                    <a
+                        class="item-navigation active"
+                        title="Cập nhật tài khoản"
+                        onClick={() => handleNav({ nav: "user/profile" })}
+                    >
+                        <div class="row">
+                            <div class="col-auto"><i class="fas fa-user"></i></div>
+                            <div class="col">{t("infoNav1")}</div>
+                            <div class="col-auto">
+                                <i class="icon-arrow-thin right_us"></i>
+                            </div></div>
+                    </a>
+                    <div class="item-navigation">
+                        <a class="item-navigation" title="orderInfo" style={{ cursor: 'pointer' }} onClick={() => handleNav({ nav: "user/updateAddress" })}
+                        ><div class="row">
+                                <div class="col-auto"><i class="fas fa-shopping-cart"></i></div>
+                                <div class="col">{t("infoNav2")}</div>
                                 <div class="col-auto">
                                     <i class="icon-arrow-thin right_us"></i>
-                                </div></div>
-                        </a>
-                        <div class="item-navigation">
-                            <a class="item-navigation" title="orderInfo" style={{ cursor: 'pointer' }} onClick={() => handleNav({ nav: "user/updateAddress" })}
-                            ><div class="row">
-                                    <div class="col-auto"><i class="fas fa-shopping-cart"></i></div>
-                                    <div class="col">{t("infoNav2")}</div>
-                                    <div class="col-auto">
-                                        <i class="icon-arrow-thin right_us"></i>
-                                    </div></div></a>
-                        </div>
-                        <div class="item-navigation">
-                            <a
-                                class="item-navigation"
-                                title="Đăng xuất"
-                                onClick={handleLogout}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <i class="fas fa-solid fa-right-from-bracket"></i>
-                                    </div>
-                                    <div class="col">{t("Logout")}</div>
-                                    <div class="col-auto"></div>
+                                </div></div></a>
+                    </div>
+                    <div class="item-navigation">
+                        <a
+                            class="item-navigation"
+                            title="Đăng xuất"
+                            onClick={handleLogout}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <i class="fas fa-solid fa-right-from-bracket"></i>
                                 </div>
-                            </a>
+                                <div class="col">{t("Logout")}</div>
+                                <div class="col-auto"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="now-detail-profile">
+                <div class="header-user-profile">{t("infoTitle")}</div>
+                <div class="content-user-profile">
+                    <div class="user-profile-update">
+                        <div class="title-user">{t("userTitle1")}</div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="user-avatar-image">
+                                    <img
+                                        src={img}
+                                        alt=""
+                                        id="avatar_user"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="form-group">
+                                    <span>{t("updateImage")}</span>
+                                    <div class="custom-file-image">
+                                        <input
+                                            type="file"
+                                            id="validatedCustomFile"
+                                            class="input-custom"
+                                            required=""
+                                            style={{ display: 'none' }}
+                                            accept="image/*"
+                                        />
+                                        <label class="label-custom" for="validatedCustomFile">{t("upload")}</label>
+                                        <span class="font-italic font13">{t("condition")}</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-blue-4" type="button">{t("update")}</button>
+                            </div>
                         </div>
                     </div>
-
-
-                </div>
-                <div class="now-detail-profile">
-                    <div class="header-user-profile">{t("infoTitle")}</div>
-                    <div class="content-user-profile">
-                        <div class="user-profile-update">
-                            <div class="title-user">{t("userTitle1")}</div>
-                            <div class="row">
-                                <div class="col-3">
-                                    <div class="user-avatar-image">
-                                        <img
-                                            src={img}
-                                            alt=""
-                                            id="avatar_user"
+                    <div class="user-profile-update">
+                        <form>
+                            <div class="title-user">{t("changeInfo")}</div>
+                            <div class="row form-group align-items-center">
+                                <div class="col-3 txt-bold">
+                                    {t("firstName")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group">
+                                        <input
+                                            name="firstName"
+                                            placeholder={firstName}
+                                            type="text"
+                                            class="form-control"
+                                            value={formDataInfo.firstName}
+                                            onChange={handleChange1}
+                                            required
                                         />
                                     </div>
                                 </div>
-                                <div class="col-9">
-                                    <div class="form-group">
-                                        <span>{t("updateImage")}</span>
-                                        <div class="custom-file-image">
-                                            <input
-                                                type="file"
-                                                id="validatedCustomFile"
-                                                class="input-custom"
-                                                required=""
-                                                style={{ display: 'none' }}
-                                                accept="image/*"
-                                            />
-                                            <label class="label-custom" for="validatedCustomFile">{t("upload")}</label>
-                                            <span class="font-italic font13">{t("condition")}</span>
-                                        </div>
+                            </div>
+                            <div class="row form-group align-items-center">
+                                <div class="col-3 txt-bold">{t("lastName")}<span class="txt-red font-weight-bold">*</span></div>
+                                <div class="col-4">
+                                    <div class="input-group">
+                                        <input
+                                            name="lastName"
+                                            placeholder={lastName}
+                                            type="text"
+                                            value={formDataInfo.lastName}
+                                            onChange={handleChange1}
+                                            class="form-control"
+                                            required
+                                        />
                                     </div>
-                                    <button class="btn btn-blue-4" type="button">{t("update")}</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="user-profile-update">
-                            <form>
-                                <div class="title-user">{t("changeInfo")}</div>
-                                <div class="row form-group align-items-center">
-                                    <div class="col-3 txt-bold">
-                                        {t("firstName")}
-                                        <span class="txt-red font-weight-bold">*</span>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="input-group">
-                                            <input
-                                                name="firstName"
-                                                placeholder={firstName}
-                                                type="text"
-                                                class="form-control"
-                                                value={formDataInfo.firstName}
-                                                onChange={handleChange1}
-                                                required
-                                            />
-                                        </div>
+                            <div class="row form-group align-items-center">
+                                <div class="col-3 txt-bold">Email</div>
+                                <div class="col-8">
+                                    <div class="input-group">
+                                        <div class="show-email">{email}</div>
                                     </div>
                                 </div>
-                                <div class="row form-group align-items-center">
-                                    <div class="col-3 txt-bold">{t("lastName")}<span class="txt-red font-weight-bold">*</span></div>
-                                    <div class="col-4">
-                                        <div class="input-group">
-                                            <input
-                                                name="lastName"
-                                                placeholder={lastName}
-                                                type="text"
-                                                value={formDataInfo.lastName}
-                                                onChange={handleChange1}
-                                                class="form-control"
-                                                required
-                                            />
-                                        </div>
+                            </div>
+                            <div class="row form-group align-items-center">
+                                <div class="col-3 txt-bold">
+                                    {t("address1")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
+                                <div class="col-8">
+                                    <div class="input-group">
+                                        <textarea
+                                            name="address"
+                                            placeholder={address}
+                                            type="text"
+                                            class="form-control"
+                                            value={formDataInfo.address}
+                                            onChange={handleChange1}
+                                            style={{ wordWrap: "break-word", resize: "vertical" }}
+                                            required
+                                        />
                                     </div>
                                 </div>
-                                <div class="row form-group align-items-center">
-                                    <div class="col-3 txt-bold">Email</div>
-                                    <div class="col-8">
-                                        <div class="input-group">
-                                            <div class="show-email">{email}</div>
-                                        </div>
+                            </div>
+                            <div class="row form-group align-items-center">
+                                <div class="col-3 txt-bold">
+                                    {t("phoneNumber")}
+                                    <span class="txt-red font-weight-bold">*</span>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group">
+                                        <input
+                                            name="phoneNumber"
+                                            placeholder={phoneNumber}
+                                            type="text"
+                                            value={formDataInfo.phoneNumber}
+                                            onChange={handleChange1}
+                                            class="form-control"
+                                            maxLength={10}
+                                            required
+                                        />
                                     </div>
                                 </div>
-                                <div class="row form-group align-items-center">
-                                    <div class="col-3 txt-bold">
-                                        {t("address1")}
-                                        <span class="txt-red font-weight-bold">*</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="input-group">
-                                            <textarea
-                                                name="address"
-                                                placeholder={address}
-                                                type="text"
-                                                class="form-control"
-                                                value={formDataInfo.address}
-                                                onChange={handleChange1}
-                                                style={{ wordWrap: "break-word", resize: "vertical" }}
-                                                required
-                                            />
-                                        </div>
-                                    </div>
+                            </div>
+                            {errorInfo && <div class="row form-group align-items-center"><div className="alert-danger">{errorInfo}</div></div>}
+                            <div class="row">
+                                <div class="col-3">
+                                    <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleChangeInfo}>
+                                    {t("saveChange")}
+                                    </button>
                                 </div>
-                                <div class="row form-group align-items-center">
-                                    <div class="col-3 txt-bold">
-                                        {t("phoneNumber")}
-                                        <span class="txt-red font-weight-bold">*</span>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="input-group">
-                                            <input
-                                                name="phoneNumber"
-                                                placeholder={phoneNumber}
-                                                type="text"
-                                                value={formDataInfo.phoneNumber}
-                                                onChange={handleChange1}
-                                                class="form-control"
-                                                maxLength={10}
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                {errorInfo && <div class="row form-group align-items-center"><div className="alert-danger">{errorInfo}</div></div>}
-                                <div class="row">
-                                    <div class="col-3">
-                                        <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleChangeInfo}>
-                                            {t("saveChange")}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="user-profile-update">
-                            <form>
-                                <div class="title-user">{t("resetTitle")}</div>
-                                <div className="form-group verify-pass">
-                                    <div className="row align-items-center mar-bottom5">
-                                        <div className="col-3 txt-bold">
-                                            {t("oldPass")}
-                                            <span class="txt-red font-weight-bold">*</span>
-                                        </div>
-                                        <div className="col-4">
-                                            <div className="input-group validate-pass">
-                                                <input
-                                                    name="oldPass"
-                                                    placeholder={t("oldPass")}
-                                                    type="password"
-                                                    className="form-control"
-                                                    value={formData.oldPass}
-                                                    onChange={handleChange}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="row align-items-center mar-bottom5">
-                                        <div className="col-3 txt-bold">
-                                            {t("newPass")}
-                                            <span class="txt-red font-weight-bold">*</span>
-                                        </div>
-                                        <div className="col-4">
-                                            <div className="input-group validate-pass">
-                                                <input
-                                                    name="newPass"
-                                                    placeholder={t("newPass")}
-                                                    type="password"
-                                                    className="form-control"
-                                                    value={formData.newPass}
-                                                    onChange={handleChange}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="row align-items-center">
-                                        <div className="col-3 txt-bold">
-                                            {t("confirmPass")}
-                                            <span class="txt-red font-weight-bold">*</span>
-                                        </div>
-                                        <div className="col-4">
-                                            <div className="input-group validate-pass">
-                                                <input
-                                                    name="confirmedPass"
-                                                    placeholder={t("confirmPass")}
-                                                    type="password"
-                                                    className="form-control"
-                                                    value={formData.confirmedPass}
-                                                    onChange={handleChange}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {error && <div class="row form-group align-items-center"><div className="alert-danger">{error}</div></div>}
-                                <div class="row">
-                                    <div class="col-3">
-                                        <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleChangePassword}>
-                                            {t("resetTitle")}
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
+                    <div class="user-profile-update">
+                        <form>
+                        <div class="title-user">{t("resetTitle")}</div>
+                                    <div className="form-group verify-pass">
+                                        <div className="row align-items-center mar-bottom5">
+                                            <div className="col-3 txt-bold">
+                                                {t("oldPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
+                                            <div className="col-4">
+                                                <div className="input-group validate-pass">
+                                                    <input
+                                                        name="oldPass"
+                                                        placeholder={t("oldPass")}
+                                                        type="password"
+                                                        className="form-control"
+                                                        value={formData.oldPass}
+                                                        onChange={handleChange}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row align-items-center mar-bottom5">
+                                            <div className="col-3 txt-bold">
+                                                {t("newPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
+                                            <div className="col-4">
+                                                <div className="input-group validate-pass">
+                                                    <input
+                                                        name="newPass"
+                                                        placeholder={t("newPass")}
+                                                        type="password"
+                                                        className="form-control"
+                                                        value={formData.newPass}
+                                                        onChange={handleChange}    
+                                                        required                                                   
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row align-items-center">
+                                            <div className="col-3 txt-bold">
+                                                {t("confirmPass")}
+                                                <span class="txt-red font-weight-bold">*</span>
+                                            </div>
+                                            <div className="col-4">
+                                                <div className="input-group validate-pass">
+                                                    <input
+                                                        name="confirmedPass"
+                                                        placeholder={t("confirmPass")}
+                                                        type="password"
+                                                        className="form-control"
+                                                        value={formData.confirmedPass}
+                                                        onChange={handleChange}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {error && <div class="row form-group align-items-center"><div className="alert-danger">{error}</div></div>}
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-blue-4 btn-block" onClick={handleChangePassword}>
+                                            {t("resetTitle")}
+                                            </button>
+                                        </div>
+                                    </div>                          
+
+                        </form>
+                    </div>                 
                 </div>
             </div>
-            {isLoading && (<LoadingModal />)}
+        </div>
+        {isLoading && (<LoadingModal/>)}
         </div>
     )
 }

@@ -166,7 +166,7 @@ const Sidebara = ({ }) => {
 
                         <Item
                             title="Logout"
-                            to="/admin/calendar"
+                            to="/admin/logout"
                             icon={<LogoutIcon />}
                             selected={selected}
                             setSelected={setSelected}

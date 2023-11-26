@@ -78,38 +78,56 @@ const SignUpShipper = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const address = `${formData.detailAddress}, ${formData.ward}, ${formData.district}, ${formData.city}`;
-        const registrationData = {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            password: formData.password,
-            passwordConfirm: formData.passwordConfirm,
-            address: address,
-            phoneNumber: formData.phoneNumber,
-            frontImageCCCD: formData.frontImageCCCD.name,
-            behindImageCCCD: formData.behindImageCCCD.name,
-            licenseImage: formData.licenseImage.name,
-            vehicleNumber: formData.vehicleNumber,
-            vehicleType: formData.vehicleType,
-            vehicleLicense: formData.vehicleLicense,
-            licenseNumber: formData.licenseNumber,
-        };
-        console.log(registrationData)
+        // const registrationData = {
+        // firstName: formData.firstName,
+        // lastName: formData.lastName,
+        // email: formData.email,
+        // password: formData.password,
+        // passwordConfirm: formData.passwordConfirm,
+        // address: address,
+        // phoneNumber: formData.phoneNumber,
+        // frontImageCCCD: formData.frontImageCCCD,
+        // behindImageCCCD: formData.behindImageCCCD,
+        // licenseImage: formData.licenseImage,
+        // vehicleNumber:formData.vehicleNumber,
+        // vehicleType:formData.vehicleType,
+        // vehicleLicense: formData.vehicleLicense,
+        // licenseNumber:formData.licenseNumber,
+        // };
+        const registrationData = new FormData();
+        registrationData.append('firstName', formData.firstName);
+        registrationData.append('lastNam', formData.lastName);
+        registrationData.append('email', formData.email);
+        registrationData.append('password', formData.password);
+        registrationData.append('passwordConfirm', formData.passwordConfirm);
+        registrationData.append('address', address);
+        registrationData.append('phoneNumber', formData.phoneNumber);
+        registrationData.append('frontImageCCCD', formData.frontImageCCCD);
+        registrationData.append('behindImageCCCD', formData.behindImageCCCD);
+        registrationData.append('licenseImage', formData.licenseImage);
+        registrationData.append('vehicleNumber', formData.vehicleNumber);
+        registrationData.append('vehicleType', formData.vehicleType);
+        registrationData.append('vehicleLicense', formData.vehicleLicense);
+        registrationData.append('licenseNumber', formData.licenseNumber);
 
-        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(registrationData.email)) {
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
             setError(t("error8"))
-        } else if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(registrationData.password)) {
+        } else if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(formData.password)) {
             setError(t("error5"))
-        } else if (registrationData.password !== registrationData.passwordConfirm) {
+        } else if (formData.password !== formData.passwordConfirm) {
             setError(t("error6"))
-        } else if (!/^\d{10}$/.test(registrationData.phoneNumber)) {
+        } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
             setError(t("error9"))
         } else {
             try {
                 setIsLoading(true)
                 console.log(registrationData)
 
-                const response = await axios.post('https://falth-api.vercel.app/api/shipper', registrationData);
+                const response = await axios.post('https://falth-api.vercel.app/api/shipper', registrationData, {
+                    headers: {
+                        ContentType: 'multipart/form-data',
+                    }
+                });
                 console.log('Đăng ký thành công', response.data);
                 setError('')
                 setSuccess('Đã nhận được thông tin! Mời bạn xác nhận email')
@@ -216,24 +234,24 @@ const SignUpShipper = () => {
                                 <div class="row_su row-space">
                                     <div class="col-2_su">
                                         <div class="input-group_su">
-                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder={t("licenseId")} name="licenseNumber" value={formData.licenseNumber} onChange={handleChange} />
+                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder={t("licenseId")} name="licenseNumber" value={formData.licenseNumber} onChange={handleChange} required />
                                         </div>
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su">
-                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder="Mã giấy đăng kí xe" name="vehicleLicense" value={formData.vehicleLicense} onChange={handleChange} />
+                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder="Mã giấy đăng kí xe" name="vehicleLicense" value={formData.vehicleLicense} onChange={handleChange} required />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row_su row-space">
                                     <div class="col-2_su">
                                         <div class="input-group_su">
-                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder={t("vehicleNumber")} name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} />
+                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder={t("vehicleNumber")} name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} required />
                                         </div>
                                     </div>
                                     <div class="col-2_su">
                                         <div class="input-group_su">
-                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder={t("vehicleType")} name="vehicleType" value={formData.vehicleType} onChange={handleChange} />
+                                            <input style={{ border: 'none' }} class="input--style-2" type="text" placeholder={t("vehicleType")} name="vehicleType" value={formData.vehicleType} onChange={handleChange} required />
                                         </div>
                                     </div>
                                 </div>

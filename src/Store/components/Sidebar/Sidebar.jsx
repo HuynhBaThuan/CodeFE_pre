@@ -14,8 +14,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useLogout } from '../../../User/services/authContext';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import Logout from "@mui/icons-material/Logout";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -39,7 +43,9 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Thống kê");
-
+  const Logout = () => {
+    console.log("Logout")
+  }
   return (
     <Box
       sx={{
@@ -172,6 +178,14 @@ const Sidebar = () => {
               icon={<CommentIcon />}
               selected={selected}
               setSelected={setSelected}
+            />
+            <Item
+              title="Logout"
+              icon={<LogoutIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              onClick={Logout()}
+              to="/store/logout"
             />
 
           </Box>

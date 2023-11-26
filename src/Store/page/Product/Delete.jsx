@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 function Delete({ selectedRow, setOpenDelete, setError, fetchData, setMessage, setOpenNotify }) {
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const api = `https://falth-api.vercel.app/api/product/store/${_id}?limit=100`;
     const handleDeleteProduct = async (id) => {

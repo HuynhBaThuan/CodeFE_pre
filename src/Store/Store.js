@@ -14,6 +14,7 @@ import Formadd from './page/Product/Formadd';
 import Formedit from './page/Product/Formedit';
 import Detailorder from './page/Feedback/Detailorder';
 import { ToastContainer } from 'react-toastify';
+import Logout from './page/Logout/logout';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Statistics from './page/Statistics/Statistics';
@@ -23,31 +24,11 @@ import './Store.css'
 const Store = () => {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
-  const [Catname, setCatname] = useState([]);
-  const token = localStorage.getItem('autoken');
+  const tokenString = localStorage.getItem('user');
+  const tokenObject = JSON.parse(tokenString);
+  localStorage.setItem('_id', tokenObject._id);
 
 
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.post('https://falth-api.vercel.app/api/auth/login/', {
-        email: 'owner1@gmail.com',
-        password: 'leduchuy123',
-      });
-      const token = response.data.token;
-      const _id = response.data.data.user._id;
-      localStorage.setItem('autoken', token);
-      localStorage.setItem('_id', _id);
-      console.log(token);
-      console.log(response.data.data.user._id);
-      console.log('Đăng nhập thành công');
-    } catch (error) {
-      console.log('Lỗi đăng nhập:', error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -58,14 +39,15 @@ const Store = () => {
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
-              <Route path="/" element={<Statistics Catname={Catname} />} />
-              <Route path="/Formadd" element={<Formadd Catname={Catname} />} />
-              <Route path="/Formedit" element={<Formedit Catname={Catname} />} />
-              <Route path="/product" element={<Product Catname={Catname} />} />
+              <Route path="/" element={<Statistics />} />
+              <Route path="/Formadd" element={<Formadd />} />
+              <Route path="/Formedit" element={<Formedit />} />
+              <Route path="/product" element={<Product />} />
               <Route path='/listorder' element={<Listorder />} />
               <Route path='/info' element={<Info />} />
-              <Route path='/category' element={<Category listCat={Catname} />} />
-              <Route path="/detailorder" element={<Detailorder Catname={Catname} />} />
+              <Route path='/category' element={<Category />} />
+              <Route path="/detailorder" element={<Detailorder />} />
+              <Route path="/logout" element={<Logout />} />
             </Routes>
             <ToastContainer />
           </main>

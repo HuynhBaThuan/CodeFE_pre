@@ -27,7 +27,7 @@ const Statistics = () => {
     const [datachart, setDatachart] = useState([]);
     const [databestseller, setDatabestseller] = useState([]);
     const [dataLineChart, setDataLineChart] = useState([]);
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const [isLoading, setIsLoading] = useState(true);
     const [status, SetStatus] = useState(true);
 
@@ -160,7 +160,7 @@ const Statistics = () => {
 
                         </div>
                     </Box> */}
-                     <Box
+                    <Box
                         gridColumn="span 12"
                         gridRow="span 7"
                         display="flex"

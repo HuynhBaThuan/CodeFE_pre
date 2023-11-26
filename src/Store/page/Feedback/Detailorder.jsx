@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import Header1 from "../../components/Header/Header1";
 import axios from 'axios';
-//import 'bootstrap/dist/css/bootstrap.min.css';
+// //import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 import style from './Detailorder.module.css';
 
 
 const Detailorder = () => {
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const [Order, setOrder] = useState([]);
     const [tatol, settatol] = useState("");
@@ -158,7 +158,7 @@ const Detailorder = () => {
                                     let color;
                                     switch (Order.status) {
                                         case "Finished":
-                                            color = "#4caf4fb9"; // Màu xanh lá cây cho trạng thái Finished
+                                            color = "#4CAF50"; // Màu xanh lá cây cho trạng thái Finished
                                             break;
                                         case "Refused":
                                             color = "#FF5722"; // Màu cam cho trạng thái Refused
@@ -166,8 +166,21 @@ const Detailorder = () => {
                                         case "Cancelled":
                                             color = "#F44336"; // Màu đỏ cho trạng thái Cancelled
                                             break;
+                                        case "Preparing":
+                                            color = "#FFC107"; // Màu vàng cho trạng thái Preparing
+                                            break;
+                                        case "Ready":
+                                            color = "#FFC107"; // Màu vàng cho trạng thái Ready
+                                            break;
+                                        case "Delivering":
+                                            color = "#2196F3"; // Màu xanh dương cho trạng thái Delivering
+                                            break;
+                                        case "Waiting":
+                                            color = "#9E9E9E"; // Màu xám cho trạng thái Waiting
+                                            break;
                                         default:
-                                            color = "#4caf4fb9"; // Màu mặc định nếu không phải các trạng thái trên
+                                            color = "#000000"; // Màu đen mặc định hoặc một màu khác tùy ý
+                                            break;
                                     }
 
                                     return (

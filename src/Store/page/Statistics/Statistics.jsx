@@ -23,7 +23,7 @@ const Product = () => {
     const [datachart, setDatachart] = useState([]);
     const [databestseller, setDatabestseller] = useState([]);
     const [dataLineChart, setDataLineChart] = useState([]);
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const [isLoading, setIsLoading] = useState(true);
     const [Dataproduct, setDataproduct] = useState("");
     const [datarevenue, setdatarevenue] = useState("count");
@@ -248,7 +248,7 @@ const Product = () => {
                                     </div>
                                 </div>
                                 <div className={style.InteractivePieChart}>
-                                    <ApexChart data={GetRevenueByCat} status={"revenue"} />
+                                    <ApexChart data={GetRevenueByCat} status={"revenue"} cat={false} />
                                 </div>
                             </div>
                         </div>
@@ -310,7 +310,7 @@ const Product = () => {
                                     </div>
                                 </div>
                                 <div className={style.InteractivePieChart}>
-                                    <ApexChart data={datachart} status={"count"} />
+                                    <ApexChart data={datachart} status={"count"} cat={true} />
                                 </div>
                             </div>
                         </div>

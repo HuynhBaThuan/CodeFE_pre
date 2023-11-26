@@ -20,7 +20,7 @@ const Product = () => {
     const redirectToDetailorderPage = (id) => {
         history('/store/detailorder', { state: id });
     };
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const api = `https://falth-api.vercel.app/api/order/owner/${_id}`;
     const fetchData = async () => {
@@ -128,7 +128,7 @@ const Product = () => {
                 let color;
                 switch (params.row.status) {
                     case "Finished":
-                        color = "#4caf4fb9"; // Màu xanh lá cây cho trạng thái Finished
+                        color = "#4CAF50"; // Màu xanh lá cây cho trạng thái Finished
                         break;
                     case "Refused":
                         color = "#FF5722"; // Màu cam cho trạng thái Refused
@@ -136,8 +136,21 @@ const Product = () => {
                     case "Cancelled":
                         color = "#F44336"; // Màu đỏ cho trạng thái Cancelled
                         break;
+                    case "Preparing":
+                        color = "#FFC107"; // Màu vàng cho trạng thái Preparing
+                        break;
+                    case "Ready":
+                        color = "#FFC107"; // Màu vàng cho trạng thái Ready
+                        break;
+                    case "Delivering":
+                        color = "#2196F3"; // Màu xanh dương cho trạng thái Delivering
+                        break;
+                    case "Waiting":
+                        color = "#9E9E9E"; // Màu xám cho trạng thái Waiting
+                        break;
                     default:
-                        color = "#4caf4fb9"; // Màu mặc định nếu không phải các trạng thái trên
+                        color = "#000000"; // Màu đen mặc định hoặc một màu khác tùy ý
+                        break;
                 }
 
                 return (

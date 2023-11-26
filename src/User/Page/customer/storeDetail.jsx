@@ -38,7 +38,7 @@ const StoreDetail = () => {
         fetchData();
     }, []);
 
-    const [activeCategory, setActiveCategory] = useState(null);
+    const [activeCategory, setActiveCategory] = useState('');
 
     const handleCategoryClick = (categoryId) => {
         setActiveCategory(categoryId);
@@ -72,10 +72,11 @@ const StoreDetail = () => {
                                 {store.address}
                             </div>
                             <div class="rating" style={{cursor:'pointer'}} onClick={handleComment}>
+                                <span class="number-rating">{store.ratingsAverage}</span>
                                 <div class="stars">
                                     <span class=""><i class="fas fa-solid fa-star"></i></span>
                                 </div>
-                                <span class="number-rating">{store.ratingAverage}</span>{t("ratingInFALTH")}
+                                <span style={{color:'#ee4d2d'}}>{t("ratingInFALTH")}</span>
                             </div>
                             <div class="view-more-rating">
                                 <span
@@ -129,13 +130,13 @@ const StoreDetail = () => {
                                             {categories.map((category) => (
                                                 <Link to={category.catName} spy={true} smooth={true} duration={500} offset={-150}>
 
-                                                    <div className="item" key={category.id}>
+                                                    <div className="item" key={category._id}>
                                                         <span
-                                                            // id={`category-link-${category.id}`}
+                                                            id={`category-link-${category._id}`}
                                                             title={category.catName}
-                                                            className={`item-link ${category.id === activeCategory ? 'active' : ''
+                                                            className={`item-link ${category._id === activeCategory ? 'active' : ''
                                                                 }`}
-                                                            onClick={() => handleCategoryClick(category.id)}
+                                                            onClick={() => handleCategoryClick(category._id)}
                                                         >
                                                             {category.catName}
                                                         </span>

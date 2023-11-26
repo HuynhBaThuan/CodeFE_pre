@@ -57,7 +57,7 @@ function Image({ images, setImages, setDeletedImageUrls }) {
     <div className='card'>
       <input type='file' className='file' multiple ref={fileInputRef} onChange={onFileSelect} hidden>
       </input>
-      <div className='container'>
+      <div className='container1'>
         {images.map((image, index) => (
           <div className='image' key={index}>
             <span className='delete' onClick={() => deleteImage(index)}>

@@ -18,34 +18,16 @@ import ManageUser from "./Page/ManageUser/ManageUser"
 import Statistics from "./Page/Statistics/Statistics"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Logout from './Page/Logout/logout';
 import DetailShipper from './Page/ManageShipper/DetailShipper'
 
 
 const App = () => {
     const [theme, colorMode] = useMode();
-    const [Catname, setCatname] = useState([]);
-    const token = localStorage.getItem('autoken');
-    const [Admin, setAdmin] = useState([]);
     const [isSidebar, setIsSidebar] = useState(true);
-    const Login = async () => {
-        try {
-            const response = await axios.post('https://falth-api.vercel.app/api/auth/login/', {
-                email: 'admin@gmail.com',
-                password: 'leduchuy123',
-            });
-            const token = response.data.token;
-            const _id = response.data.data.user._id;
-            localStorage.setItem('autoken', token);
-            localStorage.setItem('_id', _id);
-            console.log('Đăng nhập thành công');
-            setAdmin(response.data.data.user);
-        } catch (error) {
-            console.log('Lỗi đăng nhập:', error);
-        }
-    };
-    useEffect(() => {
-        Login();
-    }, []);
+    const tokenString = localStorage.getItem('user');
+    const tokenObject = JSON.parse(tokenString);
+    localStorage.setItem('_id', tokenObject._id);
 
 
 
@@ -67,6 +49,7 @@ const App = () => {
                                 <Route path='/ManageUser' element={<ManageUser />} />
                                 <Route path='/Detailstore' element={<Detailstore />} />
                                 <Route path='/DetailShipper' element={<DetailShipper />} />
+                                <Route path="/logout" element={<Logout />} />
                             </Routes>
                         </main>
                         <ToastContainer />

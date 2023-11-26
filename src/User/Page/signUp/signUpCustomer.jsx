@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import LoadingModal from '../../Components/Loading/Loading'
 const SignUpCustomer = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {
         cities,
@@ -38,7 +38,7 @@ const SignUpCustomer = () => {
         setFormData({
             ...formData,
             [name]: value,
-        });
+          });
     }
     const handleChangeDictrict = (e) => {
         handleDistrictChange(e);
@@ -46,15 +46,15 @@ const SignUpCustomer = () => {
         setFormData({
             ...formData,
             [name]: value,
-        });
+          });
     }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+            setFormData({
+              ...formData,
+              [name]: value,
+            });
     };
 
     const [error, setError] = useState('')
@@ -63,36 +63,36 @@ const SignUpCustomer = () => {
         e.preventDefault();
         const address = `${formData.detailAddress}, ${formData.ward}, ${formData.district}, ${formData.city}`;
         const registrationData = {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            password: formData.password,
-            passwordConfirm: formData.passwordConfirm,
-            address: address,
-            phoneNumber: formData.phoneNumber,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          passwordConfirm: formData.passwordConfirm,
+          address: address,
+          phoneNumber: formData.phoneNumber,
         };
         // console.log(registrationData)
-        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(registrationData.email)) {
+        if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(registrationData.email)) {
             setError(t("error8"))
-        } else if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(registrationData.password.trim())) {
+        } else if(!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(registrationData.password.trim())) {
             setError(t("error5"))
-        } else if (registrationData.password.trim() !== registrationData.passwordConfirm.trim()) {
+        }else if(registrationData.password.trim() !== registrationData.passwordConfirm.trim()) {
             setError(t("error6"))
         } else if (!/^\d{10}$/.test(registrationData.phoneNumber)) {
             setError(t("error9"))
         } else {
             try {
                 setIsLoading(true)
-                // Gọi API đăng ký người dùng
-                const response = await axios.post('https://falth-api.vercel.app/api/user', registrationData);
-
-                // Xử lý phản hồi từ máy chủ, ví dụ: hiển thị thông báo thành công
-                console.log('Đăng ký thành công', response.data);
-                setError('')
-                setSuccess(t("success"))
+              // Gọi API đăng ký người dùng
+              const response = await axios.post('https://falth-api.vercel.app/api/user', registrationData);
+    
+              // Xử lý phản hồi từ máy chủ, ví dụ: hiển thị thông báo thành công
+              console.log('Đăng ký thành công', response.data);
+              setError('')
+              setSuccess(t("success"))
                 navigate("/verify", { state: { action: "verifyUser", email: registrationData.email } });
             } catch (error) {
-                setError(t("error10"));
+              setError(t("error10"));
             }
             setIsLoading(false)
 
@@ -166,7 +166,7 @@ const SignUpCustomer = () => {
                                         <div class="input-group_su">
                                             <div class="rs-select2 js-select-simple select--no-search">
                                                 <select onChange={handleChangeDictrict} name="district" class="form-select form-select-sm" id="district" aria-label=".form-select-sm" required value={formData.district}
-                                                >
+                                        >
                                                     <option disabled="disabled" selected="selected">{t("district")}</option>
                                                     {districts.map((district) => (
                                                         <option key={district.Name} value={district.Name}>
@@ -182,7 +182,7 @@ const SignUpCustomer = () => {
                                         <div class="input-group_su">
                                             <div class="rs-select2 js-select-simple select--no-search">
                                                 <select name="ward" class="form-select form-select-sm" id="ward" aria-label=".form-select-sm" required value={formData.ward}
-                                                    onChange={handleChange}>
+                                        onChange={handleChange}>
                                                     <option disabled="disabled" selected="selected">{t("ward")}</option>
                                                     {wards.map((ward) => (
                                                         <option key={ward.Id} value={ward.Name}>
@@ -210,7 +210,7 @@ const SignUpCustomer = () => {
                     </div>
                 </div>
             </div>
-            {isLoading && (<LoadingModal />)}
+            {isLoading && (<LoadingModal/>)}
         </div>
     )
 }

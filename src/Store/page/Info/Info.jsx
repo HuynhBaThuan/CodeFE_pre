@@ -23,7 +23,7 @@ const UserProfile = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [imgLink, setimgLink] = useState("");
     const [img, setimg] = useState(null);
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -206,7 +206,7 @@ const UserProfile = () => {
                     },
                 }}
             >
-                <div className="now-detail-profile" style={{
+                <div className="now-detail-profile1" style={{
                     borderRadius: "4px",
                     boxShadow: " 0 0 3px 0 rgba(50,50,50,.3)"
                 }} >
@@ -236,7 +236,7 @@ const UserProfile = () => {
                                                     name="name"
                                                     placeholder="Tên"
                                                     type="text"
-                                                    className="form-control"
+                                                    className="form-control1"
                                                     value={name}
                                                     onChange={handleNameChange}
                                                 />
@@ -251,7 +251,7 @@ const UserProfile = () => {
                                                     name="address"
                                                     placeholder="Địa chỉ"
                                                     type="text"
-                                                    className="form-control"
+                                                    className="form-control1"
                                                     value={address}
                                                     onChange={handleAddressChange}
                                                 />
@@ -266,7 +266,7 @@ const UserProfile = () => {
                                                     name="phoneNumber"
                                                     placeholder="Số điện thoại"
                                                     type="text"
-                                                    className="form-control"
+                                                    className="form-control1"
                                                     value={phoneNumber}
                                                     onChange={handlePhoneNumberChange}
                                                 />
@@ -281,7 +281,7 @@ const UserProfile = () => {
                                                     name="discription"
                                                     placeholder="Mô tả"
                                                     type="text"
-                                                    className="form-control"
+                                                    className="form-control1"
                                                     value={description}
                                                     onChange={handleDiscriptionChange}
                                                 />
@@ -289,14 +289,14 @@ const UserProfile = () => {
                                         </div>
                                     </div>
                                     <div className="form-group11">
-                                        <div className="col-3_1 1">Giờ mở cửa</div>
+                                        <div className="col-3_11">Giờ mở cửa</div>
                                         <div className="col-91">
                                             <div className="input-group11">
                                                 <input
                                                     name="openingHours"
                                                     placeholder="Giờ mở cửa"
                                                     type="time"
-                                                    className="form-control"
+                                                    className="form-control1"
                                                     value={openingHours}
                                                     onChange={handleOpeningHoursChange}
                                                 />
@@ -311,7 +311,7 @@ const UserProfile = () => {
                                                     name="closingHours"
                                                     placeholder="Giờ đóng cửa"
                                                     type="time"
-                                                    className="form-control"
+                                                    className="form-control1"
                                                     value={closingHours}
                                                     onChange={handleClosingHoursChange}
                                                 />
@@ -328,7 +328,7 @@ const UserProfile = () => {
                                                             name="oldPassword1"
                                                             placeholder="Mật khẩu cũ"
                                                             type="password"
-                                                            className="form-control"
+                                                            className="form-control1"
                                                             value={password}
                                                             onChange={handlePasswordChange}
                                                         />
@@ -343,7 +343,7 @@ const UserProfile = () => {
                                                             name="newPassword"
                                                             placeholder="Mật khẩu mới"
                                                             type="password"
-                                                            className="form-control"
+                                                            className="form-control1"
                                                             value={newpassword}
                                                             onChange={handleNewPasswordChange}
                                                         />
@@ -358,7 +358,7 @@ const UserProfile = () => {
                                                 <div className="col-91">
                                                     <div className="input-group11">
                                                         <span className="show-pass1">********</span>
-                                                        <button type="button" className="change-pass" onClick={togglePasswordChange}>
+                                                        <button type="button" className="change-pass1" onClick={togglePasswordChange}>
                                                             Đổi mật khẩu
                                                         </button>
                                                     </div>
@@ -368,7 +368,7 @@ const UserProfile = () => {
                                     )}
                                     <div className="row11">
                                         <div className="col-3_11">
-                                            <button onClick={handleSubmit} className="btn1 btn-blue-4 btn-block1">Lưu thay đổi</button>
+                                            <button onClick={handleSubmit} className="btn11 btn-blue-4 btn-block">Lưu thay đổi</button>
                                         </div>
                                     </div>
                                     {
@@ -388,7 +388,7 @@ const UserProfile = () => {
                                 <div className="row11">
                                     <div className="col-3_11">
                                         <div className="user-avatar-image1">
-                                            <img className="user-avatar-image" src={imgLink} id="avatar_user" />
+                                            <img className="user-avatar-image1" src={imgLink} id="avatar_user" />
                                         </div>
 
                                     </div>
@@ -396,15 +396,15 @@ const UserProfile = () => {
                                         <div className="form-group1" style={{ justifyContent: "center", display: "flex", flexDirection: "column" }}>
                                             <span style={{ display: "inline" }}>Tải lên từ</span>
                                             <div className="custom-file-image1">
-                                                <input type="file" id="validatedCustomFile" className="input-custom" required="" hidden accept="image/*"
+                                                <input type="file" id="validatedCustomFile1" className="input-custom11" required="" hidden accept="image/*"
                                                     onChange={({ target: { files } }) => {
                                                         if (files) {
                                                             setimg((files[0]))
                                                             setimgLink(URL.createObjectURL(files[0]))
                                                         }
                                                     }} />
-                                                <label className="label-custom1" htmlFor="validatedCustomFile1">Chọn</label>
-                                                <span className="font-italic font131">Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB</span>
+                                                <label className="label-custom11" htmlFor="validatedCustomFile1">Chọn</label>
+                                                <span className="font-italic1 font131">Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB</span>
                                             </div>
                                         </div>
                                     </div>

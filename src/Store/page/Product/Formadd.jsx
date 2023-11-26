@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import axios from 'axios';
-//import 'bootstrap/dist/css/bootstrap.min.css';
+import { FormControl } from 'react-bootstrap';
 import Image from "../../components/Image/Image";
 import * as yup from 'yup';
 import { Formik } from 'formik';
@@ -19,16 +19,16 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Product = () => {
+    const [productStatus, setProductStatus] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingbutton, setIsLoadingbutton] = useState(false);
     const history = useNavigate();
-
     const [images, setImages] = useState([]);
     const [deletedImageUrls, setDeletedImageUrls] = useState([]);
     const [message, setMessage] = useState("");
     const [validated, setValidated] = useState(false);
-    const token = localStorage.getItem('autoken');
-    const _id = localStorage.getItem('_id');
+    const token = localStorage.getItem('token');
+    const _id = localStorage.getItem('_id'); 
     const [Catname, setCatname] = useState([]);
     const notify = (er, message) => toast[er](message, {
         position: "top-right",
@@ -45,14 +45,14 @@ const Product = () => {
     const fetchCatname = async () => {
         try {
             const response = await axios.get(
-                'https://falth-api.vercel.app/api/category',
+                `https://falth-api.vercel.app/api/category/owner/${_id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            const responseData = response.data;
+            const responseData = response.data.data;
             console.log(responseData);
             setCatname(responseData);
             setIsLoading(false);
@@ -101,6 +101,7 @@ const Product = () => {
         formData.append('name', tenSanPham);
         formData.append('price', giaTien);
         formData.append('description', moTa);
+        formData.append('isOutofOrder', productStatus);
         console.log(images)
         if (images.length === 0) {
             setMessage("Bạn cần chọn ít nhất một hình ảnh.");
@@ -150,7 +151,7 @@ const Product = () => {
                                         <Row className="mb-3" style={{ marginTop: "30px" }}>
                                             <Form.Group as={Col} md="6" controlId="validationCustom01">
                                                 <Form.Label>Tên sản phẩm</Form.Label>
-                                                <Form.Control
+                                                <FormControl
                                                     required
                                                     type="text"
                                                     placeholder="Tên sản phẩm"
@@ -215,20 +216,21 @@ const Product = () => {
                                                 justifyContent="bottom"
                                             >
                                                 <Form.Label>Danh mục</Form.Label>
-                                                <Form.Select
+                                                <Form.Control
+                                                    required
+                                                    as="select"
+                                                    placeholder="Mô tả"
                                                     name="category"
                                                     value={values.category}
-                                                    onChange={(e) => {
-                                                        handleChange(e);
-                                                        values.category = e.target.value;
-                                                    }}
+                                                    onChange={handleChange}
+                                                    isInvalid={!!errors.category}
                                                 >
                                                     {Catname.map((option, index) => (
                                                         <option key={index} value={option.catName}>
                                                             {option.catName}
                                                         </option>
                                                     ))}
-                                                </Form.Select>
+                                                </Form.Control>
                                             </Form.Group>
                                         </Row>
                                         <Row className="mb-3" style={{ marginTop: "30px" }}>
@@ -240,7 +242,7 @@ const Product = () => {
                                                     className="position-relative"
                                                     style={{ display: 'flex', justifyContent: 'center' }}
                                                 >
-                                                    <Spinner animation="border" />
+                                                    <Loading />
                                                 </Form.Group>
 
 
@@ -295,13 +297,16 @@ const Product = () => {
                                         id="default-radio-1"
                                         label="Cón hàng"
                                         name="default-radio"
-                                        defaultChecked // Tự động chọn vị trí 1 khi trang được tải
+                                        onClick={() => setProductStatus(true)}
+                                        defaultChecked={productStatus}
                                     />
                                     <Form.Check
                                         type="radio"
                                         id="default-radio-2"
                                         label="Hết hàng"
                                         name="default-radio"
+                                        onChange={() => setProductStatus(false)}
+                                        defaultChecked={!productStatus}
                                     />
                                 </div>
                             </div>

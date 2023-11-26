@@ -19,7 +19,7 @@ const Detailorder = () => {
     const location = useLocation();
     const dataFromPreviousPage = location.state;
     const [images, setImages] = useState([]);
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const [data, setdata] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

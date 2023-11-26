@@ -90,7 +90,7 @@ function ManageShipper() {
         };
     }, [selectActive]);
 
-    const token = localStorage.getItem('autoken');
+    const token = localStorage.getItem('token');
     const _id = localStorage.getItem('_id');
     const api = `https://falth-api.vercel.app/api/admin/shipper/approve`;
 
