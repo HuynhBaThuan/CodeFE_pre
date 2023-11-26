@@ -223,15 +223,15 @@ const UserProfile = () => {
                         </div>
 
                     ) : (
-                        <div className="content-user-profile">
+                        <div className="content-user-profile1">
 
-                            <div className="user-profile-update1">
+                            <div className="user-profile-update11">
                                 <form >
-                                    <div className="title-user">Thay đổi thông tin</div>
-                                    <div className="form-group1">
-                                        <div className="col-3_1 ">Tên quán</div>
-                                        <div className="col-9">
-                                            <div className="input-group1">
+                                    <div className="title-user1">Thay đổi thông tin</div>
+                                    <div className="form-group11">
+                                        <div className="col-3_11">Tên quán</div>
+                                        <div className="col-91">
+                                            <div className="input-group11">
                                                 <input
                                                     name="name"
                                                     placeholder="Tên"
@@ -243,10 +243,10 @@ const UserProfile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="form-group1">
-                                        <div className="col-3_1 ">Địa chỉ</div>
-                                        <div className="col-9">
-                                            <div className="input-group1">
+                                    <div className="form-group11">
+                                        <div className="col-3_11">Địa chỉ</div>
+                                        <div className="col-91">
+                                            <div className="input-group11">
                                                 <input
                                                     name="address"
                                                     placeholder="Địa chỉ"
@@ -258,10 +258,10 @@ const UserProfile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="form-group1">
-                                        <div className="col-3_1 ">Số điện thoại</div>
-                                        <div className="col-9">
-                                            <div className="input-group1">
+                                    <div className="form-group11">
+                                        <div className="col-3_11">Số điện thoại</div>
+                                        <div className="col-91">
+                                            <div className="input-group11">
                                                 <input
                                                     name="phoneNumber"
                                                     placeholder="Số điện thoại"
@@ -273,10 +273,10 @@ const UserProfile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="form-group1">
-                                        <div className="col-3_1 ">Mô tả</div>
-                                        <div className="col-9">
-                                            <div className="input-group1">
+                                    <div className="form-group11">
+                                        <div className="col-3_11">Mô tả</div>
+                                        <div className="col-91">
+                                            <div className="input-group11">
                                                 <input
                                                     name="discription"
                                                     placeholder="Mô tả"
@@ -288,10 +288,10 @@ const UserProfile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="form-group1">
-                                        <div className="col-3_1 ">Giờ mở cửa</div>
-                                        <div className="col-9">
-                                            <div className="input-group1">
+                                    <div className="form-group11">
+                                        <div className="col-3_1 1">Giờ mở cửa</div>
+                                        <div className="col-91">
+                                            <div className="input-group11">
                                                 <input
                                                     name="openingHours"
                                                     placeholder="Giờ mở cửa"
@@ -303,10 +303,10 @@ const UserProfile = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="form-group1">
-                                        <div className="col-3_1 ">Giờ đóng cửa</div>
-                                        <div className="col-9">
-                                            <div className="input-group1">
+                                    <div className="form-group11">
+                                        <div className="col-3_11">Giờ đóng cửa</div>
+                                        <div className="col-91">
+                                            <div className="input-group11">
                                                 <input
                                                     name="closingHours"
                                                     placeholder="Giờ đóng cửa"
@@ -320,10 +320,10 @@ const UserProfile = () => {
                                     </div>
                                     {isPasswordChangeVisible ? (
                                         <>
-                                            <div className="form-group1">
-                                                <div className="col-3_1 ">Mật khẩu cũ</div>
-                                                <div className="col-9">
-                                                    <div className="input-group1">
+                                            <div className="form-group11">
+                                                <div className="col-3_11">Mật khẩu cũ</div>
+                                                <div className="col-91">
+                                                    <div className="input-group11">
                                                         <input
                                                             name="oldPassword1"
                                                             placeholder="Mật khẩu cũ"
@@ -335,10 +335,10 @@ const UserProfile = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="form-group1">
-                                                <div className="col-3_1 ">Mật khẩu mới</div>
-                                                <div className="col-9">
-                                                    <div className="input-group1">
+                                            <div className="form-group11">
+                                                <div className="col-3_11">Mật khẩu mới</div>
+                                                <div className="col-91">
+                                                    <div className="input-group11">
                                                         <input
                                                             name="newPassword"
                                                             placeholder="Mật khẩu mới"
@@ -353,11 +353,11 @@ const UserProfile = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <div className="form-group1">
-                                                <div className="col-3_1 ">Mật khẩu</div>
-                                                <div className="col-9">
-                                                    <div className="input-group1">
-                                                        <span className="show-pass">********</span>
+                                            <div className="form-group11">
+                                                <div className="col-3_11">Mật khẩu</div>
+                                                <div className="col-91">
+                                                    <div className="input-group11">
+                                                        <span className="show-pass1">********</span>
                                                         <button type="button" className="change-pass" onClick={togglePasswordChange}>
                                                             Đổi mật khẩu
                                                         </button>
@@ -366,9 +366,9 @@ const UserProfile = () => {
                                             </div>
                                         </>
                                     )}
-                                    <div className="row1">
-                                        <div className="col-3_1 ">
-                                            <button onClick={handleSubmit} className="btn1 btn-blue-4 btn-block">Lưu thay đổi</button>
+                                    <div className="row11">
+                                        <div className="col-3_11">
+                                            <button onClick={handleSubmit} className="btn1 btn-blue-4 btn-block1">Lưu thay đổi</button>
                                         </div>
                                     </div>
                                     {
@@ -383,19 +383,19 @@ const UserProfile = () => {
                                     }
                                 </form>
                             </div>
-                            <div className="user-profile-update">
-                                <div className="title-user">Tải ảnh đại diện</div>
-                                <div className="row1">
-                                    <div className="col-3_1 ">
-                                        <div className="user-avatar-image">
+                            <div className="user-profile-update1">
+                                <div className="title-user1">Tải ảnh đại diện</div>
+                                <div className="row11">
+                                    <div className="col-3_11">
+                                        <div className="user-avatar-image1">
                                             <img className="user-avatar-image" src={imgLink} id="avatar_user" />
                                         </div>
 
                                     </div>
-                                    <div className="col-9">
+                                    <div className="col-91">
                                         <div className="form-group1" style={{ justifyContent: "center", display: "flex", flexDirection: "column" }}>
                                             <span style={{ display: "inline" }}>Tải lên từ</span>
-                                            <div className="custom-file-image">
+                                            <div className="custom-file-image1">
                                                 <input type="file" id="validatedCustomFile" className="input-custom" required="" hidden accept="image/*"
                                                     onChange={({ target: { files } }) => {
                                                         if (files) {
@@ -403,8 +403,8 @@ const UserProfile = () => {
                                                             setimgLink(URL.createObjectURL(files[0]))
                                                         }
                                                     }} />
-                                                <label className="label-custom1" htmlFor="validatedCustomFile">Chọn</label>
-                                                <span className="font-italic font13">Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB</span>
+                                                <label className="label-custom1" htmlFor="validatedCustomFile1">Chọn</label>
+                                                <span className="font-italic font131">Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB</span>
                                             </div>
                                         </div>
                                     </div>

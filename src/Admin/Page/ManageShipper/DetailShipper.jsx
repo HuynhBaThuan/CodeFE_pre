@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import Header1 from "../../components/Header/Header1";
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import style from './DetailShipper.module.css';
 import Form from 'react-bootstrap/Form';
 import { useLocation } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from '../../components/Loading/Loading'
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';

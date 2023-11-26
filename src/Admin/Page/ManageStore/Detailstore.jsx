@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import Header1 from "../../components/Header/Header1";
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import style from './Detailstore.module.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useLocation } from 'react-router-dom';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import { Formik } from 'formik';
 import Loading from '../../components/Loading/Loading'
 import { toast } from 'react-toastify';

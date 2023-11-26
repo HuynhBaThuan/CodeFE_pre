@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import Header1 from "../../components/Header/Header1";
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 import style from './Detailorder.module.css';
